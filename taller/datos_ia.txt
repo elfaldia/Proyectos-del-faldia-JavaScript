@@ -1,0 +1,10 @@
+nako,2003,15,simple,benjamin,0
+yan,2004,21,media,pedro,0
+chamo,2001,27,avanzada,samanta,0
+zyzi,2005,19,media,luis,0
+campos,2000,17,media,rafael,4
+kley,2002,10,media,constantino,3
+flojo,1999,60,simple,david,0
+faldia,2001,20,avanzada,alejandro,12
+cuyi,2004,19,media,eduardo,2
+batoto,2002,24,media,belen,0
