@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import java.io.File;
 import java.io.BufferedWriter;
+import java.util.Arrays;
 
 public class App {
  
@@ -251,15 +252,15 @@ public class App {
 				System.out.println(" ");
 				System.out.println("--- Bienvenido al submenu IA, en este apartado tienes las siguientes opciones: ---");
 				System.out.println("");
-				System.out.println("- Ordenar por cualidad.");
-				System.out.println("- Editar datos de ia.");
+				System.out.println("- Ordenar por cualidad (Ordenar).");
+				System.out.println("- Editar datos de ia (Editar).");
 				String subMenuIa = "";
 				// matgen de error para el menu
 				while(true) {
 					System.out.println(" ");
 					System.out.println("¿A cual opción desea ingresar?: ");
 					subMenuIa = leer.nextLine();
-					if(subMenuIa.equalsIgnoreCase("ordenar por cualidad") || subMenuIa.equalsIgnoreCase("editar datos de ia")) {
+					if(subMenuIa.equalsIgnoreCase("ordenar") || subMenuIa.equalsIgnoreCase("editar")) {
 						break;
 					}else {
 						System.out.println("-- La opción ingresada es invalida, intente nuevamente --");
@@ -268,11 +269,27 @@ public class App {
 				}
 				// continuacion
 				// Submenu ia ordernar por cualidad
-				if(subMenuIa.equalsIgnoreCase("ordenar por cualidad")) {
+				if(subMenuIa.equalsIgnoreCase("ordenar")) {
 					System.out.println("");
 					System.out.println("-- En la opción ordenar por cualidad puedes ordenar las IA en la forma que quiera, con las siguientes opciones: --");
 					System.out.println("");
-					System.out.println("-Por nombre IA.\n-Por año de creacion.\n-Por velocidad de aprendizaje.\n-Por tipo de IA.\n-Por creador.\n-Por cantidad de mejora.");
+					System.out.println("- Nombre.\n- Creacion.\n- Velocidad.\n- Tipo.\n- Creador.\n- Mejora.");
+					String opcion = "";
+					// magen de error
+					while(true) {
+						System.out.println("");
+						System.out.println("-¿Cual opción eligira?-");
+						opcion = leer.nextLine();
+						if(opcion.equalsIgnoreCase("nombre") || opcion.equalsIgnoreCase("creacion") || opcion.equalsIgnoreCase("velocidad") || opcion.equalsIgnoreCase("tipo") || opcion.equalsIgnoreCase("creador") || opcion.equalsIgnoreCase("mejora")) {
+							break;
+						}else {
+							System.out.println("-La opción que ingreso es erronea, ingrese nuevamente-");
+							continue;
+						}
+					}
+					if(opcion.equalsIgnoreCase("nombre")) {
+						ordenarDeFormaAlfabetica(nombreIas,contGeneral);
+					}
 				}
 			}
 		}
@@ -511,7 +528,16 @@ public class App {
 	    writer.close();
 	}
 	
-	public static void ordenarDeFormaAlfabetica(String[] lista) {
+	public static void ordenarDeFormaAlfabetica(String[] lista,int indice) {
 		
+		String[] nuevaLista = new String[indice];
+		for(int i = 0; i < indice ; i++) {
+			nuevaLista[i] = lista[i];
+		}
+		Arrays.sort(nuevaLista);
+		System.out.println("\n- Los nombres de IA ordenados de forma alfabetica seria de la siguiente forma -\n");
+		for(int i = 0; i < indice; i++) {
+			System.out.println("-> " + nuevaLista[i]);
+		}
 	}
 }
