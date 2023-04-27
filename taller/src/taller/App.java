@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import java.io.File;
 import java.io.BufferedWriter;
+import java.util.Arrays;
 
 public class App {
  
@@ -36,7 +37,7 @@ public class App {
 			int indice = (int) (Math.random()*indiceGeneral);
 			// Este es la variable que nos ayudara a ingresar en los menú.
 			String categoriaEspecífica = login(indice,usuarios,contraseñas,categorias,creadores,indiceGeneral);
-			menuGeneral(categoriaEspecífica,indiceGeneral,indice,especialidades,nombreIa,cantidadDeMejoras,tipoDeIa,velocidadDeAprendizaje,contIngresosDeDatos);
+			menuGeneral(categoriaEspecífica,indiceGeneral,indice,especialidades,nombreIa,cantidadDeMejoras,tipoDeIa,velocidadDeAprendizaje,contIngresosDeDatos,añoDeCreacion,creadores);
 		}
 		/*
 		// matriz para la corrupción
@@ -138,7 +139,7 @@ public class App {
 			cont++;
 			
 			for(int i = 0; i < contIndices;i++) {
-				if (creador.equals(creadores[i])) {
+				if (creador.equalsIgnoreCase(creadores[i])) {
 					especialidades[i] = especialidad;
 					break;
 				}
@@ -160,7 +161,7 @@ public class App {
 			cont++;
 			
 			for(int i = 0; i < contIndices;i++) {
-				if (creador.equals(creadores[i])) {
+				if (creador.equalsIgnoreCase(creadores[i])) {
 					años[i] = año;
 					nombresIa[i] = nombreIa;
 					velocidades[i] = velocidadAprendizaje;
@@ -187,7 +188,7 @@ public class App {
 		return categorias[indice];
 	}
 	
-	public static void menuGeneral(String categoriaEspecífica ,int contGeneral, int indice, String[] especialidades,String[] nombreIas,int[] cantMejoras,String[] tipoDeIa,float[] velocidadDEMejora,int[] contIngresosDeDatos) {
+	public static void menuGeneral(String categoriaEspecífica ,int contGeneral, int indice, String[] especialidades,String[] nombreIas,int[] cantMejoras,String[] tipoDeIa,float[] velocidadDEMejora,int[] contIngresosDeDatos,int[] añoCreacion, String[] creadores) {
 		Scanner leer = new Scanner(System.in);
 		
 		if(categoriaEspecífica.equalsIgnoreCase("normal")) {
@@ -251,15 +252,15 @@ public class App {
 				System.out.println(" ");
 				System.out.println("--- Bienvenido al submenu IA, en este apartado tienes las siguientes opciones: ---");
 				System.out.println("");
-				System.out.println("- Ordenar por cualidad.");
-				System.out.println("- Editar datos de ia.");
+				System.out.println("- Ordenar por cualidad (Ordenar).");
+				System.out.println("- Editar datos de ia (Editar).");
 				String subMenuIa = "";
 				// matgen de error para el menu
 				while(true) {
 					System.out.println(" ");
 					System.out.println("¿A cual opción desea ingresar?: ");
 					subMenuIa = leer.nextLine();
-					if(subMenuIa.equalsIgnoreCase("ordenar por cualidad") || subMenuIa.equalsIgnoreCase("editar datos de ia")) {
+					if(subMenuIa.equalsIgnoreCase("ordenar") || subMenuIa.equalsIgnoreCase("editar")) {
 						break;
 					}else {
 						System.out.println("-- La opción ingresada es invalida, intente nuevamente --");
@@ -268,11 +269,48 @@ public class App {
 				}
 				// continuacion
 				// Submenu ia ordernar por cualidad
-				if(subMenuIa.equalsIgnoreCase("ordenar por cualidad")) {
+				if(subMenuIa.equalsIgnoreCase("ordenar")) {
 					System.out.println("");
 					System.out.println("-- En la opción ordenar por cualidad puedes ordenar las IA en la forma que quiera, con las siguientes opciones: --");
 					System.out.println("");
-					System.out.println("-Por nombre IA.\n-Por año de creacion.\n-Por velocidad de aprendizaje.\n-Por tipo de IA.\n-Por creador.\n-Por cantidad de mejora.");
+					System.out.println("- Nombre.\n- Creacion.\n- Velocidad.\n- Tipo.\n- Creador.\n- Mejora.");
+					String opcion = "";
+					// magen de error
+					while(true) {
+						System.out.println("");
+						System.out.println("-¿Cual opción eligira?-");
+						opcion = leer.nextLine();
+						if(opcion.equalsIgnoreCase("nombre") || opcion.equalsIgnoreCase("creacion") || opcion.equalsIgnoreCase("velocidad") || opcion.equalsIgnoreCase("tipo") || opcion.equalsIgnoreCase("creador") || opcion.equalsIgnoreCase("mejora")) {
+							break;
+						}else {
+							System.out.println("-La opción que ingreso es erronea, ingrese nuevamente-");
+							continue;
+						}
+					}
+					// orden por nombre
+					if(opcion.equalsIgnoreCase("nombre")) {
+						ordenarDeFormaAlfabetica(nombreIas,contGeneral);
+					}
+					// orden por año de creación
+					else if (opcion.equalsIgnoreCase("creacion")) {
+						ordenaPorAñoDeCreacion(nombreIas,añoCreacion,contGeneral);
+					}
+					// orden por velocidad de mejora
+					else if(opcion.equalsIgnoreCase("velocidad")) {
+						ordenarPorVelocidad(nombreIas,velocidadDEMejora,contGeneral);
+					}
+					// orden por tipo de IA
+					else if(opcion.equalsIgnoreCase("tipo")) {
+						ordenarPorTipo(nombreIas,tipoDeIa,contGeneral);
+					}
+					// orden por creador de la IA
+					else if(opcion.equalsIgnoreCase("creador")) {
+						ordenarPorCreador(nombreIas,creadores,contGeneral);
+					}
+					// orden por cantidad de mejoras
+					else if(opcion.equalsIgnoreCase("mejora")) {
+						ordenarPorMejora(nombreIas,cantMejoras,contGeneral);
+					}
 				}
 			}
 		}
@@ -511,7 +549,130 @@ public class App {
 	    writer.close();
 	}
 	
-	public static void ordenarDeFormaAlfabetica(String[] lista) {
+	public static void ordenarDeFormaAlfabetica(String[] lista,int indice) {
+		
+		//Metodo burbuja para ordenar de forma alfabetica
+		for(int i = 0; i < indice - 1; i++) {
+			for(int j = 0; j < indice - i - 1;j++) {
+				if(lista[j].compareTo(lista[j + 1]) > 0) {
+					burbujaUno(lista,j);
+				}
+			}
+		}
+		System.out.println("\n-- Los nombres de los IA ordenados de forma alfabetica serían de la siguiente forma --\n");
+		for(int i = 0; i < indice;i++) {
+			System.out.println("-> " + lista[i]);
+		}System.out.println("\n-- De nada :) --");
+	}
+	
+	public static void ordenaPorAñoDeCreacion(String[] nombre, int[] año, int indice) {
+		
+		// Metodo burbuja para ordenar la lista de int
+		for(int i = 0 ; i < indice -1; i++) {
+			for(int j = i +1; j < indice; j++) {
+				if(año[i] > año[j]) {
+					burbujaDosString(nombre,i,j);
+					burbujaDosInt(año,i,j);
+				}
+			}
+		}
+		System.out.println("\n-- Los IA ordenados por año de creación serían de la siguiente forma --\n");
+		for(int i = 0; i < indice;i++) {
+			System.out.println("-> " + nombre[i] + ", este IA fue creado en el año " + año[i]);
+		}System.out.println("\n-- De nada :) --");
+	}
+	
+	public static void ordenarPorVelocidad(String[] nombre, float[]velocidad, int indice) {
+		
+		// Metodo burbuja para ordenar la lista de floats
+		for(int i = 0 ; i < indice -1; i++) {
+			for(int j = i +1; j < indice; j++) {
+				if(velocidad[i] > velocidad[j]) {
+					burbujaDosString(nombre,i,j);
+					burbujaDosFloat(velocidad,i,j);
+				}
+			}
+		}
+		System.out.println("\n-- Los IA ordenados por velocidad de mejora sería de la siguiente forma --\n");
+		for(int i = 0; i < indice;i++) {
+			System.out.println("-> " + nombre[i] + ", este IA posee una velocidad de mejora de " + (int)(velocidad[i]) + " dias.");
+		}System.out.println("\n-- De nada :) --");
+	}
+	
+	public static void ordenarPorTipo(String[] nombre, String[] tipo, int indice) {
+		
+		// Metodo burbuja para poder colocarde de avanzada a media y a simple
+		for(int i = 0; i < indice - 1; i++) {
+			for(int j = 0; j < indice - i - 1;j++) {
+				if(tipo[j].compareTo(tipo[j + 1]) > 0) {
+					burbujaUno(nombre,j);
+					burbujaUno(tipo,j);
+				}
+			}
+		}
+		System.out.println("\n-- Los IA ordenados por gerarquía dependiendo su tipo sería de la siguiente forma --\n");
+		for(int i = 0; i < indice;i++) {
+			System.out.println("-> " + nombre[i] + ", este IA es de tipo " + tipo[i] + ".");
+		}System.out.println("\n-- De nada :) --");
+	}
+	
+	public static void ordenarPorCreador(String[] nombre, String[] creador, int indice) {
+		
+		// Metodo burbuja para poder ordenar de forma alfabetica a los creadores de los ia
+		for(int i = 0; i < indice - 1; i++) {
+			for(int j = 0; j < indice - i - 1;j++) {
+				if(creador[j].compareTo(creador[j + 1]) > 0) {
+					burbujaUno(nombre,j);
+					burbujaUno(creador,j);
+				}
+			}
+		}
+		System.out.println("\n-- Los IA ordenados según su creador sería de la siguiente forma --\n");
+		for(int i = 0; i < indice;i++) {
+			System.out.println("-> " + nombre[i] + ", el creador de este IA es " + creador[i] + ".");
+		}System.out.println("\n-- De nada :) --");
 		
 	}
+	
+	public static void ordenarPorMejora(String[] nombre, int[] mejora, int indice) {
+		
+		// Metodo burbuja para ordenar la lista de int
+		for(int i = 0 ; i < indice -1; i++) {
+			for(int j = i +1; j < indice; j++) {
+				if(mejora[i] < mejora[j]) {
+					burbujaDosString(nombre,i,j);
+					burbujaDosInt(mejora,i,j);
+				}
+			}
+		}
+		System.out.println("\n-- Los IA ordenados por sus cantidades de mejoras serían de la siguiente forma --\n");
+		for(int i = 0; i < indice;i++) {
+			System.out.println("-> " + nombre[i] + ", este IA tiene una cantidad de " + mejora[i] + " mejoras.");
+		}System.out.println("\n-- De nada :) --");
+	}
+	
+ 	public static void burbujaUno(String[] lista, int indice) {
+		String aux = lista[indice];
+		lista[indice] = lista[indice + 1];
+		lista[indice + 1] = aux;
+	}
+ 	
+ 	public static void burbujaDosString(String[] lista,int indice1,int indice2) {
+ 		String aux =  lista[indice1];
+ 		lista[indice1] = lista[indice2];
+ 		lista[indice2] = aux;
+ 	}
+ 	
+ 	public static void burbujaDosInt(int[] lista,int indice1, int indice2) {
+ 		int aux =  lista[indice1];
+ 		lista[indice1] = lista[indice2];
+ 		lista[indice2] = aux;
+ 	}
+ 	
+ 	public static void burbujaDosFloat(float[] lista,int indice1, int indice2) {
+ 		float aux =  lista[indice1];
+ 		lista[indice1] = lista[indice2];
+ 		lista[indice2] = aux;
+ 	}
+ 	
 }
