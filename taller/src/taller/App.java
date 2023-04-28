@@ -4,12 +4,12 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import java.io.File;
 import java.io.BufferedWriter;
-import java.util.Arrays;
 
 public class App {
  
 	public static void main(String[] args)throws IOException {
 
+		// listas usuarios 
 		String[] creadores = new String[100];
 		String[] usuarios = new String[100];
 		String[] contraseñas = new String[100];
@@ -17,6 +17,8 @@ public class App {
 		
 		//listas de creadores.
 		String[] especialidades = new String[100];
+		int[] añosExperiencia = new int[100];
+		int[] edadCreadores = new int[100];
 		
 		//Listas de IA.
 		String[] nombreIa = new String[100];
@@ -29,7 +31,7 @@ public class App {
 		int[] contIngresosDeDatos = new int[1];
 		
 		// Inicio del programa.
-		int indiceGeneral = rellenarListas(añoDeCreacion,creadores,usuarios,contraseñas,categorias,especialidades,nombreIa,velocidadDeAprendizaje,tipoDeIa,cantidadDeMejoras);
+		int indiceGeneral = rellenarListas(edadCreadores,añosExperiencia,añoDeCreacion,creadores,usuarios,contraseñas,categorias,especialidades,nombreIa,velocidadDeAprendizaje,tipoDeIa,cantidadDeMejoras);
 		
 		if (indiceGeneral == 0) {
 			
@@ -37,7 +39,7 @@ public class App {
 			int indice = (int) (Math.random()*indiceGeneral);
 			// Este es la variable que nos ayudara a ingresar en los menú.
 			String categoriaEspecífica = login(indice,usuarios,contraseñas,categorias,creadores,indiceGeneral);
-			menuGeneral(categoriaEspecífica,indiceGeneral,indice,especialidades,nombreIa,cantidadDeMejoras,tipoDeIa,velocidadDeAprendizaje,contIngresosDeDatos,añoDeCreacion,creadores);
+			menuGeneral(edadCreadores,añosExperiencia,categoriaEspecífica,indiceGeneral,indice,especialidades,nombreIa,cantidadDeMejoras,tipoDeIa,velocidadDeAprendizaje,contIngresosDeDatos,añoDeCreacion,creadores,categorias,usuarios,contraseñas);
 		}
 		/*
 		// matriz para la corrupción
@@ -105,7 +107,7 @@ public class App {
 	    corrupcionDeDatos(matriz,archivo,filas,columnas);
 	}
 	
-	public static int rellenarListas(int[] años,String[] creadores,String[] usuarios,String[] contraseñas,String[] categorias,String[] especialidades,String[] nombresIa,float[] velocidades,String[] tipoIas,int[] cantidadDeMejoras) throws IOException {
+	public static int rellenarListas(int[] edadCreadores,int[] añosExperiencia ,int[] años,String[] creadores,String[] usuarios,String[] contraseñas,String[] categorias,String[] especialidades,String[] nombresIa,float[] velocidades,String[] tipoIas,int[] cantidadDeMejoras) throws IOException {
 		
 		File nombreTxt = new File("datos_usuarios.txt");
 		Scanner arch = new Scanner(nombreTxt);
@@ -135,12 +137,16 @@ public class App {
 		while(arch.hasNextLine()) {
 			String[] partes = arch.nextLine().split(",");
 			String creador = partes[0];
+			int experiencia = Integer.parseInt(partes[1]);
 			String especialidad = partes[2];
+			int edad = Integer.parseInt(partes[3]);
 			cont++;
 			
 			for(int i = 0; i < contIndices;i++) {
 				if (creador.equalsIgnoreCase(creadores[i])) {
 					especialidades[i] = especialidad;
+					añosExperiencia[i] = experiencia;
+					edadCreadores[i] = edad;
 					break;
 				}
 			}
@@ -188,7 +194,7 @@ public class App {
 		return categorias[indice];
 	}
 	
-	public static void menuGeneral(String categoriaEspecífica ,int contGeneral, int indice, String[] especialidades,String[] nombreIas,int[] cantMejoras,String[] tipoDeIa,float[] velocidadDEMejora,int[] contIngresosDeDatos,int[] añoCreacion, String[] creadores) {
+	public static void menuGeneral(int[] edadCreadores,int[] añosExperiencia,String categoriaEspecífica ,int contGeneral, int indice, String[] especialidades,String[] nombreIas,int[] cantMejoras,String[] tipoDeIa,float[] velocidadDEMejora,int[] contIngresosDeDatos,int[] añoCreacion, String[] creadores,String[] categorias,String[] usuarios,String[] contraseñas) {
 		Scanner leer = new Scanner(System.in);
 		
 		if(categoriaEspecífica.equalsIgnoreCase("normal")) {
@@ -211,8 +217,7 @@ public class App {
 				
 				// bucle de comprobación
 				while(true) {
-					System.out.println(" ");
-					System.out.println("¿A cual menu deseas ingresar? (maestro ia o programador): ");
+					System.out.println("\n¿A cual menu deseas ingresar? (maestro ia o programador): ");
 					categoria = leer.nextLine();
 					if(categoria.equalsIgnoreCase("maestro ia") || categoria.equalsIgnoreCase("programador")) {
 						break;
@@ -237,10 +242,9 @@ public class App {
 
 			String subMenu = "";
 			while (true) {
-				System.out.println(" ");
-				System.out.println("-- ¿A cual submenu deseas ingresar? (IA o Usuarios y creadores): ");
+				System.out.println("\n-- ¿A cual submenu deseas ingresar? (IA o Usuarios): ");
 				subMenu = leer.nextLine();
-				if (subMenu.equalsIgnoreCase("IA") || subMenu.equalsIgnoreCase("Usuarios y creadores")) {
+				if (subMenu.equalsIgnoreCase("IA") || subMenu.equalsIgnoreCase("Usuarios")) {
 					break;
 				}else {
 					System.out.println("-- Submenu invalido, intente nuevamente -- ");
@@ -249,16 +253,13 @@ public class App {
 			}
 			// Submenu IA
 			if(subMenu.equalsIgnoreCase("ia")) {
-				System.out.println(" ");
-				System.out.println("--- Bienvenido al submenu IA, en este apartado tienes las siguientes opciones: ---");
-				System.out.println("");
-				System.out.println("- Ordenar por cualidad (Ordenar).");
+				System.out.println("\n--- Bienvenido al submenu IA, en este apartado tienes las siguientes opciones: ---");
+				System.out.println("\n- Ordenar por cualidad (Ordenar).");
 				System.out.println("- Editar datos de ia (Editar).");
 				String subMenuIa = "";
 				// matgen de error para el menu
 				while(true) {
-					System.out.println(" ");
-					System.out.println("¿A cual opción desea ingresar?: ");
+					System.out.println("\n¿A cual opción desea ingresar?: ");
 					subMenuIa = leer.nextLine();
 					if(subMenuIa.equalsIgnoreCase("ordenar") || subMenuIa.equalsIgnoreCase("editar")) {
 						break;
@@ -270,15 +271,12 @@ public class App {
 				// continuacion
 				// Submenu ia ordernar por cualidad
 				if(subMenuIa.equalsIgnoreCase("ordenar")) {
-					System.out.println("");
-					System.out.println("-- En la opción ordenar por cualidad puedes ordenar las IA en la forma que quiera, con las siguientes opciones: --");
-					System.out.println("");
-					System.out.println("- Nombre.\n- Creacion.\n- Velocidad.\n- Tipo.\n- Creador.\n- Mejora.");
+					System.out.println("\n-- En la opción ordenar por cualidad puedes ordenar las IA en la forma que quiera, con las siguientes opciones: --");
+					System.out.println("\n- Nombre.\n- Creacion.\n- Velocidad.\n- Tipo.\n- Creador.\n- Mejora.");
 					String opcion = "";
 					// magen de error
 					while(true) {
-						System.out.println("");
-						System.out.println("-¿Cual opción eligira?-");
+						System.out.println("\n-¿Cual opción eligira?-");
 						opcion = leer.nextLine();
 						if(opcion.equalsIgnoreCase("nombre") || opcion.equalsIgnoreCase("creacion") || opcion.equalsIgnoreCase("velocidad") || opcion.equalsIgnoreCase("tipo") || opcion.equalsIgnoreCase("creador") || opcion.equalsIgnoreCase("mejora")) {
 							break;
@@ -310,6 +308,156 @@ public class App {
 					// orden por cantidad de mejoras
 					else if(opcion.equalsIgnoreCase("mejora")) {
 						ordenarPorMejora(nombreIas,cantMejoras,contGeneral);
+					}
+				}
+			}
+			else if (subMenu.equalsIgnoreCase("Usuarios")) {
+				System.out.println("\n--- Bienvenido al submenu Usuarios y creadores, en este apartado tienes las siguientes opciones: ---");
+				System.out.println("");
+				System.out.println("- Cantidad de tipo de Usuario (Cantidadxtipo).");
+				System.out.println("- Añadir Usuario y/o Creador (Añadir).");
+				System.out.println("- Editar datos de Usuario y/o Creador (Editar).");
+				System.out.println("- Eliminar Usuario y/o Creador: (Eliminar).");
+				System.out.println("\n || RECOMENDACIÓN: al ingresar el tipo de usuario que desea, coloque  lo que se enceuntra entre parentesis, si este no posee uno, introduzca su nombre tal cual ||");
+				String subMenuUsuario = "";
+				
+				// Bucle de margen de error
+				while(true) {
+					System.out.println("\n¿A cual opción desea ingresar?: ");
+					subMenuUsuario = leer.nextLine();
+					if(subMenuUsuario.equalsIgnoreCase("Cantidadxtipo") || subMenuUsuario.equalsIgnoreCase("Añadir") || subMenuUsuario.equalsIgnoreCase("Editar") || subMenuUsuario.equalsIgnoreCase("Eliminar")) {
+						break;
+					}else {
+						System.out.println("-- La opción ingresada es invalida, intente nuevamente --");
+						continue;
+					}
+				}
+				
+				// Opcion Cantidad de tipo de Usuario (Cantidadxtipo)
+				if (subMenuUsuario.equalsIgnoreCase("Cantidadxtipo")) {
+					System.out.println("\n--- Ingrese el tipo de usuario que desea consultar su cantidad ---");
+					System.out.println("\n- Normal\n- Administrador");
+					String tipoUsuario = "";
+					
+					// Bucle margen de error
+					while (true) {
+						System.out.println("\n-- ¿Por cual tipo se decidio? --");
+						tipoUsuario = leer.nextLine();
+						if(tipoUsuario.equalsIgnoreCase("Normal") || tipoUsuario.equalsIgnoreCase("Administrador")) {
+							break;
+						}else {
+							System.out.println("\n-- El tipo de usuario ingresario es erroneo o no es valido, intente nuevamente --");
+						}
+					}
+					// Usuario tipo normal
+					if(tipoUsuario.equalsIgnoreCase("normal")) {
+						cantidadTiposUsuarios(categorias,"normal",contGeneral);
+					}
+					// Usuario tipo Administrador
+					if(tipoUsuario.equalsIgnoreCase("Administrador")) {
+						cantidadTiposUsuarios(categorias,"Administrador",contGeneral);
+					}
+				}
+				// Opcion Añadir Usuario y/o Creador (Añadir)
+				else if (subMenuUsuario.equalsIgnoreCase("Añadir")) {
+					System.out.println("\n--- En este apartado puedes crear nuevos Usuarios o Creadores ---");
+					System.out.println("\n--- Indique a que aspecto desea agregar datos ---");
+					System.out.println("\n- Usuarios\n- Creadores");
+					System.out.println("\n || OBSERVACIÓN: un usuario puede tener varios nombres de creadores ||");
+					String archivo = "";
+					
+					// Bucle margen de error
+					while (true) {
+						System.out.println("\n-- ¿Cual archivo desea editar? --");
+						archivo = leer.nextLine();
+						if(archivo.equalsIgnoreCase("Usuarios") || archivo.equalsIgnoreCase("Creadores")) {
+							break;
+						}else {
+							System.out.println("\n-- El arcivo que ingreso es erroneo o no es valido, intente nuevamente --");
+						}
+					}
+					
+					// Archivo usuario
+					if(archivo.equalsIgnoreCase("Usuarios")) {
+
+						System.out.println("\n-- Para crear un nuevo usuario necesitamos registrar los siguientes datos --");
+						System.out.println("\n- Ingrese el nombre de usuario -");						
+						usuarios[contGeneral + 1] = leer.nextLine(); // se agrega el nombre del usuario
+						
+						System.out.println("\n- Ingrese la contraseña del usuario -");
+						contraseñas[contGeneral + 1] = leer.nextLine(); // se agrega la nueva contraseña
+						
+						// margen de error para las categorias
+						while (true) {
+							System.out.println("\n- Ingrese el tipo de categoria (Normal o Administrador) -");
+							String categoria = leer.nextLine(); // se agrega la categoria
+							
+							if(categoria.equalsIgnoreCase("normal") || categoria.equalsIgnoreCase("administrador")) {
+								categorias[contGeneral + 1] = categoria; // se agrega la categoria
+								break;
+							} else {
+								System.out.println("\n- La categoria ingresada es invalida, intente nuevamente -");
+								continue;
+							}
+						}
+						// Añadir creadores 
+						System.out.println("\n- Ingrese los nombres de los creadores dueños del usuario, cuando ingrese la cantidad que usted desee, escriba (listo) para guardar los cambios -");
+						// ciclo hasta que se introduzca LISTO
+						while (true) {
+							System.out.println("\n- Ingrese nombre -");
+							String nombre = leer.nextLine();
+							if(nombre.equalsIgnoreCase("listo")) {
+								break;
+							}else {
+								if(creadores[contGeneral + 1] == null) {
+									creadores[contGeneral + 1] = (nombre + " - ");
+								}else {
+									creadores[contGeneral + 1] += (nombre + " - ");
+								}
+							}
+						}
+						// Printear resultado
+						System.out.println("\n--- Se a creado con exito el usuario! el mismo posee los siguientes datos  ---\n- |Usuario| " + usuarios[contGeneral + 1] + "\n- |Contraseña| " + contraseñas[contGeneral + 1] + "\n- |categoria| " + categorias[contGeneral + 1] + "\n- |Nombres o Nombre| - " + creadores[contGeneral + 1]);
+					}
+					else if(archivo.equalsIgnoreCase("Creadores")) {
+						
+						System.out.println("\n-- Para añadir a un nuevo creador se necesitaran los siguientes datos, los cuales tendras que ir rellenando --");
+						System.out.println("\n- Ingrese el nombre del creador -");						
+						creadores[contGeneral + 1] = leer.nextLine(); // se agrega el nombre del nuevo creador
+						
+						System.out.println("\n- Ingrese el tiempo que tiene de experiencia -");
+						añosExperiencia[contGeneral + 1] = Integer.parseInt(leer.nextLine()); // se agrega el tiempo de experiencia
+						
+						// margen de error
+						while (true) {
+							System.out.println("\n- Ingrese la especialidad del creador, las especialidades son las siguientes - \n- Maestro IA (MaestroIa)\n- Programador\n- IA Master (IaMaster)");
+							System.out.println("\n || OBSERVACIÓN: un usuario puede tener varios nombres de creadores ||");
+							System.out.println("\n- especialidad -");
+							String especial = leer.nextLine(); // se agrega la especialidad
+							if(especial.equalsIgnoreCase("maestroia") || especial.equalsIgnoreCase("programador") || especial.equalsIgnoreCase("iamaster")) {
+								especialidades[contGeneral + 1] = especial;
+								break;
+							}else {
+								System.out.println("\n- La especialidad que introdujo no es valida, intente nuevamente -");
+								continue;
+							}
+						}
+						
+						System.out.println("\n- Ingrese la edad del creador (todos los creadores deben ser mayores de 20 años) -");
+						// Margen de error
+						while (true) {
+							System.out.println("\n- Edad -");
+							int edad = Integer.parseInt(leer.nextLine());
+							if(edad > 20 && edad < 100) {
+								edadCreadores[contGeneral + 1] = edad;
+								break;
+							}else {
+								System.out.println("\n- La edad que ingreso no tiene logica, intente nuevamente -");
+								continue;
+							}
+						}
+						// Printear los datos añadidos
+						System.out.println("\n--- Se a creado con exito el nuevo creador! el mismo posee los siguientes datos  ---\n- |Nombre| " + creadores[contGeneral + 1] + "\n- |Años de experiencia| " + añosExperiencia[contGeneral + 1] + "\n- |Especialidad| " + especialidades[contGeneral + 1] + "\n- |Edad| - " + edadCreadores[contGeneral + 1]);
 					}
 				}
 			}
@@ -674,4 +822,17 @@ public class App {
  		lista[indice1] = lista[indice2];
  		lista[indice2] = aux;
  	}	
+ 	
+ 	public static void cantidadTiposUsuarios(String[] tipos, String tipo, int indice) {
+ 		int cont = 0;
+
+ 		for ( int i = 0; i < indice ; i++) {
+ 			if(tipo.equalsIgnoreCase(tipos[i])){
+ 				cont++;
+ 			}
+ 		}
+ 		float porcentaje = (cont * 100)/indice;
+		System.out.println("\n- El tipo de Usuario " + tipo + " -");
+		System.out.println("\n-- Tiene un porcentaje de " + porcentaje + "% respecto al total --");
+ 	}
 }
