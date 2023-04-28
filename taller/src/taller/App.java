@@ -674,5 +674,4 @@ public class App {
  		lista[indice1] = lista[indice2];
  		lista[indice2] = aux;
  	}	
- 	
 }
