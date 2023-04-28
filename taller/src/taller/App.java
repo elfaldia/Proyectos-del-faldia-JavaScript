@@ -673,6 +673,6 @@ public class App {
  		float aux =  lista[indice1];
  		lista[indice1] = lista[indice2];
  		lista[indice2] = aux;
- 	}
- 	
+ 	}	
+ 	// hola como estas guaradr
 }
