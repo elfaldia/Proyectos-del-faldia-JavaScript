@@ -8,7 +8,14 @@ import java.io.BufferedWriter;
 public class App {
  
 	public static void main(String[] args)throws IOException {
-
+		
+		// Datos eliminación
+		String[][] matrizUno = armarMatriz("datos_usuarios.txt");
+		String[][] matrizDos = armarMatriz("datos_creadores.txt");
+		String[][] matrizTres = armarMatriz("datos_ia.txt");
+		
+		eliminarDatos(matrizUno,matrizDos,matrizTres);		
+		
 		// listas usuarios 
 		String[] creadores = new String[100];
 		String[] usuarios = new String[100];
@@ -32,9 +39,8 @@ public class App {
 		
 		// Inicio del programa.
 		int indiceGeneral = rellenarListas(edadCreadores,añosExperiencia,añoDeCreacion,creadores,usuarios,contraseñas,categorias,especialidades,nombreIa,velocidadDeAprendizaje,tipoDeIa,cantidadDeMejoras);
-		
 		if (indiceGeneral == 0) {
-			
+			System.out.println("\n------------------------------------------------------------------------------------------------\n\tEl programa no puede iniciarse ya que la base de datos se encuentra vacia.\n------------------------------------------------------------------------------------------------");
 		}else {
 			int indice = (int) (Math.random()*indiceGeneral);
 			// Este es la variable que nos ayudara a ingresar en los menú.
@@ -59,6 +65,166 @@ public class App {
 		*/
 	}
 	
+	public static void eliminarDatos(String[][] matrizUno , String[][] matrizDos, String[][] matrizTres) throws IOException{
+		//
+		int contBorrados = 0;
+		// Matrices nuevas
+		String[][] modificadaUno = new String[filas("datos_usuarios.txt")][columnas("datos_usuarios.txt")]; String[][] modificadaDos = new String[filas("datos_creadores.txt")][columnas("datos_creadores.txt")]; String[][] modificadaTres = new String[filas("datos_ia.txt")][columnas("datos_ia.txt")];
+		// files de los archivos
+		File fileUno = new File("datos_usuarios.txt"); File fileDos = new File("datos_creadores.txt"); File fileTres = new File("datos_ia.txt");
+		// columnas con los diferentes archivos txt
+		int columnasUno = columnas("datos_usuarios.txt"); int columnasDos = columnas("datos_creadores.txt"); int columnasTres = columnas("datos_ia.txt");
+		// filas generales
+		int filas = filas("datos_usuarios.txt");
+		int filasNuevaMatriz = 0;
+		
+		// Ciclo para armas las 3 matrices a base de los archivos txt
+		for (int i = 0; i < filas; i++) {
+			int verificador = verificadorExistenciaIAWINS(matrizUno,matrizDos,matrizTres,columnasUno,columnasDos,columnasTres,i);
+			if(verificador == 0) {
+				modificadaUno[i] = matrizUno[i];
+				modificadaDos[i] = matrizDos[i];
+				modificadaTres[i] = matrizTres[i];
+				filasNuevaMatriz++;
+			}else {
+				contBorrados++;
+				continue;
+			}
+		}
+		modificadaUno = reorganizarMatriz(modificadaUno); modificadaDos = reorganizarMatriz(modificadaDos); modificadaTres = reorganizarMatriz(modificadaTres);
+		
+		String[][] temporalUno = new String[filasNuevaMatriz][columnas("datos_usuarios.txt")]; String[][] temporalDos = new String[filasNuevaMatriz][columnas("datos_creadores.txt")]; String[][] temporalTres = new String[filasNuevaMatriz][columnas("datos_ia.txt")];
+		for(int i = 0; i < filasNuevaMatriz; i++) {
+			for(int j = 0; j < columnasUno ; j++) {
+				temporalUno[i][j] = modificadaUno[i][j];
+			}
+			for(int j = 0; j < columnasDos ; j++) {
+				temporalDos[i][j] = modificadaDos[i][j];
+			}
+			for(int j = 0; j < columnasTres ; j++) {
+				temporalTres[i][j] = modificadaTres[i][j];
+			}
+		}
+ 		corrupcionDeDatos(temporalUno,fileUno,filasNuevaMatriz,columnasUno); corrupcionDeDatos(temporalDos,fileDos,filasNuevaMatriz,columnasDos); corrupcionDeDatos(temporalTres,fileTres,filasNuevaMatriz,columnasTres);
+
+ 		
+ 		// Impreción de reporte
+ 		System.out.println("\n---------------------------------------------------------\n\t\tINFORME DE DATOS ELIMINADOS\n---------------------------------------------------------");
+ 		System.out.println("\n---------------------------------------------------------\n--> En el archivo -datos_usuarios.txt- se eliminaron: " + contBorrados + " --");
+ 		System.out.println("\n--> En el archivo -datos_creadores.txt- se eliminaron: " + contBorrados + " --\n\n--> En el archivo -datos_ia.txt- se eliminaron: " + contBorrados + " --\n---------------------------------------------------------\n");
+ 		
+	}
+	
+
+	public static String[][] reorganizarMatriz(String[][] matriz) {
+	    int filas = matriz.length;
+	    int columnas = matriz[0].length;
+	    
+	    for (int i = 0; i < filas; i++) {
+	        boolean tieneNulos = false;
+	        for (int j = 0; j < columnas; j++) {
+	            if (matriz[i][j] == null) {
+	                tieneNulos = true;
+	                break;
+	            }
+	        }
+	        if (tieneNulos) {
+	            // Busca la siguiente fila con valores no nulos
+	            for (int k = i+1; k < filas; k++) {
+	                boolean tieneValores = false;
+	                for (int l = 0; l < columnas; l++) {
+	                    if (matriz[k][l] != null) {
+	                        tieneValores = true;
+	                        break;
+	                    }
+	                }
+	                if (tieneValores) {
+	                    // Intercambia las filas i y k
+	                    String[] filaAux = matriz[i];
+	                    matriz[i] = matriz[k];
+	                    matriz[k] = filaAux;
+	                    break;
+	                }
+	            }
+	        }
+	    }
+	    return matriz;
+	}
+	
+	
+	public static String[][] armarMatriz(String archivo) throws IOException {
+		
+		Scanner arch = new Scanner(new File(archivo));
+		String[][] matriz = new String[filas(archivo)][columnas(archivo)];
+		int filas = 0;
+		int columnas = 0;
+		
+		while (arch.hasNextLine()) {
+			String[] linea = arch.nextLine().split(",");
+			columnas = linea.length;
+			
+			for(int i = 0; i < columnas; i++) {
+				matriz[filas][i] = linea[i];
+			}filas++;
+		}
+		return matriz;
+	}
+	
+	
+	public static int filas(String archivo)  throws IOException{
+		
+		Scanner arch = new Scanner(new File(archivo));
+		int cont = 0;
+		while (arch.hasNextLine()) {
+			String partes = arch.nextLine();
+			cont++;
+		}return cont;
+	}
+	
+	
+	public static int columnas(String archivo)  throws IOException{
+		
+		Scanner arch = new Scanner(new File(archivo));
+		int cont = 0;
+		while (arch.hasNextLine()) {
+			String[] partes = arch.nextLine().split(",");
+			cont = partes.length;
+		}return cont;
+	}
+	
+	
+	public static void imprimirMatriz(String[][] matriz,int filas,int columnas) {
+		for (int i = 0;i < filas; i++) {
+			for (int j = 0; j < columnas; j++) {
+				System.out.print(matriz[i][j] + "\t");
+    		}
+    	System.out.println();
+		}
+	}
+	
+	
+	public static int verificadorExistenciaIAWINS(String[][] partesUno,String[][] partesDos, String[][] partesTres, int c1 , int c2, int c3, int f) {
+		int cont = 0;
+		
+		for(int j = 0; j < c1 ; j++) {
+			if(partesUno[f][j].equalsIgnoreCase( "¡@IA¿WIN$#")) {
+				cont++;
+			}
+		}
+		for(int j = 0; j < c2 ; j++) {
+			if(partesDos[f][j].equalsIgnoreCase( "¡@IA¿WIN$#")) {
+				cont++;
+			}
+		}
+		for(int j = 0; j < c3 ; j++) {
+			if(partesTres[f][j].equalsIgnoreCase( "¡@IA¿WIN$#")) {
+				cont++;
+			}	
+		}
+		return cont;
+	}
+	
+
 	public static void rellenarMatriz(String[][] matriz,File archivo,int filas,int columnas, int[] contIngresosDeDatos) throws IOException{
 	    Scanner arch = new Scanner(archivo);
 	    filas = 0;
@@ -107,12 +273,14 @@ public class App {
 	    corrupcionDeDatos(matriz,archivo,filas,columnas);
 	}
 	
-	public static int rellenarListas(int[] edadCreadores,int[] añosExperiencia ,int[] años,String[] creadores,String[] usuarios,String[] contraseñas,String[] categorias,String[] especialidades,String[] nombresIa,float[] velocidades,String[] tipoIas,int[] cantidadDeMejoras) throws IOException {
+	
+	public static int rellenarListas( int[] edadCreadores,int[] añosExperiencia ,int[] años,String[] creadores,String[] usuarios,String[] contraseñas,String[] categorias,String[] especialidades,String[] nombresIa,float[] velocidades,String[] tipoIas,int[] cantidadDeMejoras) throws IOException {
 		
 		File nombreTxt = new File("datos_usuarios.txt");
 		Scanner arch = new Scanner(nombreTxt);
 		int contIndices = 0;
 		int cont = 0;
+		
 		while(arch.hasNextLine()) {
 			String[] partes = arch.nextLine().split(",");
 			String usuario = partes[0];
@@ -120,17 +288,17 @@ public class App {
 			String categoria = partes[2];
 			String creador = partes[3];
 			cont++;
-
-			// Corromper el arch txt
 			
+			// Corromper el arch txt
 			creadores[contIndices] = creador;
 			usuarios[contIndices] = usuario;
 			contraseñas[contIndices] = contraseña;
 			categorias[contIndices] = categoria;
 			contIndices++;
+		
 		}
 		if(cont == 0) {
-			System.out.println("El archivo de usuarios esta vacio.");
+			System.out.println("\n-> El archivo de usuarios esta vacio.");
 		}
 		cont = 0;
 		arch = new Scanner(new File("datos_creadores.txt"));
@@ -145,14 +313,15 @@ public class App {
 			for(int i = 0; i < contIndices;i++) {
 				if (creador.equalsIgnoreCase(creadores[i])) {
 					especialidades[i] = especialidad;
+					experiencia = experiencia / 365;
 					añosExperiencia[i] = experiencia;
 					edadCreadores[i] = edad;
 					break;
-				}
-			}
+				}	
+			}	
 		}	
 		if(cont == 0) {
-			System.out.println("El archivo de creadores esta vacio.");
+			System.out.println("\n-> El archivo de creadores esta vacio.");
 		}
 		cont = 0;
 		arch = new Scanner(new File("datos_ia.txt"));
@@ -165,10 +334,10 @@ public class App {
 			String creador = partes[4];
 			int cantMejoras = Integer.parseInt(partes[5]);
 			cont++;
-			
+		
 			for(int i = 0; i < contIndices;i++) {
 				if (creador.equalsIgnoreCase(creadores[i])) {
-					años[i] = año;
+					años[i] = (int)año;
 					nombresIa[i] = nombreIa;
 					velocidades[i] = velocidadAprendizaje;
 					tipoIas[i] = tipoIa;
@@ -178,7 +347,7 @@ public class App {
 			}
 		}
 		if (cont == 0) {
-			System.out.println("El archivo de ia esta vacio.");
+			System.out.println("\n-> El archivo de ia esta vacio.");
 		}
 		return contIndices;
 	}
@@ -381,10 +550,12 @@ public class App {
 					if(archivo.equalsIgnoreCase("Usuarios")) {
 
 						System.out.println("\n-- Para crear un nuevo usuario necesitamos registrar los siguientes datos --");
-						System.out.println("\n- Ingrese el nombre de usuario -");						
+						System.out.println("\n- Ingrese el nombre de usuario -");	
+						contIngresosDeDatos[0] += 1;
 						usuarios[contGeneral + 1] = leer.nextLine(); // se agrega el nombre del usuario
 						
 						System.out.println("\n- Ingrese la contraseña del usuario -");
+						contIngresosDeDatos[0] += 1;
 						contraseñas[contGeneral + 1] = leer.nextLine(); // se agrega la nueva contraseña
 						
 						// margen de error para las categorias
@@ -393,6 +564,7 @@ public class App {
 							String categoria = leer.nextLine(); // se agrega la categoria
 							
 							if(categoria.equalsIgnoreCase("normal") || categoria.equalsIgnoreCase("administrador")) {
+								contIngresosDeDatos[0] += 1;
 								categorias[contGeneral + 1] = categoria; // se agrega la categoria
 								break;
 							} else {
@@ -410,6 +582,7 @@ public class App {
 								break;
 							}else {
 								if(creadores[contGeneral + 1] == null) {
+									contIngresosDeDatos[0] += 1;
 									creadores[contGeneral + 1] = (nombre + " - ");
 								}else {
 									creadores[contGeneral + 1] += (nombre + " - ");
@@ -422,10 +595,12 @@ public class App {
 					else if(archivo.equalsIgnoreCase("Creadores")) {
 						
 						System.out.println("\n-- Para añadir a un nuevo creador se necesitaran los siguientes datos, los cuales tendras que ir rellenando --");
-						System.out.println("\n- Ingrese el nombre del creador -");						
+						System.out.println("\n- Ingrese el nombre del creador -");	
+						contIngresosDeDatos[0] += 1;
 						creadores[contGeneral + 1] = leer.nextLine(); // se agrega el nombre del nuevo creador
 						
 						System.out.println("\n- Ingrese el tiempo que tiene de experiencia -");
+						contIngresosDeDatos[0] += 1;
 						añosExperiencia[contGeneral + 1] = Integer.parseInt(leer.nextLine()); // se agrega el tiempo de experiencia
 						
 						// margen de error
@@ -435,6 +610,7 @@ public class App {
 							System.out.println("\n- especialidad -");
 							String especial = leer.nextLine(); // se agrega la especialidad
 							if(especial.equalsIgnoreCase("maestroia") || especial.equalsIgnoreCase("programador") || especial.equalsIgnoreCase("iamaster")) {
+								contIngresosDeDatos[0] += 1;
 								especialidades[contGeneral + 1] = especial;
 								break;
 							}else {
@@ -449,6 +625,7 @@ public class App {
 							System.out.println("\n- Edad -");
 							int edad = Integer.parseInt(leer.nextLine());
 							if(edad > 20 && edad < 100) {
+								contIngresosDeDatos[0] += 1;
 								edadCreadores[contGeneral + 1] = edad;
 								break;
 							}else {
@@ -687,6 +864,9 @@ public class App {
 	    BufferedWriter writer = new BufferedWriter(new FileWriter(archivo));
 	    for (int i = 0; i < indice; i++) {
 	        for (int j = 0; j < columnas; j++) {
+	        	if(matriz[i][j] == null) {
+	        		continue;
+	        	}
 	            writer.write(matriz[i][j]);
 	            if (j != columnas - 1) {
 	                writer.write(",");
@@ -835,4 +1015,5 @@ public class App {
 		System.out.println("\n- El tipo de Usuario " + tipo + " -");
 		System.out.println("\n-- Tiene un porcentaje de " + porcentaje + "% respecto al total --");
  	}
+ 
 }
