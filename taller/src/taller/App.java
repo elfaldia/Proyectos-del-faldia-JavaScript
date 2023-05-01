@@ -1,6 +1,7 @@
 package taller;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.io.File;
 import java.io.BufferedWriter;
@@ -13,6 +14,7 @@ public class App {
 		String[][] matrizUno = armarMatriz("datos_usuarios.txt");
 		String[][] matrizDos = armarMatriz("datos_creadores.txt");
 		String[][] matrizTres = armarMatriz("datos_ia.txt");
+		File fileUno = new File("datos_usuarios.txt"); File fileDos = new File("datos_creadores.txt"); File fileTres = new File("datos_ia.txt");
 		
 		eliminarDatos(matrizUno,matrizDos,matrizTres);		
 		
@@ -45,24 +47,15 @@ public class App {
 			int indice = (int) (Math.random()*indiceGeneral);
 			// Este es la variable que nos ayudara a ingresar en los menú.
 			String categoriaEspecífica = login(indice,usuarios,contraseñas,categorias,creadores,indiceGeneral);
-			menuGeneral(edadCreadores,añosExperiencia,categoriaEspecífica,indiceGeneral,indice,especialidades,nombreIa,cantidadDeMejoras,tipoDeIa,velocidadDeAprendizaje,contIngresosDeDatos,añoDeCreacion,creadores,categorias,usuarios,contraseñas);
+			menuGeneral(matrizUno,matrizDos,matrizTres,edadCreadores,añosExperiencia,categoriaEspecífica,indiceGeneral,indice,especialidades,nombreIa,cantidadDeMejoras,tipoDeIa,velocidadDeAprendizaje,contIngresosDeDatos,añoDeCreacion,creadores,categorias,usuarios,contraseñas);
 		}
-		/*
 		// matriz para la corrupción
-		int filas = 0;
-		int columna = 4;
-		String[][] txt1 = new String[100][100];
-		File archivo = new File("datos_usuarios.txt");
-		rellenarMatriz(txt1,archivo,filas,columna,contIngresosDeDatos);
+		corromperMatriz("datos_usuarios.txt",fileUno,filas("datos_usuarios.txt"),columnas("datos_usuarios.txt"),contIngresosDeDatos);
 		// segunda matriz
-		String[][] txt2 = new String[100][100];
-		File archivo2 = new File("datos_creadores.txt");
-		rellenarMatriz(txt2,archivo2,filas,columna,contIngresosDeDatos);
+		corromperMatriz("datos_creadores.txt",fileDos,filas("datos_creadores.txt"),columnas("datos_creadores.txt"),contIngresosDeDatos);
 		// tercera matriz
-		String[][] txt3 = new String[100][100];
-		File archivo3 = new File("datos_ia.txt");
-		rellenarMatriz(txt3,archivo3,filas,columna,contIngresosDeDatos);
-		*/
+		corromperMatriz("datos_ia.txt",fileTres,filas("datos_ia.txt"),columnas("datos_ia.txt"),contIngresosDeDatos);
+		
 	}
 	
 	public static void eliminarDatos(String[][] matrizUno , String[][] matrizDos, String[][] matrizTres) throws IOException{
@@ -106,7 +99,10 @@ public class App {
 			}
 		}
  		corrupcionDeDatos(temporalUno,fileUno,filasNuevaMatriz,columnasUno); corrupcionDeDatos(temporalDos,fileDos,filasNuevaMatriz,columnasDos); corrupcionDeDatos(temporalTres,fileTres,filasNuevaMatriz,columnasTres);
-
+ 		
+ 		matrizUno = temporalUno;
+ 		matrizDos = temporalDos;
+ 		matrizTres = temporalTres;
  		
  		// Impreción de reporte
  		System.out.println("\n---------------------------------------------------------\n\t\tINFORME DE DATOS ELIMINADOS\n---------------------------------------------------------");
@@ -115,7 +111,6 @@ public class App {
  		
 	}
 	
-
 	public static String[][] reorganizarMatriz(String[][] matriz) {
 	    int filas = matriz.length;
 	    int columnas = matriz[0].length;
@@ -151,7 +146,6 @@ public class App {
 	    return matriz;
 	}
 	
-	
 	public static String[][] armarMatriz(String archivo) throws IOException {
 		
 		Scanner arch = new Scanner(new File(archivo));
@@ -169,8 +163,7 @@ public class App {
 		}
 		return matriz;
 	}
-	
-	
+
 	public static int filas(String archivo)  throws IOException{
 		
 		Scanner arch = new Scanner(new File(archivo));
@@ -180,8 +173,7 @@ public class App {
 			cont++;
 		}return cont;
 	}
-	
-	
+		
 	public static int columnas(String archivo)  throws IOException{
 		
 		Scanner arch = new Scanner(new File(archivo));
@@ -191,8 +183,7 @@ public class App {
 			cont = partes.length;
 		}return cont;
 	}
-	
-	
+		
 	public static void imprimirMatriz(String[][] matriz,int filas,int columnas) {
 		for (int i = 0;i < filas; i++) {
 			for (int j = 0; j < columnas; j++) {
@@ -201,7 +192,6 @@ public class App {
     	System.out.println();
 		}
 	}
-	
 	
 	public static int verificadorExistenciaIAWINS(String[][] partesUno,String[][] partesDos, String[][] partesTres, int c1 , int c2, int c3, int f) {
 		int cont = 0;
@@ -224,32 +214,35 @@ public class App {
 		return cont;
 	}
 	
-
-	public static void rellenarMatriz(String[][] matriz,File archivo,int filas,int columnas, int[] contIngresosDeDatos) throws IOException{
-	    Scanner arch = new Scanner(archivo);
-	    filas = 0;
-	    columnas = 0;
+	public static int verificadorNombres(String[][] partesUno,String[][] partesDos, String[][] partesTres, int c1 , int c2, int c3, int f,String nombre) {
+		int cont = 0;
 		
-	    // Leer los datos del archivo y almacenarlos en la matriz
-	    int cont = 0;
-	    while (arch.hasNextLine()) {
-	        String[] line = arch.nextLine().split(",");
-	        columnas = line.length;
-	        cont++;
-	        for (int j = 0; j < line.length; j++) {
-	            matriz[filas][j] = line[j];
-	        }
-	        filas++;
-	    }
-	    if (cont == 0) {
-	    	System.out.println("El archivo se encuentra vacio.");
-	    	return;
-	    }
-	    arch.close(); // cerrar el scanner
-
+		for(int j = 0; j < c1 ; j++) {
+			if(partesUno[f][j].equalsIgnoreCase( nombre)) {
+				cont++;
+			}
+		}
+		for(int j = 0; j < c2 ; j++) {
+			if(partesDos[f][j].equalsIgnoreCase(nombre)) {
+				cont++;
+			}
+		}
+		for(int j = 0; j < c3 ; j++) {
+			if(partesTres[f][j].equalsIgnoreCase( nombre)) {
+				cont++;
+			}	
+		}
+		return cont;
+	}
+	
+	public static void corromperMatriz(String arch, File archivo,int filas,int columnas, int[] contIngresosDeDatos) throws IOException{
+	   
+		// Matriz para traspaso de datos
+		String[][] matriz = armarMatriz(arch);
+		
 	    // Generar valores aleatorios e insertarlos en la matriz
 	    int azar = (int)(Math.random()*4);
-	    if(azar == 1|| azar == 2) {
+	    if(azar == 1|| azar == 2 || azar == 3) {
 	    	int aux = 0;
 	    	while(true) {
 	    		if(contIngresosDeDatos[0] == 0) {
@@ -264,15 +257,9 @@ public class App {
 	    		}
 	    	}
 	    }
-	    /*for (int i = 0;i < filas; i++) {
-	    	for (int j = 0; j < columnas; j++) {
-	    		System.out.print(matriz[i][j] + "\t");
-	    	}
-	    	System.out.println();
-	    }*/
+	    // corrupcion de la matriz 
 	    corrupcionDeDatos(matriz,archivo,filas,columnas);
 	}
-	
 	
 	public static int rellenarListas( int[] edadCreadores,int[] añosExperiencia ,int[] años,String[] creadores,String[] usuarios,String[] contraseñas,String[] categorias,String[] especialidades,String[] nombresIa,float[] velocidades,String[] tipoIas,int[] cantidadDeMejoras) throws IOException {
 		
@@ -363,7 +350,266 @@ public class App {
 		return categorias[indice];
 	}
 	
-	public static void menuGeneral(int[] edadCreadores,int[] añosExperiencia,String categoriaEspecífica ,int contGeneral, int indice, String[] especialidades,String[] nombreIas,int[] cantMejoras,String[] tipoDeIa,float[] velocidadDEMejora,int[] contIngresosDeDatos,int[] añoCreacion, String[] creadores,String[] categorias,String[] usuarios,String[] contraseñas) {
+	public static void editarDatosIaVelocidad(String[][] matriz, int[] contIngresos)throws IOException {
+		
+		Scanner leer = new Scanner(System.in);
+		
+		String[] listaComprobacion = new String[matriz.length];
+		int velocidad = 0;
+		
+		// Salida por pantalla
+		System.out.println("\n--- Ingrese el nombre del IA a la cual desea hacerle una edición ---\n");
+		for(int i = 0; i < matriz.length ; i++) {
+			System.out.println((i +1) + ") -> " + matriz[i][0] + " con una velocidad de mejora de " + matriz[i][2] + " dias.");
+			listaComprobacion[i] = matriz[i][0];}
+		
+		// ingreso por patalla
+		// comprobacion de error
+		String nombre = "";
+	
+		while(true) {
+			int cont = 0;                                
+			System.out.println("\n-- Introduzca el nombre --\n");
+			nombre = leer.nextLine();
+			
+			for(int i = 0; i < listaComprobacion.length; i++) {
+				if (nombre.equalsIgnoreCase(listaComprobacion[i])) {
+					velocidad = Integer.parseInt(matriz[i][2]);
+					cont++;
+					break;
+				}
+			}if (cont != 0) {
+				break;
+			}else {
+				System.out.println("\n-La opción que ingreso es erronea, ingrese nuevamente-");
+				continue;
+				}	
+			}
+		// Ingreso de datos
+		int nuevaMejora = 0;
+		System.out.println("\n-> El nombre del IA es " + nombre + " y posee una velocidad de mejora de " + velocidad + ". -");
+		System.out.println("\n-- Tenga en cuenta que el minio de velocidad es de 10 y el maximo de 60 --");
+		System.out.println("-- Aparte, la modificación que haga debe ser igual o mas rapida que la ya existente --");
+
+		while(true) {
+			System.out.println("\n- ¿Que velocidad desea colocarle al usuario? -");
+			nuevaMejora = Integer.parseInt(leer.nextLine());
+			if(velocidad >= nuevaMejora && nuevaMejora >= 10 && 60 >= nuevaMejora) {
+				contIngresos[0]++;
+				break;
+			}else {
+				System.out.println("\n-- La mejora que ingreso esta fuera del rango específicado --");
+				continue;
+			}
+		}
+		// Reemplazo los datos en el txt
+		for(int i = 0; i < listaComprobacion.length; i++) {
+			if(nombre.equalsIgnoreCase(matriz[i][0])) {
+				matriz[i][2] = Integer.toString(nuevaMejora);
+			}
+		}
+		File archivo = new File("datos_ia.txt");
+		corrupcionDeDatos(matriz,archivo,filas("datos_ia.txt"),columnas("datos_ia.txt"));
+		System.out.println("\n---- La velocidad fue actualizada con exito!, paso de tener " + velocidad + " en velocidad de mejora a " + nuevaMejora + " ----");
+	}
+	
+	public static void editarDatosIaMejora(String[][] matriz,int[] contIngresos)throws IOException {
+		
+		Scanner leer = new Scanner(System.in);
+		
+		String[] listaComprobacion = new String[matriz.length];
+		int mejoras = 0;
+		String tipoIa = "";
+		
+		// Salida por pantalla
+		System.out.println("\n--- Ingrese el nombre del IA a la cual desea hacerle una edición ---\n");
+		for(int i = 0; i < matriz.length ; i++) {
+			System.out.println((i +1) + ") -> " + matriz[i][0] + " tiene " + matriz[i][5] + " mejoras y es de tipo " + matriz[i][3]);
+			listaComprobacion[i] = matriz[i][0];}
+		
+		// ingreso por patalla
+		// comprobacion de error
+		String nombre = "";
+	
+		while(true) {
+			int cont = 0;                                
+			System.out.println("\n-- Introduzca el nombre --\n");
+			nombre = leer.nextLine();
+			
+			for(int i = 0; i < listaComprobacion.length; i++) {
+				if (nombre.equalsIgnoreCase(listaComprobacion[i])) {
+					mejoras = Integer.parseInt(matriz[i][5]);
+					tipoIa = matriz[i][3];
+					cont++;
+					break;
+				}
+			}if (cont != 0) {
+				break;
+			}else {
+				System.out.println("\n-La opción que ingreso es erronea, ingrese nuevamente-");
+				continue;
+				}	
+			}
+		// Ingreso de datos
+		int nuevaMejora = 0;
+		System.out.println("\n-> El nombre del IA es " + nombre + ", este tiene " + mejoras + " mejoras, siendo asi de tipo " + tipoIa + " -");
+		//Filtrado por tipo de ia
+		
+		// tipo simple
+		if(tipoIa.equalsIgnoreCase("simple")) {
+			System.out.println("\n-- Este IA no puede ser modificada ya que es de tipo simple, por lo tanto, no puede ser mejorado --"); 
+		}
+		
+		// tipo medio
+		else if(tipoIa.equalsIgnoreCase("media")) {
+			
+			System.out.println("\n-- Tenga en cuenta que el minimo de mejora es de 0 y el maximo de 5, ya que este ia es de tipo " + tipoIa + " --");
+			System.out.println("-- Aparte, la modificación que haga debe ser igual o mayor que la ya existente --");
+
+			while(true) {
+				System.out.println("\n- ¿De cuanto será la mejora? -");
+				nuevaMejora = Integer.parseInt(leer.nextLine());
+				if(mejoras <= nuevaMejora && nuevaMejora >= 0 && 5 >= nuevaMejora) {
+					contIngresos[0]++;
+					break;
+				}else {
+					System.out.println("\n-- La mejora que ingreso esta fuera del rango específicado --");
+					continue;
+				}
+			}
+			// Reemplazo los datos en el txt
+			for(int i = 0; i < listaComprobacion.length; i++) {
+				if(nombre.equalsIgnoreCase(matriz[i][0])) {
+					matriz[i][5] = Integer.toString(nuevaMejora);
+				}
+			}
+			File archivo = new File("datos_ia.txt");
+			corrupcionDeDatos(matriz,archivo,filas("datos_ia.txt"),columnas("datos_ia.txt"));
+			System.out.println("\n---- Enhorabuena ahora el IA " + nombre + " fue mejorado!, paso de tener " + mejoras + " en velocidad de mejora a " + nuevaMejora + " ----");
+		}
+		
+		// tipo avanzada
+		else if(tipoIa.equalsIgnoreCase("avanzada")) {
+			
+			System.out.println("\n-- Tenga en cuenta que el minimo de mejora es de 0 y el maximo de 30, ya que este ia es de tipo " + tipoIa + " --");
+			System.out.println("-- Aparte, la modificación que haga debe ser igual o mayor que la ya existente --");
+
+			while(true) {
+				System.out.println("\n- ¿De cuanto será la mejora? -");
+				nuevaMejora = Integer.parseInt(leer.nextLine());
+				if(mejoras <= nuevaMejora && nuevaMejora >= 0 && 30 >= nuevaMejora) {
+					contIngresos[0]++;
+					break;
+				}else {
+					System.out.println("\n-- La mejora que ingreso esta fuera del rango específicado --");
+					continue;
+				}
+			}
+			// Reemplazo los datos en el txt
+			for(int i = 0; i < listaComprobacion.length; i++) {
+				if(nombre.equalsIgnoreCase(matriz[i][0])) {
+					matriz[i][5] = Integer.toString(nuevaMejora);
+				}
+			}
+			File archivo = new File("datos_ia.txt");
+			corrupcionDeDatos(matriz,archivo,filas("datos_ia.txt"),columnas("datos_ia.txt"));
+			System.out.println("\n---- Enhorabuena ahora el IA " + nombre + " fue mejorado!, paso de tener " + mejoras + " en velocidad de mejora a " + nuevaMejora + " ----");
+		}
+	}
+	
+	public static void eliminarDatosNombres(String[][] matrizUsuarios,String[][] matrizCreadores, String[][] matrizIa,int[] contIngresos)throws IOException {
+		
+		Scanner leer = new Scanner(System.in);
+		// matrices
+		String[][] modificadaUno = new String[filas("datos_usuarios.txt")][columnas("datos_usuarios.txt")]; String[][] modificadaDos = new String[filas("datos_creadores.txt")][columnas("datos_creadores.txt")]; String[][] modificadaTres = new String[filas("datos_ia.txt")][columnas("datos_ia.txt")];
+		
+		// columnas con los diferentes archivos txt
+		int columnasUno = columnas("datos_usuarios.txt"); int columnasDos = columnas("datos_creadores.txt"); int columnasTres = columnas("datos_ia.txt");
+		// filas generales
+		int filas = filas("datos_usuarios.txt");
+		int filasNuevaMatriz = 0;
+		// lista nombres
+		String[] listaComprobacion = new String[filas("datos_usuarios.txt")];
+		
+		System.out.println("\n--- En este apartado puedes eliminar toda la información de un creador en específico ---");
+		System.out.println("--- Se desplegará una lista con todos los creadores vigentes ---\n");
+		
+		// lista de nombre - rellenar lista de nombres
+		for(int i = 0; i < filas;i++) {
+			System.out.println((i+1) + ") " + matrizCreadores[i][0]);
+			listaComprobacion[i] = matrizCreadores[i][0];
+		}
+		
+		// bucle comprobación de ingresos correcto de datos
+		String nombre = "";
+		while(true) {
+			int cont = 0;                                
+			System.out.println("\n-- Introduzca el nombre --\n");
+			nombre = leer.nextLine();
+			
+			for(int i = 0; i < listaComprobacion.length; i++) {
+				if (nombre.equalsIgnoreCase(listaComprobacion[i])) {
+					cont++;
+					contIngresos[0]++;
+					break;
+				}
+			}if (cont != 0) {
+				break;
+			}else {
+				System.out.println("\n-La opción que ingreso es erronea, ingrese nuevamente-");
+				continue;
+			}	
+		}
+		
+		// crear nueva matriz
+		for(int i = 0; i < filas; i++) {
+			int verificador = verificadorNombres(matrizUsuarios,matrizCreadores,matrizIa,columnasUno , columnasDos,columnasTres,i,nombre);
+			if(verificador == 0) {
+				modificadaUno[i] = matrizUsuarios[i];
+				modificadaDos[i] = matrizCreadores[i];
+				modificadaTres[i] = matrizIa[i];
+				filasNuevaMatriz++;
+			}else {
+				continue;
+			}
+		}
+		
+		//reordanizar la matriz
+
+		modificadaUno = reorganizarMatriz(modificadaUno);modificadaDos = reorganizarMatriz(modificadaDos);modificadaTres = reorganizarMatriz(modificadaTres);
+		
+		// Nuevas matrices para poder hacer el paso de datos limpios evitando los null
+		String[][] temporalUno = new String[filasNuevaMatriz][columnas("datos_usuarios.txt")]; String[][] temporalDos = new String[filasNuevaMatriz][columnas("datos_creadores.txt")]; String[][] temporalTres = new String[filasNuevaMatriz][columnas("datos_ia.txt")];
+		// files
+		File fileUno = new File("datos_usuarios.txt"); File fileDos = new File("datos_creadores.txt"); File fileTres = new File("datos_ia.txt");
+		
+		// Rellenar las matrices sin contar los null
+		for(int i = 0; i < filasNuevaMatriz; i++) {
+			for(int j = 0; j < columnasUno ; j++) {
+				temporalUno[i][j] = modificadaUno[i][j];
+			}
+			for(int j = 0; j < columnasDos ; j++) {
+				temporalDos[i][j] = modificadaDos[i][j];
+			}
+			for(int j = 0; j < columnasTres ; j++) {
+				temporalTres[i][j] = modificadaTres[i][j];
+			}
+		}
+		
+		//ahora pasamos los datos de la matriz temporales a la original del codigo
+		matrizUsuarios = temporalUno;
+		matrizCreadores = temporalDos;
+		matrizIa = temporalTres;
+		
+		//eliminar las filas en todos los archivos txt y reescribirlos nuevamente
+		corrupcionDeDatos(temporalUno,fileUno,filasNuevaMatriz,columnasUno); corrupcionDeDatos(temporalDos,fileDos,filasNuevaMatriz,columnasDos); corrupcionDeDatos(temporalTres,fileTres,filasNuevaMatriz,columnasTres);
+	
+		//impreción
+		System.out.println("\n-- Se ha borrado toda la información de " + nombre + " en todo la base de datos. --");
+		
+	}
+	
+	public static void menuGeneral(String[][] matrizUsuario,String[][] matrizCreadores ,String[][] matrizIA, int[] edadCreadores,int[] añosExperiencia,String categoriaEspecífica ,int contGeneral, int indice, String[] especialidades,String[] nombreIas,int[] cantMejoras,String[] tipoDeIa,float[] velocidadDEMejora,int[] contIngresosDeDatos,int[] añoCreacion, String[] creadores,String[] categorias,String[] usuarios,String[] contraseñas)throws IOException {
 		Scanner leer = new Scanner(System.in);
 		
 		if(categoriaEspecífica.equalsIgnoreCase("normal")) {
@@ -478,6 +724,29 @@ public class App {
 					else if(opcion.equalsIgnoreCase("mejora")) {
 						ordenarPorMejora(nombreIas,cantMejoras,contGeneral);
 					}
+				}
+				// Submenu editar por cualidad
+				else if(subMenuIa.equalsIgnoreCase("editar")) {
+					System.out.println("\n-- En la opción editar datos de los ia podrás alterar la velocidad de mejora y su cantidad de mejoras: --");
+					System.out.println("\n- velocidad de mejora. (velocidad)\n- cantidad de mejoras. (mejoras)");
+					System.out.println("\n || RECOMENDACIÓN: al ingresar el tipo de usuario que desea, coloque  lo que se enceuntra entre parentesis, si este no posee uno, introduzca su nombre tal cual ||");
+					String opcion = "";
+					// magen de error
+					while(true) {
+						System.out.println("\n-¿Cual opción eligira?-");
+						opcion = leer.nextLine();
+						if(opcion.equalsIgnoreCase("velocidad") || opcion.equalsIgnoreCase("mejoras")) {
+							break;
+						}else {
+							System.out.println("-La opción que ingreso es erronea, ingrese nuevamente-");
+							continue;
+						}
+					}
+					//editar la velocidad
+					if(opcion.equalsIgnoreCase("velocidad")){
+						editarDatosIaVelocidad(matrizIA,contIngresosDeDatos); }
+					else if(opcion.equalsIgnoreCase("mejoras")) {
+						editarDatosIaMejora(matrizIA,contIngresosDeDatos); }
 				}
 			}
 			else if (subMenu.equalsIgnoreCase("Usuarios")) {
@@ -636,6 +905,10 @@ public class App {
 						// Printear los datos añadidos
 						System.out.println("\n--- Se a creado con exito el nuevo creador! el mismo posee los siguientes datos  ---\n- |Nombre| " + creadores[contGeneral + 1] + "\n- |Años de experiencia| " + añosExperiencia[contGeneral + 1] + "\n- |Especialidad| " + especialidades[contGeneral + 1] + "\n- |Edad| - " + edadCreadores[contGeneral + 1]);
 					}
+				}
+				// Opcion eliminar datos de usuario (eliminar)
+				else if (subMenuUsuario.equalsIgnoreCase("eliminar")) {
+					eliminarDatosNombres(matrizUsuario,matrizCreadores, matrizIA, contIngresosDeDatos);
 				}
 			}
 		}
@@ -864,9 +1137,6 @@ public class App {
 	    BufferedWriter writer = new BufferedWriter(new FileWriter(archivo));
 	    for (int i = 0; i < indice; i++) {
 	        for (int j = 0; j < columnas; j++) {
-	        	if(matriz[i][j] == null) {
-	        		continue;
-	        	}
 	            writer.write(matriz[i][j]);
 	            if (j != columnas - 1) {
 	                writer.write(",");
@@ -1015,5 +1285,5 @@ public class App {
 		System.out.println("\n- El tipo de Usuario " + tipo + " -");
 		System.out.println("\n-- Tiene un porcentaje de " + porcentaje + "% respecto al total --");
  	}
- 
+  	
 }
