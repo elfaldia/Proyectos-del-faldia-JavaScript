@@ -168,9 +168,10 @@ public class App {
 		Scanner arch = new Scanner(new File(archivo));
 		int cont = 0;
 		while (arch.hasNextLine()) {
-			String partes = arch.nextLine();
+			arch.nextLine();
 			cont++;
-		}return cont;
+		}arch.close()
+;		return cont;
 	}
 		
 	public static int columnas(String archivo)  throws IOException{
@@ -335,6 +336,7 @@ public class App {
 		if (cont == 0) {
 			System.out.println("\n-> El archivo de ia esta vacio.");
 		}
+		arch.close();
 		return contIndices;
 	}
 
@@ -410,6 +412,7 @@ public class App {
 		File archivo = new File("datos_ia.txt");
 		corrupcionDeDatos(matriz,archivo,filas("datos_ia.txt"),columnas("datos_ia.txt"));
 		System.out.println("\n---- La velocidad fue actualizada con exito!, paso de tener " + velocidad + " en velocidad de mejora a " + nuevaMejora + " ----");
+		leer.close();
 	}
 	
 	public static void editarDatosIaMejora(String[][] matriz,int[] contIngresos)throws IOException {
@@ -513,7 +516,7 @@ public class App {
 			File archivo = new File("datos_ia.txt");
 			corrupcionDeDatos(matriz,archivo,filas("datos_ia.txt"),columnas("datos_ia.txt"));
 			System.out.println("\n---- Enhorabuena ahora el IA " + nombre + " fue mejorado!, paso de tener " + mejoras + " en velocidad de mejora a " + nuevaMejora + " ----");
-		}
+		}leer.close();
 	}
 	
 	public static void eliminarDatosNombres(String[][] matrizUsuarios,String[][] matrizCreadores, String[][] matrizIa,int[] contIngresos)throws IOException {
@@ -605,7 +608,7 @@ public class App {
 	
 		//impreción
 		System.out.println("\n-- Se ha borrado toda la información de " + nombre + " en todo la base de datos. --");
-		
+		leer.close();
 	}
 	
 	public static void menuGeneral(String[][] matrizUsuario,String[][] matrizCreadores ,String[][] matrizIA, int[] edadCreadores,int[] añosExperiencia,String categoriaEspecífica ,int contGeneral, int indice, String[] especialidades,String[] nombreIas,int[] cantMejoras,String[] tipoDeIa,float[] velocidadDEMejora,int[] contIngresosDeDatos,int[] añoCreacion, String[] creadores,String[] categorias,String[] usuarios,String[] contraseñas)throws IOException {
@@ -905,12 +908,188 @@ public class App {
 						System.out.println("\n--- Se a creado con exito el nuevo creador! el mismo posee los siguientes datos  ---\n- |Nombre| " + creadores[contGeneral + 1] + "\n- |Años de experiencia| " + añosExperiencia[contGeneral + 1] + "\n- |Especialidad| " + especialidades[contGeneral + 1] + "\n- |Edad| - " + edadCreadores[contGeneral + 1]);
 					}
 				}
+				
+				// Opcion editar datos dde distintos archivos (editar)
+				else if (subMenuUsuario.equalsIgnoreCase("editar")) {
+					// Bienvenida al codigo
+					System.out.println("\n-- En este apartado puedes editar la base de dato de dos archivos, los cuales son -- \n- datos_usuarios.txt (usuarios)\n- datos_creadores.txt (creadores)");
+					System.out.println("\n || RECOMENDACIÓN: al ingresar el tipo de usuario que desea, coloque  lo que se enceuntra entre parentesis, si este no posee uno, introduzca su nombre tal cual ||");
+					
+					// Bucle
+					String opcion = "";
+					while(true) {
+						System.out.println("\n- Ingrese el nombre del archivo que desea editar -");
+						opcion = leer.nextLine();
+						if(opcion.equalsIgnoreCase("usuarios") || opcion.equalsIgnoreCase("creadores")) {
+							break;
+						}else {
+							System.out.println("\n--- El nombre del archivo que ingreso es erroneo, intente nuevamente ---");
+							continue;
+						}
+					}System.out.println("\n-- Acontinuación se desplegará la lista con los nombres los cuales puedes editar dichas bases de datos --\n");
+					for(int i = 0; i < filas("datos_usuarios.txt") ; i++) {
+						System.out.println("-> " + creadores[i]);
+					}
+					
+					// El menu inicial
+					if (opcion.equalsIgnoreCase("usuarios")) {
+						editarDatosUsuarios(matrizUsuario,contIngresosDeDatos);
+					}
+					else if (opcion.equalsIgnoreCase("creadores")) {
+						editarDatosCreadores(matrizCreadores,contIngresosDeDatos);
+					}
+				}
+				
 				// Opcion eliminar datos de usuario (eliminar)
 				else if (subMenuUsuario.equalsIgnoreCase("eliminar")) {
 					eliminarDatosNombres(matrizUsuario,matrizCreadores, matrizIA, contIngresosDeDatos);
 				}
 			}
+		}leer.close();
+	}
+	
+	public static void editarDatosCreadores(String[][] matriz, int[] ingresoDatos) throws IOException {
+		
+		Scanner leer = new Scanner(System.in);
+		
+		int fila = 0;
+		String nombre = "";
+		boolean encontrado = false;
+		
+		// Se busca el nombre en la matriz en la parte de los nombres
+		while(!encontrado) {
+			System.out.println("\n-- Ingrese el nombre del creador que desea editar su base de datos --");
+			nombre = leer.nextLine();
+			
+			for(int i = 0 ; i < filas("datos_creadores.txt"); i++) {
+				if(matriz[i][0].equalsIgnoreCase(nombre)) {
+					fila = i;
+					encontrado = true;
+					break;
+				}	
+			}if (encontrado == false) {
+				System.out.println("\n- El nombre que ingresó no es válido, intente nuevamente -");
+			}
 		}
+		
+		// Editar los datos de la matriz para posteriormente reescribirla
+		System.out.println("\n- Ahora, procederemos a preguntarle y que ingrese los datos que tiene que alterar, las cuales son: dias de experiencia, categorias de creador y edad. -");
+		
+		// ciclo para la comprobación de ingresio de datos para los dias de experiencia 
+		int experiencia = 0;
+		while(true) {
+			System.out.println("\n-- Ingrese los dias de experiencia que posee el creador, tenga en cuenta que el minimo de experiencia es de 2000 hasta 3000 --");
+			experiencia = Integer.parseInt(leer.nextLine());
+			if(experiencia >= 2000 || experiencia <= 3000) {
+				break;
+			}else {
+				System.out.println("\n-- Los dias ingresados no son validos, intente nuevamente --");
+				continue;
+			}
+		}		
+		matriz[fila][1] = Integer.toString(experiencia); // cambio el tipo de usuario.
+		ingresoDatos[0] ++;
+
+		// ciclo para la comprobación de ingresio de categorias de creadores
+		String categoria = "";
+		while(true) {
+			System.out.println("\n-- Ingrese la categoria del creador, tenga en cuenta que las categorias son (maestro ia) (programador) (ia master) --");
+			categoria = leer.nextLine();
+			if(categoria.equalsIgnoreCase("maestro ia") || categoria.equalsIgnoreCase("programador") || categoria.equalsIgnoreCase("ia master")) {
+				break;
+			}else {
+				System.out.println("\n-- La categoria que ingresó no es valida, intente nuevamente --");
+				continue;
+			}
+		}				
+		matriz[fila][2] = categoria; // cambio el tipo de usuario.
+		ingresoDatos[0] ++;		
+		
+		// ciclo para la comprobación de ingresio de datos para los dias de experiencia 
+		int edad = 0;
+		while(true) {
+			System.out.println("\n-- Ingrese la edad del creador, tenga en cuenta que el minimo de edad es de 20 y el maximo es de 40 --");
+			edad = Integer.parseInt(leer.nextLine());
+			if(edad >= 20 || edad <= 40) {
+				break;
+			}else {
+				System.out.println("\n-- La edad que ingresó no es valida, intente nuevamente --");
+				continue;
+			}
+		}		
+		matriz[fila][3] = Integer.toString(edad); // cambio el tipo de usuario.
+		ingresoDatos[0] ++;
+		
+		// Reescribir el archivo txt con la matriz
+		File archivo = new File("datos_creadores.txt");
+		corrupcionDeDatos(matriz,archivo,filas("datos_usuarios.txt"),columnas("datos_usuarios.txt")); // se reescribió la matriz
+		
+		// Mensaje final		
+		System.out.println("\n --- Buenisimo! los datos han sido editados correctamente. ---");
+		System.out.println("\n --- Ahora " + nombre + " tiene una cantidad de " + matriz[fila][1] + " dias con experiencia, siendo este ahora de categoria " + matriz[fila][2] + " y tiene una " + matriz[fila][3] + " años de edad ---");
+		
+		leer.close();
+	}
+	
+	public static void editarDatosUsuarios(String[][] matriz,int[] ingresoDatos) throws IOException{
+		
+		Scanner leer = new Scanner(System.in);
+		
+		int fila = 0;
+		String nombre = "";
+		boolean encontrado = false;
+		
+		// Se busca el nombre en la matriz en la parte de los nombres
+		while(!encontrado) {
+			System.out.println("\n-- Ingrese el nombre del creador que desea editar su base de datos --");
+			nombre = leer.nextLine();
+			
+			for(int i = 0 ; i < filas("datos_usuarios.txt"); i++) {
+				if(matriz[i][3].equalsIgnoreCase(nombre)) {
+					fila = i;
+					encontrado = true;
+					break;
+				}	
+			}if (encontrado == false) {
+				System.out.println("\n- El nombre que ingresó no es válido, intente nuevamente -");
+			}
+		}
+		
+		// Editar los datos de la matriz para posteriormente reescribirla
+		System.out.println("\n- Ahora, procederemos a preguntarle y que ingrese los datos que tiene que alterar, las cuales son: usuario, contraseña y tipo de cuenta. -");
+		System.out.println("\n-- Ingrese el nuevo usuario de ingreso --");
+		matriz[fila][0] = leer.nextLine(); // cambio usuario en la matriz
+		ingresoDatos[0] ++;
+		
+		System.out.println("\n-- Ingrese la nueva contraseña --");
+		matriz[fila][1] = leer.nextLine(); // cambio la contraseña
+		ingresoDatos[0] ++;
+		
+		// ciclo para la comprobación de ingresio de datos para el tipo de usuario 
+		String tipoUsuario = "";
+		while(true) {
+			System.out.println("\n-- Ingrese el nuevo tipo de usuario del creador, tenga en cuenta que los tipos de usuario son (administrador) (normal) --");
+			tipoUsuario = leer.nextLine();
+			if(tipoUsuario.equalsIgnoreCase("administrador") || tipoUsuario.equalsIgnoreCase("normal")) {
+				break;
+			}else {
+				System.out.println("\n-- El tipo de usuario que ingresó es invalida, intente nuevamente --");
+				continue;
+			}
+		}
+		
+		matriz[fila][2] = tipoUsuario; // cambio el tipo de usuario.
+		ingresoDatos[0] ++;
+
+		// Reescribir el archivo txt con la matriz
+		File archivo = new File("datos_usuarios.txt");
+		corrupcionDeDatos(matriz,archivo,filas("datos_usuarios.txt"),columnas("datos_usuarios.txt")); // se reescribió la matriz
+		
+		// Mensaje final		
+		System.out.println("\n --- Buenisimo! los datos han sido editados correctamente. ---");
+		System.out.println("\n --- Ahora " + nombre + " tiene nombre de usuario como " + matriz[fila][0] + " con la contraseña " + matriz[fila][1] + " y el tipo de usuario " + matriz[fila][2] + " ---");
+		
+		leer.close();
 	}
 	
 	public static void menuProgramador(int contGeneral, int indice, String[] especialidades,String[] nombreIas,String[] tipoDeIa,float[] velocidadDEMejora,int[] contIngresosDeDatos) {
@@ -1027,7 +1206,7 @@ public class App {
 				//mensaje de error
 				System.out.println("--- El ia " + nombreIas[indiceIaACambiar] + " no puede ser mejorado ya que este se encuentra en el tipo mas avanzado. ---");
 			}
-		}
+		}leer.close();
 	}
 	
 	public static void menuMejoraDeIa(int contGeneral,int indice, String[] especialidades,String[] nombreIas,int[] cantMejoras,String[] tipoDeIa,float[] velocidadDEMejora,int[] contIngresosDeDatos) {
@@ -1089,7 +1268,7 @@ public class App {
 			}
 		}else {
 			System.out.println("Ok.");
-		}
+		}leer.close();
 	}
 	
 	public static void tipoDeMejora(int indice, int[] cantMejoras, String[] nombreIas,float[] velocidadDEMejora,int n,int[] contIngresosDeDatos) {
@@ -1128,7 +1307,7 @@ public class App {
 			}
 		}else {
 			System.out.println("-> Excede el limite de mejoras.");
-		}
+		}leer.close();
 	}
 	
 	public static void corrupcionDeDatos(String[][] matriz, File archivo, int indice, int columnas) throws IOException {
