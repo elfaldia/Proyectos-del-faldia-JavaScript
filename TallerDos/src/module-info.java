@@ -1,9 +1,3 @@
-/**
- * 
- */
-/**
- * @author Moonlabpc
- *
- */
+
 module TallerDos {
 }
