@@ -9,19 +9,92 @@ public class App {
 
 	public static void main(String[] args)throws IOException {
 		
-		loginCompleto();
-
+		int verificacion = txtVacio();
+		if(verificacion == 0) {
+			System.out.println("\n----------- EL PROGRAMA ESTA DAÑADo, VUELVA MAS TARDE -----------");
+		}else {
+			loginCompleto();
+			File archivoUsuario = new File("usuarios.txt");
+			Personas[] personas = new Personas[filas(archivoUsuario)];rellenarPersonas(personas);
+			int id = loginFinalizado(personas);
+			System.out.println(id);
+		}
 	}
 	
 	// ------------------------------------------- FUNCIONES ------------------------------------------- 
 	
+	// RELLENAR EL CONTENEDOR DE USUARIOS
+	public static void rellenarPersonas(Personas[] contenedor) throws IOException{
+		
+		Scanner arch = new Scanner(new File("usuarios.txt"));
+		
+		for(int i = 0; i < contenedor.length; i++) {
+			String[] linea = arch.nextLine().split(",");
+			for(int j = 0; j < linea.length; j++) {				
+				contenedor[i] = new Personas(linea[0],linea[1],Integer.parseInt(linea[2]));
+				
+			}
+		}
+	}
+	
+	// FUNCION QUE TERMINARA EL INGRESO AL SISTEMA
+	public static int loginFinalizado(Personas[] lista) {
+		
+		Scanner leer = new Scanner(System.in);
+		String nombreFinal = "";
+		int indice = 0;
+		String[] nombres = new String[lista.length];
+		for(int i = 0; i < lista.length; i++) {
+			String nombre = lista[i].getUsuario();
+			String[] dividir = nombre.split("#");
+			nombres[i] = dividir[0];
+		}
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n\t\t\t| LOG IN - INICIO DE SESIÓN |");
+		System.out.println("\n---------------------------------------------------------------------------");
+		while(true) {
+			System.out.println("\n-> Ingrese su nombre de usuario: ");
+			nombreFinal = leer.nextLine();
+			int cont = 0;
+			int i = 0;
+			for(String nombre : nombres) {
+				if(nombre.equalsIgnoreCase(nombreFinal)) {
+					indice = i;
+					cont++;
+					break;
+				}else {
+					i++;
+					continue;
+				}
+			}
+			if(cont == 1) {
+				break;
+			}else {
+				System.out.println("\n- El nombre de usuario ingresado es invalido.");
+			}
+		}
+		while(true) {
+			String contraseña = "";
+			System.out.println("\n-> Ingrese su contraseña: ");
+			contraseña = leer.nextLine();
+			
+			if(contraseña.equalsIgnoreCase(lista[indice].getContraseña())) {
+				break;
+			}else {
+				System.out.println("\n- Contraseña erronea intente nuevamente.");
+			}
+			
+		}
+		return lista[indice].getId();
+	}
+	
 	// SELECCIÓN DEL MENÚ, SI ESTE DESEA INGRESAR AL SISTEMA O REGISTRAR OTRO USUARIO
-	public static void loginCompleto() throws IOException {
+ 	public static void loginCompleto() throws IOException {
 		
 		Scanner leer = new Scanner(System.in);
 		String verificador = "";
 		
-		System.out.println("------- BIENVENIDO AL SISTEMA -------");
+		System.out.println("\t------- BIENVENIDO AL SISTEMA -------");
 		System.out.println("\n- ¿Desea registrarse o inciar sesión?\n1) Sing in.\n2) Log in.\n");
 		
 		while(true) {
@@ -38,7 +111,9 @@ public class App {
 		// PARA ASI PODER PROSEGUIR CON ARMAR LOS USUARIOS
 		if(verificador.equalsIgnoreCase("1")) {
 			
-			System.out.println("\n- Para poder registrarte necesitamos que nos des tu perfil de programador: ");
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n- || Para poder registrarte necesitamos que nos des tu perfil de programador ||: ");
+			System.out.println("\n---------------------------------------------------------------------------");
 			
 			File archivoUsuario = new File("usuarios.txt");
 			File archivoProgramador = new File("programadores.txt");
@@ -49,7 +124,8 @@ public class App {
 			
 			// CREAR UN NUEVO USUARIO
 			
-			System.out.println("\n- Ingrese su nombre: ");
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n\t- Ingrese su nombre: ");
 			String nombre = leer.nextLine();
 			// CREO EL ID DE 4 DIGITOS
 			String idUsuario = Integer.toString((int)(Math.random()*99999));
@@ -58,12 +134,14 @@ public class App {
 			
 			// CREAR TU APELLIDO
 			
-			System.out.println("\n- Ingrese su apellido: ");
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n\t- Ingrese su apellido: ");
 			String apellido = leer.nextLine();
 			
 			// CREAR LA CONTRASEÑA
 			
-			System.out.println("\n- Ingrese la contraseña: ");
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n\t- Ingrese la contraseña: ");
 			String contraseña = leer.nextLine();
 			
 			// CREAR AÑOS DE EXPERIENCIA
@@ -85,10 +163,11 @@ public class App {
 			matrizProgramadores[ultimaFila][2] = apellido;
 			matrizProgramadores[ultimaFila][3] = añosExperiencia;
 			// INGRESAREMOS LOS LENGUAJES DE PROGRAMACION QUE POSEE
-			System.out.println("\n- Acontinuación nos dirá uno a uno los lenguajes de programación que sabe, si ya ingreso todos coloque (listo): ");
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n\t- Acontinuación nos dirá uno a uno los lenguajes de programación que sabe, si ya ingreso todos coloque (listo): ");
 			while(true) {
 				int comprobacion = 0;
-				System.out.println("\n- Ingrese lenguaje: ");
+				System.out.println("\n\t- Ingrese lenguaje: ");
 				lenguaje = leer.nextLine();
 				
 				if(lenguaje.equalsIgnoreCase("listo")) {
@@ -108,11 +187,12 @@ public class App {
 					matrizProgramadores[ultimaFila][indice] = lenguaje;
 					indice++;
 				}else {
-					System.out.println("\n- La opción ingresada no es un lenguaje de programación, intente nuevamente.");
+					System.out.println("\n\t- La opción ingresada no es un lenguaje de programación, intente nuevamente.");
 				}	
 			}
 			// INGRESAMOS LOS PAISES
-			System.out.println("\n- Introduzca su pais de residencia: ");
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n\t- Introduzca su pais de residencia: ");
 			
 			while(true) {
 				pais = leer.nextLine();
@@ -130,13 +210,14 @@ public class App {
 					indice++;
 					break;
 				}else {
-					System.out.println("\n- El pais que ingreso es erroneo intente nuevamente.");
+					System.out.println("\n\t- El pais que ingreso es erroneo intente nuevamente.");
 					continue;
 				}
 			}
 			// INGRESAMOS REGION
 			String[] regiones = regiones(pais);
-			System.out.println("\n- Introduzca la región donde vive: ");
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n\t- Introduzca la región donde vive: ");
 			
 			while(true) {
 				region = leer.nextLine();
@@ -158,7 +239,7 @@ public class App {
 					indice++;
 					break;
 				}else {
-					System.out.println("\n- La region que ingreso es erroneo intente nuevamente.");
+					System.out.println("\n\t- La region que ingreso es erroneo intente nuevamente.");
 					continue;
 				}
 			}
@@ -167,11 +248,12 @@ public class App {
 			matrizUsuarios[ultimaFila][0] = usuario; matrizUsuarios[ultimaFila][1] = contraseña; matrizUsuarios[ultimaFila][2] = Integer.toString(matrizUsuarios.length);
 			
 			// ACTUALIZAR EL TXT
-			actualizarDatos(matrizUsuarios,archivoUsuario,columnas(archivoUsuario));
-			actualizarDatos(matrizProgramadores,archivoProgramador,100);
-			System.out.println("\n- Te registraste con exito!.\n- Ahora pasaremos al Login.");
+			actualizarDatos(matrizUsuarios, archivoUsuario);
+			actualizarDatosProgramador(matrizProgramadores, archivoProgramador);
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n\t- SIGN IN FINALIZADO!.\n\t- Ahota puedes pasar al Log in.");
 		}
-		leer.close();
+		
 	}
 	
 	// LISTA DE REGIONES SEGUN EL PAIS ESCOGIDO
@@ -271,25 +353,101 @@ public class App {
 		arch.close();
 		return largo;
 	}
-
-	// FUNCION QUE ACTUALIZARA LOS DATOS DEL ARCHIVO TXT
-	public static void actualizarDatos(String[][] matriz, File archivo,int columnas) throws IOException {
+	
+	// LISTA DEL LARGO DE LAS COLUMNAS
+	public static int[] listaColumnas(String[][] matriz){
+			
+		int[] lista = new int[matriz.length];
+		int cont = 0;
+		int indice = 0;
+		
+		for(int i = 0; i < matriz.length; i++) {
+			cont = 0;
+			for(int j = 0; j < matriz[0].length; j++) {
+				if(matriz[i][j] == null || j == matriz[0].length - 1 ) {
+					lista[indice] = cont;
+					indice++;
+					break;
+				}else {
+					cont++;
+				}
+			}
+		}return lista;
+	}
+	
+	// FUNCION QUE ACTUALIZARA LOS DATOS DEL ARCHIVO TXT PROGRAMADOR
+	public static void actualizarDatosProgramador(String[][] matriz, File archivo) throws IOException {
+		
+	    BufferedWriter writer = new BufferedWriter(new FileWriter(archivo));
+	    int[] columna = listaColumnas(matriz);
+	    for (int i = 0; i < matriz.length; i++) {
+	        for (int j = 0; j < columna[i]; j++) {
+	        	if (j != columna[i] - 1) {
+        			writer.write(matriz[i][j] + ",");
+        		}else {
+        			writer.write(matriz[i][j]);	        		
+        		}
+	        }
+	        if(i != matriz.length -1) {
+	        	writer.newLine();
+	        }
+	    } writer.close();
+	}
+	
+	// FUNCION QUE ACTUALIZARA LOS DATOS DE CUALQUIER TXT
+	public static void actualizarDatos(String[][] matriz, File archivo) throws IOException {
 		
 	    BufferedWriter writer = new BufferedWriter(new FileWriter(archivo));
 	    for (int i = 0; i < matriz.length; i++) {
-	        for (int j = 0; j < columnas; j++) {
-	        	if(matriz[i][j] == null) {
-	        		break;
-	        	}else {
-	        		if (j != columnas - 1) {
-	        			writer.write(matriz[i][j] + ",");
-	        		}else {
-	        			writer.write(matriz[i][j]);	        		
-	        		}
-	        	}
-	        } writer.newLine();
-	    } writer.close();
+	        for (int j = 0; j < matriz[0].length; j++) {
+	            writer.write(matriz[i][j]);
+	            if (j !=  matriz[0].length - 1) {
+	                writer.write(",");
+	            }
+	        }if(i != matriz.length - 1) {
+	        writer.newLine();
+	        }
+	    }
+	    writer.close();
 	}
+
+	// FUNCION DE COMPROBACIÓN DE DATOS, EN EL CASO QUE LOS TXT ESTEN VACIOS
+	public static int txtVacio()throws IOException{
+		
+		int ver = comprobacionVacio("usuarios.txt");
+		if(ver == 0) {
+			System.out.println("\n- LA BASE DE DATOS DE LOS USUARIOS ESTA VACIO");
+		}
+		ver = comprobacionVacio("programadores.txt");
+		if(ver == 0) {
+			System.out.println("\n- LA BASE DE DATOS DE LOS PROGRAMADORES ESTA VACIO");
+		}
+		ver = comprobacionVacio("ia.txt");
+		if(ver == 0) {
+			System.out.println("\n- LA BASE DE DATOS DE LOS IA ESTA VACIO");
+		}
+		ver = comprobacionVacio("paises.txt");
+		if(ver == 0) {
+			System.out.println("\n- LA BASE DE DATOS DE LOS PAISES ESTA VACIO");
+		}
+		ver = comprobacionVacio("debilidades.txt");
+		if(ver == 0) {
+			System.out.println("\n- LA BASE DE DATOS DE LAS DEBILIDADES ESTA VACIO");
+		}
+		return ver;
+	}
+	
+	// SUMA DATOS DE LOS TXT (APOYO DE LA FUNCION TXTVACIO)
+	public static int comprobacionVacio(String archivo) throws IOException{
+		
+		Scanner arch = new Scanner(new File(archivo));
+		int cont = 0;
+		while(arch.hasNextLine()) {
+			arch.nextLine();
+			cont++;
+		}return cont;
+	}
+	
 }
  
 

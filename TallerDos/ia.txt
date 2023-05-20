@@ -1,0 +1,5 @@
+helios,java,5,desconocida,chile,99%,ia autónoma militar,1
+nova,c#,2,desconectar su base de datos,chile,53%,ia social,2
+hombre de hierro,python,5,purga de codigo,chile,78%,ia transhumanista,3
+halflife,java,3,formatear,venezuela,66%,ia de realidad virtual,4
+skynet,python,5,destruir neuronas,argentina,48%,ia supervisora,5

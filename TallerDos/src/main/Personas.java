@@ -1,13 +1,15 @@
 package main;
 
-public class Usuarios  {
+public class Personas  {
 
 	private String usuario;
 	private String contraseña;
+	private int id;
 	
-	public Usuarios(String usuario, String contraseña) {
+	public Personas(String usuario, String contraseña, int id) {
 		this.usuario = usuario;
 		this.contraseña = contraseña;
+		this.id = id;
 	}
 
 	public String getUsuario() {
@@ -24,6 +26,14 @@ public class Usuarios  {
 
 	public void setContraseña(String contraseña) {
 		this.contraseña = contraseña;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String toString() {
