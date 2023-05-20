@@ -1,0 +1,5 @@
+chile,arica,tarapacá,antofagasta,atacama,coquimbo,valparaíso,santiago,o'higgins,maule,ñuble,biobio,la araucanía,los rios,los lagos,aysén,magallanes
+japon,hokkaido,tohoku,kanto,chubu,kinki,chogoku,shikoku,kyushu,okinawa
+argentia,buenos aires,catamarca,chaco,chubut,córdoba,corrientes,entre rios,formosa,jujuy,la pampa,la rioja,mendoza,misiones,neuquén,río negro,salta,san juan,san luis,santa cruz,santa fe,santiago del estero,tierra del fuego,tucuman
+peru,amazonas,ancash,apurimac,arequipa,ayacucho,cajamarca,callao,cusco,huancavelica,huanuco,ica,junín,la libertad,lambayeque,lima,loreto,madre de dios,moquegua,pasco,piura,puno,san martín,tacna,tumbes,ucayali
+venezuela,amazonas,anzoátegui,apure,aragua,barinas,bolívar,carabobo,cojedes,delta amacuro,dependencias federales,distrito federal,falcón,guárico,lara,mérida,miranda,monagas,nueva esparta,portuguesa,sucre,táchira,trujillo,vargas,yaracuy,zulia
