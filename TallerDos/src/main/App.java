@@ -1,5 +1,6 @@
 package main;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,17 +14,138 @@ public class App {
 		if(verificacion == 0) {
 			System.out.println("\n----------- EL PROGRAMA ESTA DAÑADo, VUELVA MAS TARDE -----------");
 		}else {
+			
+			
+			int contapro = contadorpro();
+			int contadeb = contadordeb();
+			int contaia = contadoria();
+			int contausu = contadousu();
+			int contapais = contadorpais();
+			
 			loginCompleto();
 			File archivoUsuario = new File("usuarios.txt");
-			Personas[] personas = new Personas[filas(archivoUsuario)];rellenarPersonas(personas);
+			Personas[] personas = new Personas[filas(archivoUsuario)];
+			Lenguajes[] lenguas = new Lenguajes[contapro];
+			rellenarPersonas(personas);
+			rellenarLenguajes(lenguas, contapais);
 			int id = loginFinalizado(personas);
-			System.out.println(id);
+			
+			if(id == -1) {
+				System.out.println("linea reservada para el menu de admin");
+			} else {
+				
+				System.out.println("indice "+id+ " y activacion de menu de usuario "+ contapro);
+				
+			}
 		}
 	}
 	
+
+
 	// ------------------------------------------- FUNCIONES ------------------------------------------- 
 	
 	// RELLENAR EL CONTENEDOR DE USUARIOS
+	
+		private static int contadorpais() throws IOException{
+			int i = 0;
+			Scanner arch = new Scanner(new File("paises.txt"));
+			while(arch.hasNextLine()) {
+				String[] parte = arch.nextLine().split(",");
+				i++;
+			} arch.close();
+		return i;
+
+	}
+
+	private static int contadousu() throws IOException{
+		int i = 0;
+		Scanner arch = new Scanner(new File("usuarios.txt"));
+		while(arch.hasNextLine()) {
+			String[] parte = arch.nextLine().split(",");
+			i++;
+		} arch.close();
+	return i;
+	}
+
+	private static int contadoria() throws IOException{
+		int i = 0;
+		Scanner arch = new Scanner(new File("ia.txt"));
+		while(arch.hasNextLine()) {
+			String[] parte = arch.nextLine().split(",");
+			i++;
+		} arch.close();
+	return i;
+
+	}
+
+	private static int contadordeb() throws IOException{
+		int i = 0;
+		Scanner arch = new Scanner(new File("debilidades.txt"));
+		while(arch.hasNextLine()) {
+			String[] parte = arch.nextLine().split(",");
+			i++;
+		} arch.close();
+	return i;
+	}
+	
+	private static void rellenarLenguajes(Lenguajes[] lenguas, int paiseslimite) throws IOException {
+		
+		Scanner arch = new Scanner(new File("programadores.txt"));
+		for(int i = 0; i < lenguas.length; i++) {
+			String[] linea = arch.nextLine().split(",");
+			String[] lineal = obtenerlinea(linea, paiseslimite);
+			lenguas[i] = new Lenguajes(linea[0], lineal);
+			System.out.println(lenguas[i].toString());
+			//DESCOMENTALO PARA VER EL CONTENEDOR
+		}
+
+	}
+
+	private static String[] obtenerlinea(String[] linea, int indicepais) throws IOException {
+			Scanner pais = new Scanner(new File("paises.txt"));
+			String[] listapais = new String[indicepais];
+			int paisindex = 0;
+			while(pais.hasNextLine()) {
+				String[] parte = pais.nextLine().split(",");
+				listapais[paisindex] = parte[0];
+				paisindex++;}
+			int veri = 4; //como empieza por la posicion 5 del txt
+			int diferencia = -4; //para sacer el verdadero indice de la lista
+			int indice = 0; //indice de la lista
+			boolean parar = false;
+			//EN ESTA WEA ME DEMORE			
+			for(int i = veri; i < linea.length; i++) {
+				for(int j = 0; j < indicepais; j++) {
+					if(linea[veri].equals(listapais[j])) {
+						parar = true;
+					}
+				}
+				if(parar == true) {
+					break;
+				}
+				veri++;
+			}
+	
+			indice = veri + diferencia;
+			String[] listafinal = new String[indice];
+			for(int i = 0; i < indice; i++) {
+				listafinal[i] = linea[i+4];
+			}
+		return listafinal;
+	}
+
+	private static int contadorpro() throws IOException {
+			int i = 0;
+			Scanner arch = new Scanner(new File("programadores.txt"));
+			while(arch.hasNextLine()) {
+				String[] parte = arch.nextLine().split(",");
+				i++;
+			} arch.close();
+		return i;
+	}
+
+	//RECIEN AÑADIDOS POR YAN
+		
 	public static void rellenarPersonas(Personas[] contenedor) throws IOException{
 		
 		Scanner arch = new Scanner(new File("usuarios.txt"));
@@ -52,12 +174,17 @@ public class App {
 		System.out.println("\n---------------------------------------------------------------------------");
 		System.out.println("\n\t\t\t| LOG IN - INICIO DE SESIÓN |");
 		System.out.println("\n---------------------------------------------------------------------------");
+		boolean adminlog = false;
 		while(true) {
 			System.out.println("\n-> Ingrese su nombre de usuario: ");
 			nombreFinal = leer.nextLine();
 			int cont = 0;
 			int i = 0;
-			for(String nombre : nombres) {
+			if(nombreFinal.equals("empanadasconchapalele")) {
+				adminlog = true;
+				break;
+			}
+				for(String nombre : nombres) {
 				if(nombre.equalsIgnoreCase(nombreFinal)) {
 					indice = i;
 					cont++;
@@ -77,6 +204,9 @@ public class App {
 			String contraseña = "";
 			System.out.println("\n-> Ingrese su contraseña: ");
 			contraseña = leer.nextLine();
+			if(adminlog == true && contraseña.equals("suricatarabiosa")) {
+				return -1;	
+			}
 			
 			if(contraseña.equalsIgnoreCase(lista[indice].getContraseña())) {
 				break;
@@ -85,7 +215,8 @@ public class App {
 			}
 			
 		}
-		return lista[indice].getId();
+
+		return lista[indice].getId();	
 	}
 	
 	// SELECCIÓN DEL MENÚ, SI ESTE DESEA INGRESAR AL SISTEMA O REGISTRAR OTRO USUARIO
@@ -94,7 +225,9 @@ public class App {
 		Scanner leer = new Scanner(System.in);
 		String verificador = "";
 		
-		System.out.println("\t------- BIENVENIDO AL SISTEMA -------");
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n\t\t\t| BIENVENIDO AL SISTEMA |");
+		System.out.println("\n---------------------------------------------------------------------------");
 		System.out.println("\n- ¿Desea registrarse o inciar sesión?\n1) Sing in.\n2) Log in.\n");
 		
 		while(true) {
