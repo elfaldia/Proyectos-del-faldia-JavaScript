@@ -14,80 +14,30 @@ public class App {
 		if(verificacion == 0) {
 			System.out.println("\n----------- EL PROGRAMA ESTA DAÑADo, VUELVA MAS TARDE -----------");
 		}else {
-			
-			
-			int contapro = contadorpro();
-			int contadeb = contadordeb();
-			int contaia = contadoria();
-			int contausu = contadousu();
-			int contapais = contadorpais();
-			
+
 			loginCompleto();
-			File archivoUsuario = new File("usuarios.txt");
+		
+			File archivoUsuario = new File("usuarios.txt"); File archivoProgramadores = new File("programadores.txt"); File archivoPaises = new File("paises.txt");
 			Personas[] personas = new Personas[filas(archivoUsuario)];
-			Lenguajes[] lenguas = new Lenguajes[contapro];
-			rellenarPersonas(personas);
-			rellenarLenguajes(lenguas, contapais);
+			Lenguajes[] lenguas = new Lenguajes[filas(archivoProgramadores)];
+			rellenarPersonas(personas); rellenarLenguajes(lenguas, filas(archivoPaises));
+			String[] lenguajesDelId = lenguas[1].getLenguajes();
+			System.err.println(Arrays.toString(lenguajesDelId));
 			int id = loginFinalizado(personas);
 			
 			if(id == -1) {
-				System.out.println("linea reservada para el menu de admin");
+				System.out.println("\nlinea reservada para el menu de admin");
 			} else {
 				
-				System.out.println("indice "+id+ " y activacion de menu de usuario "+ contapro);
-				
+				System.out.println("\nindice "+id+ " y activacion de menu de usuario "+ filas(archivoProgramadores));
+				 
 			}
 		}
 	}
 	
-
-
 	// ------------------------------------------- FUNCIONES ------------------------------------------- 
 	
-	// RELLENAR EL CONTENEDOR DE USUARIOS
-	
-		private static int contadorpais() throws IOException{
-			int i = 0;
-			Scanner arch = new Scanner(new File("paises.txt"));
-			while(arch.hasNextLine()) {
-				String[] parte = arch.nextLine().split(",");
-				i++;
-			} arch.close();
-		return i;
-
-	}
-
-	private static int contadousu() throws IOException{
-		int i = 0;
-		Scanner arch = new Scanner(new File("usuarios.txt"));
-		while(arch.hasNextLine()) {
-			String[] parte = arch.nextLine().split(",");
-			i++;
-		} arch.close();
-	return i;
-	}
-
-	private static int contadoria() throws IOException{
-		int i = 0;
-		Scanner arch = new Scanner(new File("ia.txt"));
-		while(arch.hasNextLine()) {
-			String[] parte = arch.nextLine().split(",");
-			i++;
-		} arch.close();
-	return i;
-
-	}
-
-	private static int contadordeb() throws IOException{
-		int i = 0;
-		Scanner arch = new Scanner(new File("debilidades.txt"));
-		while(arch.hasNextLine()) {
-			String[] parte = arch.nextLine().split(",");
-			i++;
-		} arch.close();
-	return i;
-	}
-	
+	// RELLENAR EL CONTENEDOR DE DATOS DE LOS PROGRAMADORES.
 	private static void rellenarLenguajes(Lenguajes[] lenguas, int paiseslimite) throws IOException {
 		
 		Scanner arch = new Scanner(new File("programadores.txt"));
@@ -101,6 +51,7 @@ public class App {
 
 	}
 
+	// COMPLEMENTO QUE NOS DA LA LISTAS DE LOS LENGUAJES DE PROGRAMACION DOMINADOS POR CADA PERSONA.
 	private static String[] obtenerlinea(String[] linea, int indicepais) throws IOException {
 			Scanner pais = new Scanner(new File("paises.txt"));
 			String[] listapais = new String[indicepais];
@@ -134,18 +85,7 @@ public class App {
 		return listafinal;
 	}
 
-	private static int contadorpro() throws IOException {
-			int i = 0;
-			Scanner arch = new Scanner(new File("programadores.txt"));
-			while(arch.hasNextLine()) {
-				String[] parte = arch.nextLine().split(",");
-				i++;
-			} arch.close();
-		return i;
-	}
-
-	//RECIEN AÑADIDOS POR YAN
-		
+	// RELLENAR EL CONTENEDOR DE USUARIOS.		
 	public static void rellenarPersonas(Personas[] contenedor) throws IOException{
 		
 		Scanner arch = new Scanner(new File("usuarios.txt"));
@@ -159,7 +99,7 @@ public class App {
 		}
 	}
 	
-	// FUNCION QUE TERMINARA EL INGRESO AL SISTEMA
+	// FUNCION QUE TERMINARA EL INGRESO AL SISTEMA.
 	public static int loginFinalizado(Personas[] lista) {
 		
 		Scanner leer = new Scanner(System.in);
@@ -219,7 +159,7 @@ public class App {
 		return lista[indice].getId();	
 	}
 	
-	// SELECCIÓN DEL MENÚ, SI ESTE DESEA INGRESAR AL SISTEMA O REGISTRAR OTRO USUARIO
+	// SELECCIÓN DEL MENÚ, SI ESTE DESEA INGRESAR AL SISTEMA O REGISTRAR OTRO USUARIO.
  	public static void loginCompleto() throws IOException {
 		
 		Scanner leer = new Scanner(System.in);
@@ -389,7 +329,7 @@ public class App {
 		
 	}
 	
-	// LISTA DE REGIONES SEGUN EL PAIS ESCOGIDO
+	// LISTA DE REGIONES SEGUN EL PAIS ESCOGIDO.
 	public static String[] regiones(String pais)throws IOException{
 		
 		Scanner arch = new Scanner(new File("paises.txt"));
@@ -430,14 +370,14 @@ public class App {
 		}return lista;
 	}
 	
-	// LISTA DE TODOS LOS LENGUAJES DE PROGRAMACION
+	// LISTA DE TODOS LOS LENGUAJES DE PROGRAMACION.
  	public static String[] listaProgramadores() {
 		
 		String[] lista = {"c","c++","c#","Java","Python","PHP","SQL","Ruby","Visual Basic NET","R" ,"TypeScript","Swift","Rust","Go","Kotlin","Postscript","Scheme","Erlang","Elixir","Pascal","Scala","Objective-C"};
 		return lista;
 	}
 	
-	// MATRIZ QUE CONTIENE LOS DATOS DE LOS DATOS ACTUALIZADOS HASTA EL MOMENTO
+	// MATRIZ QUE CONTIENE LOS DATOS DE LOS DATOS ACTUALIZADOS HASTA EL MOMENTO.
 	public static String[][] matrizMadre(File archivo,int fila, int columna) throws IOException{
 		
 		String[][] matriz = new String[fila][columna];
@@ -457,7 +397,7 @@ public class App {
 		return matriz;
 	}
 	
-	// SACAR LAS FILAS PARA LA MATRIZ
+	// SACAR LAS FILAS PARA LA MATRIZ.
 	public static int filas(File archivo) throws IOException{
 		
 		Scanner arch = new Scanner(archivo);
@@ -471,7 +411,7 @@ public class App {
 		return cont;
 	}
 	
-	// SACAR LAS FILAS PARA LA MATRIZ
+	// SACAR LAS FILAS PARA LA MATRIZ.
 	public static int columnas(File archivo) throws IOException{
 			
 		Scanner arch = new Scanner(archivo);
@@ -487,7 +427,7 @@ public class App {
 		return largo;
 	}
 	
-	// LISTA DEL LARGO DE LAS COLUMNAS
+	// LISTA DEL LARGO DE LAS COLUMNAS.
 	public static int[] listaColumnas(String[][] matriz){
 			
 		int[] lista = new int[matriz.length];
@@ -508,7 +448,7 @@ public class App {
 		}return lista;
 	}
 	
-	// FUNCION QUE ACTUALIZARA LOS DATOS DEL ARCHIVO TXT PROGRAMADOR
+	// FUNCION QUE ACTUALIZARA LOS DATOS DEL ARCHIVO TXT PROGRAMADOR.
 	public static void actualizarDatosProgramador(String[][] matriz, File archivo) throws IOException {
 		
 	    BufferedWriter writer = new BufferedWriter(new FileWriter(archivo));
@@ -527,7 +467,7 @@ public class App {
 	    } writer.close();
 	}
 	
-	// FUNCION QUE ACTUALIZARA LOS DATOS DE CUALQUIER TXT
+	// FUNCION QUE ACTUALIZARA LOS DATOS DE CUALQUIER TXT.
 	public static void actualizarDatos(String[][] matriz, File archivo) throws IOException {
 		
 	    BufferedWriter writer = new BufferedWriter(new FileWriter(archivo));
@@ -544,7 +484,7 @@ public class App {
 	    writer.close();
 	}
 
-	// FUNCION DE COMPROBACIÓN DE DATOS, EN EL CASO QUE LOS TXT ESTEN VACIOS
+	// FUNCION DE COMPROBACIÓN DE DATOS, EN EL CASO QUE LOS TXT ESTEN VACIOS.
 	public static int txtVacio()throws IOException{
 		
 		int ver = comprobacionVacio("usuarios.txt");
@@ -570,7 +510,7 @@ public class App {
 		return ver;
 	}
 	
-	// SUMA DATOS DE LOS TXT (APOYO DE LA FUNCION TXTVACIO)
+	// SUMA DATOS DE LOS TXT (APOYO DE LA FUNCION TXTVACIO).
 	public static int comprobacionVacio(String archivo) throws IOException{
 		
 		Scanner arch = new Scanner(new File(archivo));
@@ -583,15 +523,3 @@ public class App {
 	
 }
  
-
-
-
-
-
-
-
-
-
-
-
-
