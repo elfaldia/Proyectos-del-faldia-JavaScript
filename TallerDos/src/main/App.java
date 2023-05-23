@@ -1,6 +1,5 @@
 package main;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,49 +9,266 @@ public class App {
 
 	public static void main(String[] args)throws IOException {
 		
+		Scanner leer = new Scanner(System.in);
 		int verificacion = txtVacio();
 		if(verificacion == 0) {
 			System.out.println("\n----------- EL PROGRAMA ESTA DAÑADo, VUELVA MAS TARDE -----------");
 		}else {
 
-			loginCompleto();
+			loginCompleto(leer);
 		
-			File archivoUsuario = new File("usuarios.txt"); File archivoProgramadores = new File("programadores.txt"); File archivoPaises = new File("paises.txt");
+			File archivoDebilidades = new File("debilidades.txt"); File archivoIa = new File("ia.txt"); File archivoUsuario = new File("usuarios.txt"); File archivoProgramadores = new File("programadores.txt"); File archivoPaises = new File("paises.txt");
 			Personas[] personas = new Personas[filas(archivoUsuario)];
 			Lenguajes[] lenguas = new Lenguajes[filas(archivoProgramadores)];
-			rellenarPersonas(personas); rellenarLenguajes(lenguas, filas(archivoPaises));
-			String[] lenguajesDelId = lenguas[1].getLenguajes();
-			System.err.println(Arrays.toString(lenguajesDelId));
-			int id = loginFinalizado(personas);
+			Ias[] ias = new Ias[filas(archivoIa)];
+			Debilidades[] debilidades = new Debilidades[filas(archivoDebilidades)];
+			rellenarPersonas(personas); rellenarLenguajes(lenguas, filas(archivoPaises)); rellenarIas(ias); rellenarDebilidades(debilidades);
+
+			int id = loginFinalizado(personas,leer);
 			
 			if(id == -1) {
-				System.out.println("\nlinea reservada para el menu de admin");
+				System.out.println("\n-> | linea reservada para el menu de administrador. |");
 			} else {
 				
-				System.out.println("\nindice "+id+ " y activacion de menu de usuario "+ filas(archivoProgramadores));
-				 
+				System.out.println("\n-> | Se ha activado el menu de usuario. |");
+				 menuUsuario(id,leer,ias,debilidades,personas);
+			}
+		}leer.close();
+	}
+	
+	// ------------------------------------------- FUNCIONES -----------------------------------------------
+	
+	// ------------------------------------------- MENU USUARIOS --------------------------------------------
+	
+	// FUNCION QUE CONTENDRA EL MENU DE USUARIO
+	public static void menuUsuario(int idUsuario,Scanner leer,Ias[] ias, Debilidades[] debilidades,Personas[] usuarios) throws IOException{
+		
+		String seleccion = "";
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n\t\t\t| BIENVENIDO AL MENU DE USUARIO |");
+		System.out.println("\n---------------------------------------------------------------------------");
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n\t\t\t| INGRESE LA OPCIÓN DE SU PREFERENCIA |");
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n1) Agregar debilidad a la IA.\n2) Modificar datos usuario.\n3) Modificar precisión de una IA.\n4) Ver IAs.\n5) Ver tipo de IAs.\n6) Salir.");
+			System.out.println("\n---------------------------------------------------------------------------");
+			seleccion = leer.nextLine();
+			
+			// 1RA OPCION, AGREGAR DEBILIDADES A LAS IA.
+			if(seleccion.equalsIgnoreCase("Agregar debilidad a la IA") || seleccion.equalsIgnoreCase("1")) {
+				primeraOpcion(leer,ias,debilidades); 
+			}
+			// 2DA OPCION, AGREGAR DEBILIDADES A LAS IA.
+			else if(seleccion.equalsIgnoreCase("Modificar datos usuario") || seleccion.equalsIgnoreCase("2")) {
+				segundaOpcion(idUsuario,leer,usuarios); 
+			}
+			// 3RA OPCION, AGREGAR DEBILIDADES A LAS IA.
+			else if(seleccion.equalsIgnoreCase("Modificar datos usuario") || seleccion.equalsIgnoreCase("2")) {
+				terneraOpcion(leer,ias); 
+			}
+			// CIERRE DEL MENU (Y DEL BUCLE)
+			else if(seleccion.equalsIgnoreCase("salir") || seleccion.equalsIgnoreCase("6")) {
+				break;
+			}
+			else {
+				System.out.println("-> | EL MENÚ QUE INGRESO NO ES VALIDO, INTENTE NUEVAMENTE |");
 			}
 		}
 	}
 	
-	// ------------------------------------------- FUNCIONES ------------------------------------------- 
+	// FUNCION PARA LA 1RA OPCIÓN
+	public static void primeraOpcion(Scanner leer, Ias[] ias, Debilidades[] debilidades) throws IOException{
+		
+		File archivo = new File("ia.txt"); File archivoDos = new File("debilidades.txt");
+		int[] listaComprobacion = new int[filas(archivo)]; String[] debilidadesDisponibles = new String[filas(archivoDos)];
+		int cont = 0, contDos = 0;
+		int indice = 0;
+		String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
+		int id = 0; String debilidadSeleccionada = "";
+		System.out.println("\n-> | En esta opción podras agregarle una debilidad a culquier IA de la lista, solo debes indicar el ID del mismo: |\n");
+		
+		for(int i = 0; i < ias.length; i++) {
+			if(ias[i].getDebilidad().equalsIgnoreCase("desconocida")) {
+				System.out.println(".- Nombre IA: " + ias[i].getNombre() + " el ID de este IA es " + ias[i].getId());
+				listaComprobacion[cont] = ias[i].getId();
+				cont++;
+			}
+		}	
+		
+		System.out.println("\n-> | Introduzca el ID del IA que desea modificar |");
+		
+		// BUCLE DE COMPROBACIÓN PARA LOS ID
+		while(true) {
+			int verificador = 0;
+			id = Integer.parseInt(leer.nextLine());
+			for(int i = 0; i < cont; i++) {
+				if(id == listaComprobacion[i]) {
+					verificador++;
+					break;
+				}
+			}
+			if(verificador == 1) {
+				break;
+			}else {
+				System.out.println("\n-> | El ID ingresado no es valido |");
+			}
+		}
+		
+		for(int i = 0; i < ias.length ; i++) {
+			if(ias[i].getId() == id) {
+				indice = i;
+				break;
+			}
+		}
+		
+		System.out.println("\n-> | Ahora se desplegará la lista de debilidades validas para este usuario, escoja una sabiamente |\n");
+		
+		if(ias[indice].getNivelAmenaza() == 1) {
+			System.out.println("\n | Lo siento, pero este IA no puede recibir debilidades ya que es de nivel 1. |");
+		}else {		
+			for(int i = 0; i < debilidades.length; i++) {
+				if(ias[indice].getNivelAmenaza() >= debilidades[i].getJerarquia()) {
+					System.out.println(".- Debilidad " + debilidades[i].getDebilidad() + ".");
+					debilidadesDisponibles[contDos] = debilidades[i].getDebilidad();
+					contDos++;
+				}
+			}
+		}
+		System.out.println("\n-> | Introduzca la debilidad que desea seleccionar |");
+		
+		// BUCLE DE COMPROBACIÓN PARA LOS ID
+		while(true) {
+			int verificador = 0;
+			debilidadSeleccionada = leer.nextLine();
+			for(int i = 0; i < contDos; i++) {
+				if(debilidadesDisponibles[i].equalsIgnoreCase(debilidadSeleccionada)) {
+					verificador++;
+					break;
+				}
+			}
+			if(verificador == 1) {
+				break;
+			}else {
+				System.out.println("\n-> | La debilidad seleccionada no es valida o no existe. |");
+			}
+		}
+		matriz[indice][3] = debilidadSeleccionada;
+		actualizarDatos(matriz, archivo);
+		System.out.println("\n | LA DEBILIDAD HA SIDO IMPLEMENTADA EN LA IA " + ias[indice].getNombre() + " |");
+	}
+
+	// FUNCION PARA LA 2DA OPCION
+	public static void segundaOpcion(int idUsuario,Scanner leer, Personas[] usuarios)throws IOException {
+		
+		File archivo = new File("usuarios.txt");
+		String seleccion = ""; int indice = 0; String nombreNuevo = "", contraseñaNueva = "";
+		String[][] matriz = matrizMadre(archivo, filas(archivo),columnas(archivo));
+		
+		for(int i = 0; i < usuarios.length; i++) {
+			if(idUsuario == usuarios[i].getId()) {
+				indice = i;
+				break;
+			}
+		}
+		
+		System.out.println("\n-> | En esta opción podras editar tu nombre de usuario o tu contraseña |");
+		System.out.println("\n1) Nombre Usuario.\n2) Contraseña.");
+		System.out.println("\n-> | Introduzca tu opción |");
+		while(true) {
+			
+			seleccion = leer.nextLine();
+			if(seleccion.equalsIgnoreCase("Nombre Usuario") || seleccion.equalsIgnoreCase("1") || seleccion.equalsIgnoreCase("Contraseña") || seleccion.equalsIgnoreCase("2")) {
+				break;
+			}else{
+				System.out.println("\n-> | El menu que ingreso no es valido. |");
+			}
+		}
+		
+		if(seleccion.equalsIgnoreCase("Nombre Usuario") || seleccion.equalsIgnoreCase("1")) {
+			
+			System.out.println("\n-> | Ingrese su nuevo nombre de usuario |");
+			nombreNuevo = leer.nextLine();
+			String idDelUsuario = Integer.toString((int)(Math.random()*(99999 - 10000) + 10000));
+			String nombreCompleto = nombreNuevo + "#" + idDelUsuario;
+			
+			matriz[indice][0] = nombreCompleto; actualizarDatos(matriz, archivo);
+			System.out.println("\n | EL NOMBRE DE USUARIO FUE ACTUALIZADO CON EXITO |");
+			
+		}else if(seleccion.equalsIgnoreCase("Contraseña") || seleccion.equalsIgnoreCase("2")) {
+			
+			System.out.println("\n-> | Ingrese su nueva contraseña |");
+			contraseñaNueva = leer.nextLine();
+			
+			matriz[indice][1] = contraseñaNueva; actualizarDatos(matriz, archivo);
+			System.out.println("\n | LA CONTRASEÑA DEL USUARIO FUE ACTUALIZADO CON EXITO |");
+
+		}
+	}
+	
+	// FUNCION PARA LA 3RA OPCION
+	public static void terneraOpcion(Scanner leer, Ias[] ias)throws IOException{
+		
+		//File archivo = new File("ia.txt");
+		//String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
+		
+		
+	}
+	
+	// -----------------------------------------------------------------------------------------------------------
+	
+	// ------------------------------------------- LOGIN / COMPLEMENTOS -------------------------------------------
+	
+	// RELLENAR CONTENEDOR DE LOS IA
+	public static void rellenarDebilidades(Debilidades[] lista) throws IOException{
+			
+			Scanner arch = new Scanner(new File("debilidades.txt"));	
+			for(int i = 0; i < lista.length; i++){		
+				String[] linea = arch.nextLine().split(",");
+				lista[i] = new Debilidades(linea[0],Integer.parseInt(linea[1]));
+			}
+		}
+	
+	// FUNCION PARA IMPRIMIR MATRIZ
+	public static void imprimirMatriz(String[][] matriz) {
+	
+		for(int i = 0; i < matriz.length; i++) {
+			for(int j = 0; j < matriz[0].length; j++) {
+				if(j != matriz[0].length - 1) {
+					System.out.print(matriz[i][j] + ",");
+				}else {
+					System.out.println(matriz[i][j]);
+				}
+			}System.out.println("");
+		}
+	}
+	
+	// RELLENAR CONTENEDOR DE LOS IA
+	public static void rellenarIas(Ias[] lista) throws IOException{
+		
+		Scanner arch = new Scanner(new File("ia.txt"));	
+		for(int i = 0; i < lista.length; i++){		
+			String[] linea = arch.nextLine().split(",");
+			lista[i] = new Ias(linea[0],linea[1],Integer.parseInt(linea[2]),linea[3],linea[4],linea[5],linea[6],Integer.parseInt(linea[7]));
+		}
+	}
 	
 	// RELLENAR EL CONTENEDOR DE DATOS DE LOS PROGRAMADORES.
-	private static void rellenarLenguajes(Lenguajes[] lenguas, int paiseslimite) throws IOException {
+	public static void rellenarLenguajes(Lenguajes[] lenguas, int paiseslimite) throws IOException {
 		
 		Scanner arch = new Scanner(new File("programadores.txt"));
 		for(int i = 0; i < lenguas.length; i++) {
 			String[] linea = arch.nextLine().split(",");
 			String[] lineal = obtenerlinea(linea, paiseslimite);
 			lenguas[i] = new Lenguajes(linea[0], lineal);
-			System.out.println(lenguas[i].toString());
 			//DESCOMENTALO PARA VER EL CONTENEDOR
 		}
 
 	}
 
 	// COMPLEMENTO QUE NOS DA LA LISTAS DE LOS LENGUAJES DE PROGRAMACION DOMINADOS POR CADA PERSONA.
-	private static String[] obtenerlinea(String[] linea, int indicepais) throws IOException {
+	public static String[] obtenerlinea(String[] linea, int indicepais) throws IOException {
 			Scanner pais = new Scanner(new File("paises.txt"));
 			String[] listapais = new String[indicepais];
 			int paisindex = 0;
@@ -100,9 +316,8 @@ public class App {
 	}
 	
 	// FUNCION QUE TERMINARA EL INGRESO AL SISTEMA.
-	public static int loginFinalizado(Personas[] lista) {
+	public static int loginFinalizado(Personas[] lista, Scanner leer) {
 		
-		Scanner leer = new Scanner(System.in);
 		String nombreFinal = "";
 		int indice = 0;
 		String[] nombres = new String[lista.length];
@@ -160,9 +375,8 @@ public class App {
 	}
 	
 	// SELECCIÓN DEL MENÚ, SI ESTE DESEA INGRESAR AL SISTEMA O REGISTRAR OTRO USUARIO.
- 	public static void loginCompleto() throws IOException {
+ 	public static void loginCompleto(Scanner leer) throws IOException {
 		
-		Scanner leer = new Scanner(System.in);
 		String verificador = "";
 		
 		System.out.println("\n---------------------------------------------------------------------------");
@@ -172,7 +386,7 @@ public class App {
 		
 		while(true) {
 			verificador = leer.nextLine();
-			if(verificador.equalsIgnoreCase("1") || verificador.equalsIgnoreCase("2")) {
+			if(verificador.equalsIgnoreCase("1") || verificador.equalsIgnoreCase("2")|| verificador.equalsIgnoreCase("sing in")|| verificador.equalsIgnoreCase("log in")) {
 				break;
 			}else {
 				System.out.println("\n-- La opción ingresada es invalida, intente nuevamente.");
@@ -182,7 +396,7 @@ public class App {
 		
 		// SI LA OPCIÓN ES SING IN DEBEMOS SEGUIR PARA AGREGAR NUEVOS DATOS A LOS ARCHIVOS TXT 
 		// PARA ASI PODER PROSEGUIR CON ARMAR LOS USUARIOS
-		if(verificador.equalsIgnoreCase("1")) {
+		if(verificador.equalsIgnoreCase("1") || verificador.equalsIgnoreCase("sing in")) {
 			
 			System.out.println("\n---------------------------------------------------------------------------");
 			System.out.println("\n- || Para poder registrarte necesitamos que nos des tu perfil de programador ||: ");
@@ -201,7 +415,7 @@ public class App {
 			System.out.println("\n\t- Ingrese su nombre: ");
 			String nombre = leer.nextLine();
 			// CREO EL ID DE 4 DIGITOS
-			String idUsuario = Integer.toString((int)(Math.random()*99999));
+			String idUsuario = Integer.toString((int)(Math.random()*(99999 - 10000) + 10000));
 			// UNIMOS EL ID COMPLETO.
 			String usuario = nombre + "#" + idUsuario;
 			
@@ -520,6 +734,8 @@ public class App {
 			cont++;
 		}return cont;
 	}
+	
+	// -----------------------------------------------------------------------------------------------------------
 	
 }
  
