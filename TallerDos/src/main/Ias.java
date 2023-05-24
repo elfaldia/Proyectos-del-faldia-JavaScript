@@ -10,6 +10,7 @@ public class Ias {
 	private String precision;
 	private String tipo;
 	private int id;
+	
 	public Ias(String nombre, String lenguaje, int nivelAmenaza, String debilidad, String pais, String precision,
 			String tipo, int id) {
 		super();

@@ -15,15 +15,15 @@ public class App {
 			System.out.println("\n----------- EL PROGRAMA ESTA DAÑADo, VUELVA MAS TARDE -----------");
 		}else {
 
-			loginCompleto(leer);
+			//loginCompleto(leer);
 		
 			File archivoDebilidades = new File("debilidades.txt"); File archivoIa = new File("ia.txt"); File archivoUsuario = new File("usuarios.txt"); File archivoProgramadores = new File("programadores.txt"); File archivoPaises = new File("paises.txt");
-			Personas[] personas = new Personas[filas(archivoUsuario)];
-			Lenguajes[] lenguas = new Lenguajes[filas(archivoProgramadores)];
-			Ias[] ias = new Ias[filas(archivoIa)];
-			Debilidades[] debilidades = new Debilidades[filas(archivoDebilidades)];
+			listaPersonas personas = new listaPersonas(filas(archivoUsuario));
+			listaLenguajes lenguas = new listaLenguajes(filas(archivoProgramadores));
+			listaIas ias = new listaIas(filas(archivoIa));
+			listaDebilidades debilidades = new listaDebilidades(filas(archivoDebilidades));
 			rellenarPersonas(personas); rellenarLenguajes(lenguas, filas(archivoPaises)); rellenarIas(ias); rellenarDebilidades(debilidades);
-
+			
 			int id = loginFinalizado(personas,leer);
 			
 			if(id == -1) {
@@ -41,7 +41,7 @@ public class App {
 	// ------------------------------------------- MENU USUARIOS --------------------------------------------
 	
 	// FUNCION QUE CONTENDRA EL MENU DE USUARIO
-	public static void menuUsuario(int idUsuario,Scanner leer,Ias[] ias, Debilidades[] debilidades,Personas[] usuarios) throws IOException{
+	public static void menuUsuario(int idUsuario,Scanner leer,listaIas ias,listaDebilidades debilidades,listaPersonas usuarios) throws IOException{
 		
 		String seleccion = "";
 		System.out.println("\n---------------------------------------------------------------------------");
@@ -79,7 +79,7 @@ public class App {
 	}
 	
 	// FUNCION PARA LA 1RA OPCIÓN
-	public static void primeraOpcion(Scanner leer, Ias[] ias, Debilidades[] debilidades) throws IOException{
+	public static void primeraOpcion(Scanner leer, listaIas ias, listaDebilidades debilidades) throws IOException{
 		
 		File archivo = new File("ia.txt"); File archivoDos = new File("debilidades.txt");
 		int[] listaComprobacion = new int[filas(archivo)]; String[] debilidadesDisponibles = new String[filas(archivoDos)];
@@ -89,10 +89,10 @@ public class App {
 		int id = 0; String debilidadSeleccionada = "";
 		System.out.println("\n-> | En esta opción podras agregarle una debilidad a culquier IA de la lista, solo debes indicar el ID del mismo: |\n");
 		
-		for(int i = 0; i < ias.length; i++) {
-			if(ias[i].getDebilidad().equalsIgnoreCase("desconocida")) {
-				System.out.println(".- Nombre IA: " + ias[i].getNombre() + " el ID de este IA es " + ias[i].getId());
-				listaComprobacion[cont] = ias[i].getId();
+		for(int i = 0; i < ias.getMax(); i++) {
+			if(ias.getDebilidad(i).equalsIgnoreCase("desconocida")) {
+				System.out.println(".- Nombre IA: " + ias.getNombre(i) + " el ID de este IA es " + ias.getId(i));
+				listaComprobacion[cont] = ias.getId(i);
 				cont++;
 			}
 		}	
@@ -116,8 +116,8 @@ public class App {
 			}
 		}
 		
-		for(int i = 0; i < ias.length ; i++) {
-			if(ias[i].getId() == id) {
+		for(int i = 0; i < ias.getMax() ; i++) {
+			if(ias.getId(i) == id) {
 				indice = i;
 				break;
 			}
@@ -125,13 +125,13 @@ public class App {
 		
 		System.out.println("\n-> | Ahora se desplegará la lista de debilidades validas para este usuario, escoja una sabiamente |\n");
 		
-		if(ias[indice].getNivelAmenaza() == 1) {
+		if(ias.getNivelAmenaza(indice) == 1) {
 			System.out.println("\n | Lo siento, pero este IA no puede recibir debilidades ya que es de nivel 1. |");
 		}else {		
-			for(int i = 0; i < debilidades.length; i++) {
-				if(ias[indice].getNivelAmenaza() >= debilidades[i].getJerarquia()) {
-					System.out.println(".- Debilidad " + debilidades[i].getDebilidad() + ".");
-					debilidadesDisponibles[contDos] = debilidades[i].getDebilidad();
+			for(int i = 0; i < debilidades.getMax(); i++) {
+				if(ias.getNivelAmenaza(indice) >= debilidades.getJerarquia(i)) {
+					System.out.println(".- Debilidad " + debilidades.getDebilidad(i) + ".");
+					debilidadesDisponibles[contDos] = debilidades.getDebilidad(i);
 					contDos++;
 				}
 			}
@@ -156,18 +156,18 @@ public class App {
 		}
 		matriz[indice][3] = debilidadSeleccionada;
 		actualizarDatos(matriz, archivo);
-		System.out.println("\n | LA DEBILIDAD HA SIDO IMPLEMENTADA EN LA IA " + ias[indice].getNombre() + " |");
+		System.out.println("\n | LA DEBILIDAD HA SIDO IMPLEMENTADA EN LA IA " + ias.getNombre(indice) + " |");
 	}
 
 	// FUNCION PARA LA 2DA OPCION
-	public static void segundaOpcion(int idUsuario,Scanner leer, Personas[] usuarios)throws IOException {
+	public static void segundaOpcion(int idUsuario,Scanner leer, listaPersonas usuarios)throws IOException {
 		
 		File archivo = new File("usuarios.txt");
 		String seleccion = ""; int indice = 0; String nombreNuevo = "", contraseñaNueva = "";
 		String[][] matriz = matrizMadre(archivo, filas(archivo),columnas(archivo));
 		
-		for(int i = 0; i < usuarios.length; i++) {
-			if(idUsuario == usuarios[i].getId()) {
+		for(int i = 0; i < usuarios.getMax(); i++) {
+			if(idUsuario == usuarios.getId(i)) {
 				indice = i;
 				break;
 			}
@@ -208,7 +208,7 @@ public class App {
 	}
 	
 	// FUNCION PARA LA 3RA OPCION
-	public static void terneraOpcion(Scanner leer, Ias[] ias)throws IOException{
+	public static void terneraOpcion(Scanner leer, listaIas ias)throws IOException{
 		
 		//File archivo = new File("ia.txt");
 		//String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
@@ -221,12 +221,12 @@ public class App {
 	// ------------------------------------------- LOGIN / COMPLEMENTOS -------------------------------------------
 	
 	// RELLENAR CONTENEDOR DE LOS IA
-	public static void rellenarDebilidades(Debilidades[] lista) throws IOException{
+	public static void rellenarDebilidades(listaDebilidades lista) throws IOException{
 			
 			Scanner arch = new Scanner(new File("debilidades.txt"));	
-			for(int i = 0; i < lista.length; i++){		
+			for(int i = 0; i < lista.getMax(); i++){		
 				String[] linea = arch.nextLine().split(",");
-				lista[i] = new Debilidades(linea[0],Integer.parseInt(linea[1]));
+				lista.ingresar(new Debilidades(linea[0],Integer.parseInt(linea[1])));
 			}
 		}
 	
@@ -245,23 +245,23 @@ public class App {
 	}
 	
 	// RELLENAR CONTENEDOR DE LOS IA
-	public static void rellenarIas(Ias[] lista) throws IOException{
+	public static void rellenarIas(listaIas lista) throws IOException{
 		
 		Scanner arch = new Scanner(new File("ia.txt"));	
-		for(int i = 0; i < lista.length; i++){		
+		for(int i = 0; i < lista.getMax(); i++){		
 			String[] linea = arch.nextLine().split(",");
-			lista[i] = new Ias(linea[0],linea[1],Integer.parseInt(linea[2]),linea[3],linea[4],linea[5],linea[6],Integer.parseInt(linea[7]));
+			lista.ingresar(new Ias(linea[0],linea[1],Integer.parseInt(linea[2]),linea[3],linea[4],linea[5],linea[6],Integer.parseInt(linea[7])));
 		}
 	}
 	
 	// RELLENAR EL CONTENEDOR DE DATOS DE LOS PROGRAMADORES.
-	public static void rellenarLenguajes(Lenguajes[] lenguas, int paiseslimite) throws IOException {
+	public static void rellenarLenguajes(listaLenguajes lenguas, int paiseslimite) throws IOException {
 		
 		Scanner arch = new Scanner(new File("programadores.txt"));
-		for(int i = 0; i < lenguas.length; i++) {
+		for(int i = 0; i < lenguas.getMax(); i++) {
 			String[] linea = arch.nextLine().split(",");
 			String[] lineal = obtenerlinea(linea, paiseslimite);
-			lenguas[i] = new Lenguajes(linea[0], lineal);
+			lenguas.ingresar(new Lenguajes(linea[0], lineal));
 			//DESCOMENTALO PARA VER EL CONTENEDOR
 		}
 
@@ -302,27 +302,27 @@ public class App {
 	}
 
 	// RELLENAR EL CONTENEDOR DE USUARIOS.		
-	public static void rellenarPersonas(Personas[] contenedor) throws IOException{
+	public static void rellenarPersonas(listaPersonas contenedor) throws IOException{
 		
 		Scanner arch = new Scanner(new File("usuarios.txt"));
-		
-		for(int i = 0; i < contenedor.length; i++) {
+
+		for(int i = 0; i < contenedor.getMax(); i++) {
 			String[] linea = arch.nextLine().split(",");
-			for(int j = 0; j < linea.length; j++) {				
-				contenedor[i] = new Personas(linea[0],linea[1],Integer.parseInt(linea[2]));
-				
-			}
+			Personas datos = new Personas(linea[0],linea[1],Integer.parseInt(linea[2]));
+			contenedor.ingresar(datos);
+			
 		}
 	}
 	
 	// FUNCION QUE TERMINARA EL INGRESO AL SISTEMA.
-	public static int loginFinalizado(Personas[] lista, Scanner leer) {
+	public static int loginFinalizado(listaPersonas lista, Scanner leer) {
 		
 		String nombreFinal = "";
 		int indice = 0;
-		String[] nombres = new String[lista.length];
-		for(int i = 0; i < lista.length; i++) {
-			String nombre = lista[i].getUsuario();
+		String[] nombres = new String[lista.getCantidad()];
+		for(int i = 0; i < lista.getCantidad(); i++) {
+
+			String nombre = lista.getNombre(i);
 			String[] dividir = nombre.split("#");
 			nombres[i] = dividir[0];
 		}
@@ -363,7 +363,7 @@ public class App {
 				return -1;	
 			}
 			
-			if(contraseña.equalsIgnoreCase(lista[indice].getContraseña())) {
+			if(contraseña.equalsIgnoreCase(lista.getContraseña(indice))) {
 				break;
 			}else {
 				System.out.println("\n- Contraseña erronea intente nuevamente.");
@@ -371,7 +371,7 @@ public class App {
 			
 		}
 
-		return lista[indice].getId();	
+		return lista.getId(indice);	
 	}
 	
 	// SELECCIÓN DEL MENÚ, SI ESTE DESEA INGRESAR AL SISTEMA O REGISTRAR OTRO USUARIO.
