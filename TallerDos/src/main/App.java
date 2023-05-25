@@ -1,5 +1,6 @@
 package main;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -255,11 +256,35 @@ public class App {
 					cont++; break;
 				}
 			}
-		}
+		}System.out.println(Arrays.toString(idLenguajesCompatibles));
 		for(int ids : idLenguajesCompatibles) {
-			System.out.println("\n--------------------------------------\n.- Nombre del IA: " + ias.getNombre(ias.getIndice(ids)) + "\n.- Presición: " + ias.getPrecision(ias.getIndice(ids)) + "\n--------------------------------------");
+			if(ids == 0) {
+				break;
+			}else {
+				System.out.println("\n--------------------------------------\n.- Nombre del IA: " + ias.getNombre(ias.getIndice(ids)) + "\n.- Presición: " + ias.getPrecision(ias.getIndice(ids)) + "\n.- ID: " + ias.getId(ias.getIndice(ids)) + "\n--------------------------------------");
+			}
 		}
-		
+		int idIa = 0,aux = 0;
+		System.out.println("\n-> | INGRESA EL ID DE LA IA QUE DESEA EDITAR |\n--------------------------------------");
+		while(true) {
+			aux = 0;
+			idIa = Integer.parseInt(leer.nextLine());
+			for(int ids : idLenguajesCompatibles) {
+				if( ids == idIa) {
+					if(ids == 0) {
+						break;
+					}else {
+						idIa = ids;
+						aux++;
+						break;
+					}
+				}
+			}if(aux == 1) {
+				break;
+			}else {
+				System.out.println("\n-> | EL ID QUE IONGRESO NO PERTENECE A NINGUNA IA |\n--------------------------------------");
+			}
+		}
 	}
 	
 	// FUNCION PARA LA 4TA OPCIÓN
