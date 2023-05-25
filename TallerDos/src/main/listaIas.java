@@ -101,6 +101,10 @@ public class listaIas {
 		}
 	}
 	
+	public void getImpresion4taOpcion(int i) {
+		
+		System.out.println("\n--------------------------------------" + "\n.- El nombre del IA es: " + lista[i].getNombre() + "\n.- Su lenguaje es: " + lista[i].getLenguaje() + "\n.- El nivel de amenaza: " + lista[i].getNivelAmenaza() + "\n.- debilidad: " + lista[i].getDebilidad() + "\n.- Pais de creación: " + lista[i].getPais() + "\n.- Precisión: " + lista[i].getPrecision() + "\n.- El tipo del IA: " + lista[i].getTipo() + "\n--------------------------------------" ); 
+	}
 	
 	public boolean ingresar(Ias ia) {
 		if(cant < max) {

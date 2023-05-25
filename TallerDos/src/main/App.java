@@ -1,6 +1,5 @@
 package main;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -32,7 +31,7 @@ public class App {
 			} else {
 				
 				System.out.println("\n-> | Se ha activado el menu de usuario. |");
-				 menuUsuario(id,leer,ias,debilidades,personas);
+				 menuUsuario(id,leer,ias,debilidades,personas,lenguas);
 			}
 		}leer.close();
 	}
@@ -42,7 +41,7 @@ public class App {
 	// ------------------------------------------- MENU USUARIOS --------------------------------------------
 	
 	// FUNCION QUE CONTENDRA EL MENU DE USUARIO
-	public static void menuUsuario(int idUsuario,Scanner leer,listaIas ias,listaDebilidades debilidades,listaPersonas usuarios) throws IOException{
+	public static void menuUsuario(int idUsuario,Scanner leer,listaIas ias,listaDebilidades debilidades,listaPersonas usuarios,listaLenguajes programador) throws IOException{
 		
 		String seleccion = "";
 		System.out.println("\n---------------------------------------------------------------------------");
@@ -67,16 +66,14 @@ public class App {
 			}
 			// 3RA OPCION, AGREGAR DEBILIDADES A LAS IA.
 			else if(seleccion.equalsIgnoreCase("Modificar datos usuario") || seleccion.equalsIgnoreCase("3")) {
-				terneraOpcion(leer,ias); 
+				terneraOpcion(leer,ias,programador,idUsuario); 
 			}
-			else if(seleccion.equalsIgnoreCase("") || seleccion.equalsIgnoreCase("4")) {
+			else if(seleccion.equalsIgnoreCase("ver ias") || seleccion.equalsIgnoreCase("4")) {
 				cuartaOpcion(leer,ias);
 			}
-			else if(seleccion.equalsIgnoreCase("") || seleccion.equalsIgnoreCase("5")) {
+			else if(seleccion.equalsIgnoreCase("ver tipo de ias") || seleccion.equalsIgnoreCase("5")) {
 				quintaOpcion(leer,ias);
-			}
-			
-			
+			}				
 			// CIERRE DEL MENU (Y DEL BUCLE)
 			else if(seleccion.equalsIgnoreCase("salir") || seleccion.equalsIgnoreCase("6")) {
 				break;
@@ -86,10 +83,6 @@ public class App {
 			}
 		}
 	}
-	
-
-
-
 
 	// FUNCION PARA LA 1RA OPCIÓN
 	public static void primeraOpcion(Scanner leer, listaIas ias, listaDebilidades debilidades) throws IOException{
@@ -170,6 +163,19 @@ public class App {
 		matriz[indice][3] = debilidadSeleccionada;
 		actualizarDatos(matriz, archivo);
 		System.out.println("\n | LA DEBILIDAD HA SIDO IMPLEMENTADA EN LA IA " + ias.getNombre(indice) + " |");
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------");
+			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
+			String scout = leer.nextLine();
+			System.out.println("\n---------------------------------------------------------");
+
+			if(scout.equalsIgnoreCase("")) {
+				break;
+			}else {
+				continue;
+			}
+		}
 	}
 
 	// FUNCION PARA LA 2DA OPCION
@@ -216,35 +222,65 @@ public class App {
 			
 			matriz[indice][1] = contraseñaNueva; actualizarDatos(matriz, archivo);
 			System.out.println("\n | LA CONTRASEÑA DEL USUARIO FUE ACTUALIZADO CON EXITO |");
+		}
+		while(true) {
+			System.out.println("\n---------------------------------------------------------");
+			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
+			String scout = leer.nextLine();
+			System.out.println("\n---------------------------------------------------------");
 
+			if(scout.equalsIgnoreCase("")) {
+				break;
+			}else {
+				continue;
+			}
 		}
 	}
 	
 	// FUNCION PARA LA 3RA OPCION
-	public static void terneraOpcion(Scanner leer, listaIas ias)throws IOException{
+	public static void terneraOpcion(Scanner leer, listaIas ias,listaLenguajes programador, int id)throws IOException{
 		
-		//File archivo = new File("ia.txt");
-		//String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
+		File archivo = new File("ia.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
+		String[] lenguajesDominados = programador.getLenguaje(programador.getIndice(id));
+		int[] idLenguajesCompatibles = new int[programador.getMax()];
+		int cont = 0;
+		System.out.println("\n-> | En esta opción podras editar los IA que fueron desarrollados con los lenguajes que dominas |");
+		System.out.println("\n-> | Se desplegara una lista con los IA que puedes editar |");
 		
+		for(int i = 0; i < programador.getMax(); i++) {
+			for(String lenguaje : lenguajesDominados) {
+				if(lenguaje.equalsIgnoreCase(ias.getLenguaje(i))) {
+					idLenguajesCompatibles[cont] = ias.getId(i);
+					cont++; break;
+				}
+			}
+		}
+		for(int ids : idLenguajesCompatibles) {
+			System.out.println("\n--------------------------------------\n.- Nombre del IA: " + ias.getNombre(ias.getIndice(ids)) + "\n.- Presición: " + ias.getPrecision(ias.getIndice(ids)) + "\n--------------------------------------");
+		}
 		
 	}
-	// FUNCION PARA LA 4TA OPCIÓN
 	
+	// FUNCION PARA LA 4TA OPCIÓN
 	private static void cuartaOpcion(Scanner leer, listaIas ias) {
 		System.out.println("\n[BASE DE DATOS DE IAS REGISTRADAS]\n");
-
 		for(int i = 0; i < ias.getMax(); i++) {
-			System.out.println(ias.getIas(i));
-			if(i == 2) {
-				System.out.println("[PRESIONA ENTER PARA CONTINUAR]");
-				String scout = leer.nextLine();}
+			ias.getImpresion4taOpcion(i); 
 		}
-		System.out.println("[PRESIONA ENTER PARA IR AL MENÚ]");
-		String scout = leer.nextLine();
-		}	
+		while(true) {
+			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
+			String scout = leer.nextLine();
+			if(scout.equalsIgnoreCase("")) {
+				break;
+			}else {
+				continue;
+			}
+		}
+	}	
+	
 	// FUNCION PARA LA 5TA OPCIÓN
-
-		private static void quintaOpcion(Scanner leer, listaIas ias) {
+	private static void quintaOpcion(Scanner leer, listaIas ias) {
 
 		//EN UN FUTURO PONDRE EL CONTROL DE ERRORES
 		System.out.println("\n INGRESE EL TIPO DE IA QUE QUIERE REVISAR\n\n-IA AUTÓNOMA MILITAR\n-IA SUPERVISORA\n-IA TRANSHUMANISTA\n-IA SOCIAL\n-IA REALIDAD VIRTUAL");
@@ -255,8 +291,18 @@ public class App {
 				System.out.println("\n["+ias.getNombre(i)+"]\n");
 			}
 		}
-		System.out.println("[PRESIONA ENTER PARA IR AL MENÚ]");
-		scout = leer.nextLine();
+		while(true) {
+			System.out.println("\n---------------------------------------------------------");
+			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
+			scout = leer.nextLine();
+			System.out.println("\n---------------------------------------------------------");
+
+			if(scout.equalsIgnoreCase("")) {
+				break;
+			}else {
+				continue;
+			}
+		}
 	}
 	
 	

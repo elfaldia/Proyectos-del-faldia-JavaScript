@@ -1,5 +1,5 @@
 pablo#12345,pablo1234,1
 jaime#23124,jaimelito99,2
 ian#21211,warhammer35,3
-diego#01010,division2,4
+diego#01010,leonfkennedy,4
 manuel#99990,keydrop5,5
