@@ -1,5 +1,6 @@
 package main;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -65,9 +66,17 @@ public class App {
 				segundaOpcion(idUsuario,leer,usuarios); 
 			}
 			// 3RA OPCION, AGREGAR DEBILIDADES A LAS IA.
-			else if(seleccion.equalsIgnoreCase("Modificar datos usuario") || seleccion.equalsIgnoreCase("2")) {
+			else if(seleccion.equalsIgnoreCase("Modificar datos usuario") || seleccion.equalsIgnoreCase("3")) {
 				terneraOpcion(leer,ias); 
 			}
+			else if(seleccion.equalsIgnoreCase("") || seleccion.equalsIgnoreCase("4")) {
+				cuartaOpcion(leer,ias);
+			}
+			else if(seleccion.equalsIgnoreCase("") || seleccion.equalsIgnoreCase("5")) {
+				quintaOpcion(leer,ias);
+			}
+			
+			
 			// CIERRE DEL MENU (Y DEL BUCLE)
 			else if(seleccion.equalsIgnoreCase("salir") || seleccion.equalsIgnoreCase("6")) {
 				break;
@@ -78,6 +87,10 @@ public class App {
 		}
 	}
 	
+
+
+
+
 	// FUNCION PARA LA 1RA OPCIÓN
 	public static void primeraOpcion(Scanner leer, listaIas ias, listaDebilidades debilidades) throws IOException{
 		
@@ -215,6 +228,37 @@ public class App {
 		
 		
 	}
+	// FUNCION PARA LA 4TA OPCIÓN
+	
+	private static void cuartaOpcion(Scanner leer, listaIas ias) {
+		System.out.println("\n[BASE DE DATOS DE IAS REGISTRADAS]\n");
+
+		for(int i = 0; i < ias.getMax(); i++) {
+			System.out.println(ias.getIas(i));
+			if(i == 2) {
+				System.out.println("[PRESIONA ENTER PARA CONTINUAR]");
+				String scout = leer.nextLine();}
+		}
+		System.out.println("[PRESIONA ENTER PARA IR AL MENÚ]");
+		String scout = leer.nextLine();
+		}	
+	// FUNCION PARA LA 5TA OPCIÓN
+
+		private static void quintaOpcion(Scanner leer, listaIas ias) {
+
+		//EN UN FUTURO PONDRE EL CONTROL DE ERRORES
+		System.out.println("\n INGRESE EL TIPO DE IA QUE QUIERE REVISAR\n\n-IA AUTÓNOMA MILITAR\n-IA SUPERVISORA\n-IA TRANSHUMANISTA\n-IA SOCIAL\n-IA REALIDAD VIRTUAL");
+		String scout = leer.nextLine();
+		
+		for(int i = 0; i < ias.getMax(); i++) {
+			if(scout.equals(ias.getTipo(i))) {
+				System.out.println("\n["+ias.getNombre(i)+"]\n");
+			}
+		}
+		System.out.println("[PRESIONA ENTER PARA IR AL MENÚ]");
+		scout = leer.nextLine();
+	}
+	
 	
 	// -----------------------------------------------------------------------------------------------------------
 	
@@ -280,7 +324,7 @@ public class App {
 			int diferencia = -4; //para sacer el verdadero indice de la lista
 			int indice = 0; //indice de la lista
 			boolean parar = false;
-			//EN ESTA WEA ME DEMORE			
+			
 			for(int i = veri; i < linea.length; i++) {
 				for(int j = 0; j < indicepais; j++) {
 					if(linea[veri].equals(listapais[j])) {
@@ -613,7 +657,6 @@ public class App {
 	
 	// SACAR LAS FILAS PARA LA MATRIZ.
 	public static int filas(File archivo) throws IOException{
-		
 		Scanner arch = new Scanner(archivo);
 		int cont = 0;
 		

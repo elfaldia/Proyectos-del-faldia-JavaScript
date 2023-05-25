@@ -73,7 +73,7 @@ public class Ias {
 	}
 	@Override
 	public String toString() {
-		return "Ias [nombre=" + nombre + ", lenguaje=" + lenguaje + ", nivelAmenaza=" + nivelAmenaza + ", debilidad="
-				+ debilidad + ", pais=" + pais + ", precision=" + precision + ", tipo=" + tipo + ", id=" + id + "]";
+		return "Nombre= " + nombre + ", Lenguaje= " + lenguaje + ", Nivel de Amenaza= " + nivelAmenaza + " debilidad= "
+				+ debilidad + "\n Pais de origen= " + pais + ", Precision de la ia= " + precision + ", Tipo de ia= " + tipo + "\n id=" + id;
 	}
 }

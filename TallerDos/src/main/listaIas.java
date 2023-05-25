@@ -1,5 +1,6 @@
 package main;
 
+
 public class listaIas {
 	
 	private int cant, max;
@@ -110,4 +111,5 @@ public class listaIas {
 			return false;
 		}
 	}
+
 }
