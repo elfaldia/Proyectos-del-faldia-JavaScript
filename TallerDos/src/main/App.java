@@ -1,6 +1,5 @@
 package main;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,12 +45,12 @@ public class App {
 		
 		String seleccion = "";
 		System.out.println("\n---------------------------------------------------------------------------");
-		System.out.println("\n\t\t\t| BIENVENIDO AL MENU DE USUARIO |");
+		System.out.println("\n\t\t\t| BIENVENIDO AL MENU DE USUARO |");
 		System.out.println("\n---------------------------------------------------------------------------");
 		
 		while(true) {
 			System.out.println("\n---------------------------------------------------------------------------");
-			System.out.println("\n\t\t\t| INGRESE LA OPCIÓN DE SU PREFERENCIA |");
+			System.out.println("\n\t\t     | INGRESE LA OPCIÓN DE SU PREFERENCIA |");
 			System.out.println("\n---------------------------------------------------------------------------");
 			System.out.println("\n1) Agregar debilidad a la IA.\n2) Modificar datos usuario.\n3) Modificar precisión de una IA.\n4) Ver IAs.\n5) Ver tipo de IAs.\n6) Salir.");
 			System.out.println("\n---------------------------------------------------------------------------");
@@ -66,7 +65,7 @@ public class App {
 				segundaOpcion(idUsuario,leer,usuarios); 
 			}
 			// 3RA OPCION, AGREGAR DEBILIDADES A LAS IA.
-			else if(seleccion.equalsIgnoreCase("Modificar datos usuario") || seleccion.equalsIgnoreCase("3")) {
+			else if(seleccion.equalsIgnoreCase("Modificar precisión de una IA") || seleccion.equalsIgnoreCase("3")) {
 				terneraOpcion(leer,ias,programador,idUsuario); 
 			}
 			else if(seleccion.equalsIgnoreCase("ver ias") || seleccion.equalsIgnoreCase("4")) {
@@ -256,7 +255,7 @@ public class App {
 					cont++; break;
 				}
 			}
-		}System.out.println(Arrays.toString(idLenguajesCompatibles));
+		}
 		for(int ids : idLenguajesCompatibles) {
 			if(ids == 0) {
 				break;
@@ -265,7 +264,10 @@ public class App {
 			}
 		}
 		int idIa = 0,aux = 0;
-		System.out.println("\n-> | INGRESA EL ID DE LA IA QUE DESEA EDITAR |\n--------------------------------------");
+		System.out.println("\n--------------------------------------------------------");
+		System.out.println("\n-> | INGRESA EL ID DE LA IA QUE DESEA EDITAR |");
+		System.out.println("\n--------------------------------------------------------");
+		
 		while(true) {
 			aux = 0;
 			idIa = Integer.parseInt(leer.nextLine());
@@ -282,7 +284,39 @@ public class App {
 			}if(aux == 1) {
 				break;
 			}else {
-				System.out.println("\n-> | EL ID QUE IONGRESO NO PERTENECE A NINGUNA IA |\n--------------------------------------");
+				System.out.println("\n-> | EL ID QUE IONGRESO NO PERTENECE A NINGUNA IA |");
+				System.out.println("\n--------------------------------------------------------");
+			}
+		}
+		
+		System.out.println("\n-> | Ingrese la nueva precisión a la IA |");
+		System.out.println("\n-> | RECUERDE QUE NO PUEDE EXCEDER EL MAXIMO DE 100 |");
+		System.out.println("\n--------------------------------------------------------");
+		int precision = 0;
+		
+		while(true) {
+			precision = Integer.parseInt(leer.nextLine());
+			if(precision <= 100 && precision >= 0) {
+				break;
+			}else{
+				System.out.println("\n-> | LA PRESICIÓN QUE INGRESO NO ES VALIDA |");
+				System.out.println("\n--------------------------------------------------------");
+			}
+		}
+		String precisionFinal = Integer.toString(precision) + "%";
+		matriz[ias.getIndice(idIa)][5] = precisionFinal; actualizarDatos(matriz, archivo);
+		System.out.println("\n--------------------------------------------------------"); System.out.println("\n | LA CONTRASEÑA DEL USUARIO FUE ACTUALIZADO CON EXITO |");
+	
+		while(true) {
+			System.out.println("\n---------------------------------------------------------");
+			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
+			String scout = leer.nextLine();
+			System.out.println("\n---------------------------------------------------------");
+
+			if(scout.equalsIgnoreCase("")) {
+				break;
+			}else {
+				continue;
 			}
 		}
 	}
