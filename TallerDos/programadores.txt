@@ -1,5 +1,5 @@
 1,pablo,bochi,2,java,c,python,chile,coquimbo
 2,jaime,rivera,3,java,c,python,c#,c++,chile,santiago
-3,ian,castillo,1,python,chile,coquimbo
+3,ian,castillo,1,c,chile,coquimbo
 4,diego,cortez,2,java,python,venezuela,aragua
 5,manuel,rojas,1,python,chile,antofagasta

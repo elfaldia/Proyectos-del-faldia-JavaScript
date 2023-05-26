@@ -15,7 +15,7 @@ public class App {
 			System.out.println("\n----------- EL PROGRAMA ESTA DAÑADo, VUELVA MAS TARDE -----------");
 		}else {
 
-			//loginCompleto(leer);
+			loginCompleto(leer);
 		
 			File archivoDebilidades = new File("debilidades.txt"); File archivoIa = new File("ia.txt"); File archivoUsuario = new File("usuarios.txt"); File archivoProgramadores = new File("programadores.txt"); File archivoPaises = new File("paises.txt");
 			listaPersonas personas = new listaPersonas(filas(archivoUsuario));
@@ -28,8 +28,8 @@ public class App {
 			
 			if(id == -1) {
 				System.out.println("\n-> | linea reservada para el menu de administrador. |");
+				menuAdmin();
 			} else {
-				
 				System.out.println("\n-> | Se ha activado el menu de usuario. |");
 				 menuUsuario(id,leer,ias,debilidades,personas,lenguas);
 			}
@@ -38,7 +38,18 @@ public class App {
 	
 	// ------------------------------------------- FUNCIONES -----------------------------------------------
 	
-	// ------------------------------------------- MENU USUARIOS --------------------------------------------
+	// -------------------------------------- MENU ADMINISTRADOR -------------------------------------------
+	
+	public static void menuAdmin() {
+		
+		String seleccion = "";
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n\t\t\t| BIENVENIDO AL MENU DE ADMINISTRADOR |");
+		System.out.println("\n---------------------------------------------------------------------------");
+		
+	}
+	
+	// ----------------------------------------- MENU USUARIOS ---------------------------------------------
 	
 	// FUNCION QUE CONTENDRA EL MENU DE USUARIO
 	public static void menuUsuario(int idUsuario,Scanner leer,listaIas ias,listaDebilidades debilidades,listaPersonas usuarios,listaLenguajes programador) throws IOException{
@@ -164,18 +175,7 @@ public class App {
 		actualizarDatos(matriz, archivo);
 		System.out.println("\n | LA DEBILIDAD HA SIDO IMPLEMENTADA EN LA IA " + ias.getNombre(indice) + " |");
 		
-		while(true) {
-			System.out.println("\n---------------------------------------------------------");
-			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
-			String scout = leer.nextLine();
-			System.out.println("\n---------------------------------------------------------");
-
-			if(scout.equalsIgnoreCase("")) {
-				break;
-			}else {
-				continue;
-			}
-		}
+		enter(leer);
 	}
 
 	// FUNCION PARA LA 2DA OPCION
@@ -223,18 +223,7 @@ public class App {
 			matriz[indice][1] = contraseñaNueva; actualizarDatos(matriz, archivo);
 			System.out.println("\n | LA CONTRASEÑA DEL USUARIO FUE ACTUALIZADO CON EXITO |");
 		}
-		while(true) {
-			System.out.println("\n---------------------------------------------------------");
-			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
-			String scout = leer.nextLine();
-			System.out.println("\n---------------------------------------------------------");
-
-			if(scout.equalsIgnoreCase("")) {
-				break;
-			}else {
-				continue;
-			}
-		}
+		enter(leer);
 	}
 	
 	// FUNCION PARA LA 3RA OPCION
@@ -256,68 +245,64 @@ public class App {
 				}
 			}
 		}
+		int verificador = 0;
 		for(int ids : idLenguajesCompatibles) {
 			if(ids == 0) {
-				break;
+				verificador++;
 			}else {
 				System.out.println("\n--------------------------------------\n.- Nombre del IA: " + ias.getNombre(ias.getIndice(ids)) + "\n.- Presición: " + ias.getPrecision(ias.getIndice(ids)) + "\n.- ID: " + ias.getId(ias.getIndice(ids)) + "\n--------------------------------------");
 			}
 		}
-		int idIa = 0,aux = 0;
-		System.out.println("\n--------------------------------------------------------");
-		System.out.println("\n-> | INGRESA EL ID DE LA IA QUE DESEA EDITAR |");
-		System.out.println("\n--------------------------------------------------------");
 		
-		while(true) {
-			aux = 0;
-			idIa = Integer.parseInt(leer.nextLine());
-			for(int ids : idLenguajesCompatibles) {
-				if( ids == idIa) {
-					if(ids == 0) {
-						break;
-					}else {
-						idIa = ids;
-						aux++;
-						break;
+		if(verificador != programador.getMax()) {
+			int idIa = 0,aux = 0;
+			System.out.println("\n--------------------------------------------------------");
+			System.out.println("\n-> | INGRESA EL ID DE LA IA QUE DESEA EDITAR |");
+			System.out.println("\n--------------------------------------------------------");
+			
+			while(true) {
+				aux = 0;
+				idIa = Integer.parseInt(leer.nextLine());
+				for(int ids : idLenguajesCompatibles) {
+					if( ids == idIa) {
+						if(ids == 0) {
+							break;
+						}else {
+							idIa = ids;
+							aux++;
+							break;
+						}
 					}
+				}if(aux == 1) {
+					break;
+				}else {
+					System.out.println("\n-> | EL ID QUE IONGRESO NO PERTENECE A NINGUNA IA |");
+					System.out.println("\n--------------------------------------------------------");
 				}
-			}if(aux == 1) {
-				break;
-			}else {
-				System.out.println("\n-> | EL ID QUE IONGRESO NO PERTENECE A NINGUNA IA |");
-				System.out.println("\n--------------------------------------------------------");
 			}
-		}
-		
-		System.out.println("\n-> | Ingrese la nueva precisión a la IA |");
-		System.out.println("\n-> | RECUERDE QUE NO PUEDE EXCEDER EL MAXIMO DE 100 |");
-		System.out.println("\n--------------------------------------------------------");
-		int precision = 0;
-		
-		while(true) {
-			precision = Integer.parseInt(leer.nextLine());
-			if(precision <= 100 && precision >= 0) {
-				break;
-			}else{
-				System.out.println("\n-> | LA PRESICIÓN QUE INGRESO NO ES VALIDA |");
-				System.out.println("\n--------------------------------------------------------");
+			
+			System.out.println("\n-> | Ingrese la nueva precisión a la IA |");
+			System.out.println("\n-> | RECUERDE QUE NO PUEDE EXCEDER EL MAXIMO DE 100 |");
+			System.out.println("\n--------------------------------------------------------");
+			int precision = 0;
+			
+			while(true) {
+				precision = Integer.parseInt(leer.nextLine());
+				if(precision <= 100 && precision >= 0) {
+					break;
+				}else{
+					System.out.println("\n-> | LA PRESICIÓN QUE INGRESO NO ES VALIDA |");
+					System.out.println("\n--------------------------------------------------------");
+				}
 			}
-		}
-		String precisionFinal = Integer.toString(precision) + "%";
-		matriz[ias.getIndice(idIa)][5] = precisionFinal; actualizarDatos(matriz, archivo);
-		System.out.println("\n--------------------------------------------------------"); System.out.println("\n | LA CONTRASEÑA DEL USUARIO FUE ACTUALIZADO CON EXITO |");
-	
-		while(true) {
-			System.out.println("\n---------------------------------------------------------");
-			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
-			String scout = leer.nextLine();
-			System.out.println("\n---------------------------------------------------------");
-
-			if(scout.equalsIgnoreCase("")) {
-				break;
-			}else {
-				continue;
-			}
+			String precisionFinal = Integer.toString(precision) + "%";
+			matriz[ias.getIndice(idIa)][5] = precisionFinal; actualizarDatos(matriz, archivo);
+			System.out.println("\n--------------------------------------------------------"); System.out.println("\n | LA CONTRASEÑA DEL USUARIO FUE ACTUALIZADO CON EXITO |");	
+			enter(leer);
+		}else {
+			System.out.println("\n--------------------------------------------------------------------------");
+			System.out.println("\n-> | NO EXISTE NINGUNA IA DESEÑADA CON LOS LEGUAJES QUE MANEJAS |");
+			System.out.println("\n--------------------------------------------------------------------------");enter(leer);
 		}
 	}
 	
@@ -327,15 +312,7 @@ public class App {
 		for(int i = 0; i < ias.getMax(); i++) {
 			ias.getImpresion4taOpcion(i); 
 		}
-		while(true) {
-			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
-			String scout = leer.nextLine();
-			if(scout.equalsIgnoreCase("")) {
-				break;
-			}else {
-				continue;
-			}
-		}
+		enter(leer);
 	}	
 	
 	// FUNCION PARA LA 5TA OPCIÓN
@@ -368,6 +345,22 @@ public class App {
 	// -----------------------------------------------------------------------------------------------------------
 	
 	// ------------------------------------------- LOGIN / COMPLEMENTOS -------------------------------------------
+	
+	//CIERRE DE OPCIÓN
+	public static void enter(Scanner leer) {
+		while(true) {
+			System.out.println("\n---------------------------------------------------------");
+			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
+			String scout = leer.nextLine();
+			System.out.println("\n---------------------------------------------------------");
+
+			if(scout.equalsIgnoreCase("")) {
+				break;
+			}else {
+				continue;
+			}
+		}
+	}
 	
 	// RELLENAR CONTENEDOR DE LOS IA
 	public static void rellenarDebilidades(listaDebilidades lista) throws IOException{
