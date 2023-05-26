@@ -28,7 +28,7 @@ public class App {
 			
 			if(id == -1) {
 				System.out.println("\n-> | linea reservada para el menu de administrador. |");
-				menuAdmin();
+				menuAdmin(leer);
 			} else {
 				System.out.println("\n-> | Se ha activado el menu de usuario. |");
 				 menuUsuario(id,leer,ias,debilidades,personas,lenguas);
@@ -40,14 +40,61 @@ public class App {
 	
 	// -------------------------------------- MENU ADMINISTRADOR -------------------------------------------
 	
-	public static void menuAdmin() {
+	public static void menuAdmin(Scanner leer) {
 		
 		String seleccion = "";
 		System.out.println("\n---------------------------------------------------------------------------");
 		System.out.println("\n\t\t\t| BIENVENIDO AL MENU DE ADMINISTRADOR |");
 		System.out.println("\n---------------------------------------------------------------------------");
 		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n\t\t   | INGRESE LA OPCIÓN DE SU PREFERENCIA |");
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n1) Ver todos los programadores\n2) Ver todas las IA.\n3) Editar datos Programador.\n4) Editar datos IA.\n5) Editar datos de Usuario.\n6) Crear y visualizar debilidades.\n7) Crear una IA, programador, País\n8) Dar estadísticas por países\n9) Salir");
+			System.out.println("\n---------------------------------------------------------------------------");
+			seleccion = leer.nextLine();
+			
+			if(seleccion.equalsIgnoreCase("Ver todos los programadores") || seleccion.equalsIgnoreCase("1")) {
+				System.out.println("yan");
+			}
+			else if(seleccion.equalsIgnoreCase("Ver todas las IA") || seleccion.equalsIgnoreCase("2")) {
+				System.out.println("yan");
+			}
+			else if(seleccion.equalsIgnoreCase("Editar datos Programador") || seleccion.equalsIgnoreCase("3")) {
+				System.out.println("chamito");
+			}
+			else if(seleccion.equalsIgnoreCase("Editar datos IA") || seleccion.equalsIgnoreCase("4")) {
+				System.out.println("chamito");
+			}
+			else if(seleccion.equalsIgnoreCase("Editar datos de Usuario") || seleccion.equalsIgnoreCase("5")) {
+				System.out.println("chamito");
+			}
+			else if(seleccion.equalsIgnoreCase("Crear y visualizar debilidades") || seleccion.equalsIgnoreCase("6")) {
+				System.out.println("chamito");
+			}
+			else if(seleccion.equalsIgnoreCase("Crear una IA, programador, País") || seleccion.equalsIgnoreCase("7")) {
+				System.out.println("chamito");
+			}
+			else if(seleccion.equalsIgnoreCase("Dar estadísticas por países") || seleccion.equalsIgnoreCase("8")) {
+				System.out.println("yan");
+			}
+			else if(seleccion.equalsIgnoreCase("salir") || seleccion.equalsIgnoreCase("9")) {
+				System.out.println("\n---------------------------------------------------------------------------");
+				System.out.println("\n\t\t     | NOS VEMOS UNA PROXIMA VEZ :) |");
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}
+			else {
+				System.out.println("\n---------------------------------------------------------------------------");
+				System.out.println("-> | EL MENÚ QUE INGRESO NO ES VALIDO, INTENTE NUEVAMENTE |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}	
+			
+		}
 	}
+	
+	
 	
 	// ----------------------------------------- MENU USUARIOS ---------------------------------------------
 	
