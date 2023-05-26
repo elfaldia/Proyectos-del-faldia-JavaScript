@@ -12,7 +12,7 @@ public class App {
 		Scanner leer = new Scanner(System.in);
 		int verificacion = txtVacio();
 		if(verificacion == 0) {
-			System.out.println("\n----------- EL PROGRAMA ESTA DAÑADo, VUELVA MAS TARDE -----------");
+			System.out.println("\n----------- EL PROGRAMA ESTA DAÑADO, VUELVA MAS TARDE -----------");
 		}else {
 
 			loginCompleto(leer);
@@ -61,7 +61,7 @@ public class App {
 		
 		while(true) {
 			System.out.println("\n---------------------------------------------------------------------------");
-			System.out.println("\n\t\t     | INGRESE LA OPCIÓN DE SU PREFERENCIA |");
+			System.out.println("\n\t\t   | INGRESE LA OPCIÓN DE SU PREFERENCIA |");
 			System.out.println("\n---------------------------------------------------------------------------");
 			System.out.println("\n1) Agregar debilidad a la IA.\n2) Modificar datos usuario.\n3) Modificar precisión de una IA.\n4) Ver IAs.\n5) Ver tipo de IAs.\n6) Salir.");
 			System.out.println("\n---------------------------------------------------------------------------");
@@ -87,10 +87,15 @@ public class App {
 			}				
 			// CIERRE DEL MENU (Y DEL BUCLE)
 			else if(seleccion.equalsIgnoreCase("salir") || seleccion.equalsIgnoreCase("6")) {
+				System.out.println("\n---------------------------------------------------------------------------");
+				System.out.println("\n\t\t     | NOS VEMOS UNA PROXIMA VEZ :) |");
+				System.out.println("\n---------------------------------------------------------------------------");
 				break;
 			}
 			else {
+				System.out.println("\n---------------------------------------------------------------------------");
 				System.out.println("-> | EL MENÚ QUE INGRESO NO ES VALIDO, INTENTE NUEVAMENTE |");
+				System.out.println("\n---------------------------------------------------------------------------");
 			}
 		}
 	}
@@ -308,17 +313,31 @@ public class App {
 	
 	// FUNCION PARA LA 4TA OPCIÓN
 	private static void cuartaOpcion(Scanner leer, listaIas ias) {
-		System.out.println("\n[BASE DE DATOS DE IAS REGISTRADAS]\n");
+		System.out.println("\n--------------------------------------------------------");
+		System.out.println("\n\t-> | BASE DE DATOS DE IAS REGISTRADAS |");
+		System.out.println("\n--------------------------------------------------------");
 		for(int i = 0; i < ias.getMax(); i++) {
 			ias.getImpresion4taOpcion(i);
-			System.out.println("\n\t[PRESIONA ENTER PARA VER LA SIGUIENTE]");
-			String scout = leer.nextLine();
+
+			while(true) {
+				System.out.println("\n--------------------------------------------------------");
+				System.out.println("\n\t| PRESIONA ENTER PARA VER LA SIGUIENTE |");
+				System.out.println("\n--------------------------------------------------------");
+				String scout = leer.nextLine();
+
+				if(scout.equalsIgnoreCase("")) {
+					break;
+				}else {
+					continue;
+				}
+			}
 		}
 		enter(leer);
 	}	
 	
 	// FUNCION PARA LA 5TA OPCIÓN
 	private static void quintaOpcion(Scanner leer, listaIas ias) {
+		
 		//PEQUEÑO FRAGMENTO DE CODIGO PARA CREAR UNA LISTA SIN REPETICION DE LOS TIPOS DE IA SEGUN EL TXT
 		boolean existe = false;
 		String[] lista = new String[5];
@@ -334,11 +353,11 @@ public class App {
 		
 		//System.out.println(Arrays.toString(lista));
 		//INICIO DEL MENU COMO TAL
-		
-	System.out.println("\nINGRESE EL TIPO DE IA QUE QUIERE REVISAR\n");
+
+	System.out.println("\n--------------------------------------------------------"); System.out.println("\n-> | INGRESE EL TIPO DE IA QUE QUIERE REVISAR |"); System.out.println("\n--------------------------------------------------------");
 	for(int i = 0; i < lista.length; i++) {
-		System.out.println("-"+lista[i].toUpperCase());
-	}
+		System.out.println("\n.- Tipo de IA: "+ lista[i].toUpperCase());
+	}System.out.println("\n--------------------------------------------------------");
 	System.out.println("");
 	String scout = leer.nextLine();
 	int x = 0;
@@ -346,16 +365,20 @@ public class App {
 		for(int i = 0; i < lista.length; i++) {
 			//System.out.println(scout+" "+lista[i]);
 			if(scout.equalsIgnoreCase(lista[i])){x++;}}
-		if(x == 0) {System.out.println("\n//ERROR EN LA SINTAXIS ESCRIBE TAL CUAL COMO SE MUESTRA EN LA PANTALLA//");
+		if(x == 0) {System.out.println("\n-> | ERROR EN LA SINTAXIS ESCRIBE TAL CUAL COMO SE MUESTRA EN LA PANTALLA |");
+		System.out.println("\n--------------------------------------------------------");
 			scout = leer.nextLine();	}
 	}
 	//PRINTEO DE LAS IAS QUE SE MOSTRARAN POR CONSOLA
+	System.out.println("\n--------------------------------------------------------");
+	System.out.println("\n-> | LOS IA DE ESTE TIPO SON LOS SIGUIENTES |");
+	System.out.println("\n--------------------------------------------------------");
 	for(int i = 0; i < ias.getMax(); i++) {
 		if(scout.equals(ias.getTipo(i))) {
-			System.out.println("\n["+ias.getNombre(i)+"]\n");}}
+			System.out.println("\n.- Nombre: "+ias.getNombre(i));}}
 	
-	System.out.println("[PRESIONA ENTER PARA IR AL MENÚ]");
-scout = leer.nextLine();}
+	System.out.println("\n--------------------------------------------------------"); System.out.println("\n\t | PRESIONA ENTER PARA IR AL MENÚ |"); System.out.println("\n--------------------------------------------------------");
+	scout = leer.nextLine();}
 	
 	
 	// -----------------------------------------------------------------------------------------------------------
