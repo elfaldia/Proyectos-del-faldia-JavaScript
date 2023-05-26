@@ -326,6 +326,8 @@ public class App {
 		System.out.println("\n[BASE DE DATOS DE IAS REGISTRADAS]\n");
 		for(int i = 0; i < ias.getMax(); i++) {
 			ias.getImpresion4taOpcion(i); 
+			System.out.println("\n\t[PRESIONA ENTER PARA VER LA SIGUIENTE]");
+			String scout = leer.nextLine();
 		}
 		while(true) {
 			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
@@ -340,29 +342,43 @@ public class App {
 	
 	// FUNCION PARA LA 5TA OPCIÓN
 	private static void quintaOpcion(Scanner leer, listaIas ias) {
-
-		//EN UN FUTURO PONDRE EL CONTROL DE ERRORES
-		System.out.println("\n INGRESE EL TIPO DE IA QUE QUIERE REVISAR\n\n-IA AUTÓNOMA MILITAR\n-IA SUPERVISORA\n-IA TRANSHUMANISTA\n-IA SOCIAL\n-IA REALIDAD VIRTUAL");
-		String scout = leer.nextLine();
+		//PEQUEÑO FRAGMENTO DE CODIGO PARA CREAR UNA LISTA SIN REPETICION DE LOS TIPOS DE IA SEGUN EL TXT
+		boolean existe = false;
+		String[] lista = new String[5];
+		for(int i = 0; i < lista.length; i++) {
+			for(int j = 0; j <ias.getMax();j++) {
+				if(i == 0) {lista[i] = ias.getTipo(j);}
+				else {
+					existe = false;
+					for(int x = 0; x < i;x++) {
+						if(lista[x].equals(ias.getTipo(j))) {existe = true;}}
+					if(existe == false) {
+						lista[i] = ias.getTipo(j);}}}}
 		
-		for(int i = 0; i < ias.getMax(); i++) {
-			if(scout.equals(ias.getTipo(i))) {
-				System.out.println("\n["+ias.getNombre(i)+"]\n");
-			}
-		}
-		while(true) {
-			System.out.println("\n---------------------------------------------------------");
-			System.out.println("\n\t[PRESIONA ENTER PARA IR AL MENÚ]");
-			scout = leer.nextLine();
-			System.out.println("\n---------------------------------------------------------");
-
-			if(scout.equalsIgnoreCase("")) {
-				break;
-			}else {
-				continue;
-			}
-		}
+		//System.out.println(Arrays.toString(lista));
+		//INICIO DEL MENU COMO TAL
+		
+	System.out.println("\nINGRESE EL TIPO DE IA QUE QUIERE REVISAR\n");
+	for(int i = 0; i < lista.length; i++) {
+		System.out.println("-"+lista[i].toUpperCase());
 	}
+	System.out.println("");
+	String scout = leer.nextLine();
+	int x = 0;
+	while(x == 0) {
+		for(int i = 0; i < lista.length; i++) {
+			//System.out.println(scout+" "+lista[i]);
+			if(scout.equalsIgnoreCase(lista[i])){x++;}}
+		if(x == 0) {System.out.println("\n//ERROR EN LA SINTAXIS ESCRIBE TAL CUAL COMO SE MUESTRA EN LA PANTALLA//");
+			scout = leer.nextLine();	}
+	}
+	//PRINTEO DE LAS IAS QUE SE MOSTRARAN POR CONSOLA
+	for(int i = 0; i < ias.getMax(); i++) {
+		if(scout.equals(ias.getTipo(i))) {
+			System.out.println("\n["+ias.getNombre(i)+"]\n");}}
+	
+	System.out.println("[PRESIONA ENTER PARA IR AL MENÚ]");
+scout = leer.nextLine();}
 	
 	
 	// -----------------------------------------------------------------------------------------------------------
