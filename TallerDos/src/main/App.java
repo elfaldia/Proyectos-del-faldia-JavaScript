@@ -94,8 +94,6 @@ public class App {
 		}
 	}
 	
-	
-	
 	// ----------------------------------------- MENU USUARIOS ---------------------------------------------
 	
 	// FUNCION QUE CONTENDRA EL MENU DE USUARIO
