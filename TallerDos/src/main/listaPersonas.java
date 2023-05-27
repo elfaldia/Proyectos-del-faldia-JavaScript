@@ -60,6 +60,16 @@ public class listaPersonas {
 		}	
 	}
 	
+	public int getIndiceConNombre(String nombre) {
+		int indice = 0;
+		for(int i = 0; i < getMax(); i++) {
+			if(nombre.equalsIgnoreCase(lista[i].getContraseña())) {
+				indice = i;
+				break;
+			}
+		}return indice;
+	}
+	
 	public int getIdConNombre(String nombre) {
 		int indice = 0;
 		for(int i = 0; i < getMax(); i++) {

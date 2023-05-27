@@ -18,18 +18,19 @@ public class App {
 			loginCompleto(leer);
 		
 			File archivoDebilidades = new File("debilidades.txt"); File archivoIa = new File("ia.txt"); File archivoUsuario = new File("usuarios.txt"); File archivoProgramadores = new File("programadores.txt"); File archivoPaises = new File("paises.txt");
+			listaDatosUsuario datosUsuario = new listaDatosUsuario(filas(archivoProgramadores));
 			listaPersonas personas = new listaPersonas(filas(archivoUsuario));
 			listaLenguajes lenguas = new listaLenguajes(filas(archivoProgramadores));
 			listaIas ias = new listaIas(filas(archivoIa));
 			listaDebilidades debilidades = new listaDebilidades(filas(archivoDebilidades));
-			rellenarPersonas(personas); rellenarLenguajes(lenguas, filas(archivoPaises)); rellenarIas(ias); rellenarDebilidades(debilidades);
+			rellenarDatosUsuario(datosUsuario); rellenarLenguajes(lenguas, filas(archivoPaises)); rellenarIas(ias); rellenarDebilidades(debilidades);rellenarPersonas(personas);
 			
 			int id = loginFinalizado(personas,leer);
 			
 			if(id == -1) {
 				System.out.println("\n-> | linea reservada para el menu de administrador. |");
-				id = personas.getIdConNombre("suricatarabiosa");				
-				menuAdmin(leer,id,lenguas);
+				id = personas.getIdConNombre("suricatarabiosa");		
+				menuAdmin(leer,id,lenguas,datosUsuario);
 			} else {
 				System.out.println("\n-> | Se ha activado el menu de usuario. |");
 				 menuUsuario(id,leer,ias,debilidades,personas,lenguas);
@@ -42,7 +43,7 @@ public class App {
 	// -------------------------------------- MENU ADMINISTRADOR -------------------------------------------
 	
 	// FUNCIÓN QUE EJECUTA EL MENÚ ADMINISTRADOR
-	public static void menuAdmin(Scanner leer,int id, listaLenguajes programadores)throws IOException {
+	public static void menuAdmin(Scanner leer,int id, listaLenguajes programadores,listaDatosUsuario datosUsuarios)throws IOException {
 		
 		String seleccion = "";
 		System.out.println("\n---------------------------------------------------------------------------");
@@ -64,7 +65,7 @@ public class App {
 				System.out.println("yan");
 			}
 			else if(seleccion.equalsIgnoreCase("Editar datos Programador") || seleccion.equalsIgnoreCase("3")) {
-				opcionTresAdmin(leer, id,programadores);
+				opcionTresAdmin(leer, id,programadores,datosUsuarios);
 			}
 			else if(seleccion.equalsIgnoreCase("Editar datos IA") || seleccion.equalsIgnoreCase("4")) {
 				System.out.println("chamito");
@@ -90,37 +91,95 @@ public class App {
 			}
 			else {
 				System.out.println("\n---------------------------------------------------------------------------");
-				System.out.println("-> | EL MENÚ QUE INGRESO NO ES VALIDO, INTENTE NUEVAMENTE |");
+				System.out.println("\n-> | EL MENÚ QUE INGRESO NO ES VALIDO, INTENTE NUEVAMENTE |");
 				System.out.println("\n---------------------------------------------------------------------------");
 			}	
-			
 		}
 	}
 	
-	//------------------------------------------------------------------------------------------------------
+	//--------------------------------------------OPCIÓN TRES-----------------------------------------------
 	// TODO LO NECESARIO PARA LA FUNCIÓN TRES
-	public static void opcionTresAdmin(Scanner leer, int id, listaLenguajes programadores)throws IOException {
+	public static void opcionTresAdmin(Scanner leer, int id, listaLenguajes programadores, listaDatosUsuario datosUsuario)throws IOException {
 		
-		String seleccion = "";
 		System.out.println("\n-> | En esta opción podras editar los datos del programador: |");
 		System.out.println("\n-> | Acontinuación se desplegará una serie de datos que se pueden editar: |");
 		System.out.println("\n---------------------------------------------------------------------------");
-		System.out.println("\n1) Agregar lenguaje.\n2) Años de experiencia.\n3) Modificar pais.\n4)Ciudad.\n5) ID.\n6) Nombre.\n7) Apellido.");		System.out.println("\n---------------------------------------------------------------------------");
-		System.out.println("\n-> | Ingrese la opción que desea ejecutar: |");
-		seleccion = leer.nextLine();
-		
-		if(seleccion.equalsIgnoreCase("1") || seleccion.equalsIgnoreCase("Agregar lenguaje")) {
-			agregarLenguaje(id, leer, programadores);
+		while(true) {
+			String seleccion = "";
+
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n1) Agregar lenguaje.\n2) Años de experiencia.\n3) Modificar pais.\n4) Ciudad.\n5) ID.\n6) Nombre.\n7) Apellido.\n8) Volver al menu inicial.");System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | Ingrese la opción que desea ejecutar: |");
+			seleccion = leer.nextLine();
+			
+			if(seleccion.equalsIgnoreCase("8") || seleccion.equalsIgnoreCase("Volver al menu inicial")) {
+				break;
+			}
+			else if(seleccion.equalsIgnoreCase("1") || seleccion.equalsIgnoreCase("Agregar lenguaje")) {
+				agregarLenguaje(id, leer, programadores,datosUsuario);
+			}
+			else {
+				System.out.println("\n---------------------------------------------------------------------------");
+				System.out.println("\n-> | EL MENÚ QUE INGRESO NO ES VALIDO, INTENTE NUEVAMENTE |");
+				System.out.println("\n---------------------------------------------------------------------------");		
+			}
 		}
 	}
 	
 	// SELECCION AGREGAR LENGUAJE
-	public static void agregarLenguaje(int id, Scanner leer,listaLenguajes programadores) throws IOException{
+	public static void agregarLenguaje(int id, Scanner leer,listaLenguajes programadores, listaDatosUsuario datosUsuarios) throws IOException{
 		
-	//	File archivo = new File("programadores.txt");
-	//	String[][] matriz = new String[programadores.getMax()][100];	
+		File archivo = new File("programadores.txt");
+		String[][] matriz = matrizMadre(archivo, programadores.getMax(), 100);	
+		String[] lenguajesExistentes = programadores.getLenguaje(programadores.getIndice(id)), lengueajesNuevos = new String[100], lenguajes = listaProgramadores();
+		int indice = programadores.getIndice(id);
+		int columna = 4, ind = 0;
+		for(int i = 0; i < lenguajesExistentes.length; i++) {
+			lengueajesNuevos[i] = lenguajesExistentes[i];
+			columna++; ind++;
+		}
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | INGRESE LOS NUEVS LENGUAJES QUE SABE |");System.out.println("\n-> | PARA FINALIZAR EL INGRESO DE DATOS, INGRESE (LISTO) |");
+		String lenguaje = "";
 		
-		
+		while(true) {
+			lenguaje = leer.nextLine(); int verificador = 0;
+			if(lenguaje.equalsIgnoreCase("listo")) {
+				break;
+			}
+			for(String lenguajen : lenguajesExistentes) {
+				if(lenguajen == null) {
+					break;
+				}else if(lenguajen.equalsIgnoreCase(lenguaje)) {
+					System.out.println("-> | EL LENGUAJE QUE INGRESO YA ESTA EXISTENTE |");
+					verificador++;
+					break;
+				}
+			}if(verificador == 1) {
+				continue;
+			}else {
+				for(String lenguajen : lenguajes) {
+					if(lenguaje.equalsIgnoreCase(lenguajen)) {
+						verificador++;
+						break;
+					}
+				}
+				if(verificador == 1) {
+					lengueajesNuevos[ind] = lenguaje;
+					matriz[indice][columna] = lenguaje; 
+					System.out.println("\n---------------------------------------------------------------------------");System.out.println("\n-> | INGRESE LOS NUEVS LENGUAJES QUE SABE |");System.out.println("\n-> | PARA FINALIZAR EL INGRESO DE DATOS, INGRESE (LISTO) |");
+					columna++;ind++;
+
+					
+				}else {
+					System.out.println("-> | EL LENGUAJE QUE INGRESO NO ES VALIDO |");
+				}
+			}
+		}matriz[indice][columna] = datosUsuarios.getPais(indice);
+		columna++;
+
+		matriz[indice][columna] = datosUsuarios.getCiudad(indice); 
+		actualizarDatosProgramador(matriz, archivo);System.out.println("\n---------------------------------------------------------------------------");System.out.println("\n | LOS LENGUAJES FUERON AÑADIDOS CON EXITO |");enter(leer);
 	}
 	
 	//------------------------------------------------------------------------------------------------------
@@ -461,6 +520,16 @@ public class App {
 	
 	// ------------------------------------------- LOGIN / COMPLEMENTOS -------------------------------------------
 	
+	// RELLENAR EL CONTENEDOR DE DATOS DE LOS PROGRAMADORES.
+	public static void rellenarDatosUsuario(listaDatosUsuario lista) throws IOException {
+		
+		Scanner arch = new Scanner(new File("programadores.txt"));
+		for(int i = 0; i < lista.getMax(); i++) {
+			String[] linea = arch.nextLine().split(",");
+			lista.getIngresar(new datosUsuario(Integer.parseInt(linea[0]), linea[1], linea[2],Integer.parseInt(linea[3]) , linea[linea.length - 2], linea[linea.length - 1]));
+		}
+	}
+	
 	//CIERRE DE OPCIÓN
 	public static void enter(Scanner leer) {
 		while(true) {
@@ -567,7 +636,6 @@ public class App {
 			String[] linea = arch.nextLine().split(",");
 			Personas datos = new Personas(linea[0],linea[1],Integer.parseInt(linea[2]));
 			contenedor.ingresar(datos);
-			
 		}
 	}
 	
@@ -595,7 +663,7 @@ public class App {
 				indice = i;
 				break;
 			}
-				for(String nombre : nombres) {
+			for(String nombre : nombres) {
 				if(nombre.equalsIgnoreCase(nombreFinal)) {
 					indice = i;
 					cont++;
@@ -615,7 +683,7 @@ public class App {
 			String contraseña = "";
 			System.out.println("\n-> Ingrese su contraseña: ");
 			contraseña = leer.nextLine();
-			if(lista.getContraseña(indice).equalsIgnoreCase("suricatarabiosa")) {
+			if(lista.getContraseña(lista.getIndiceConNombre(contraseña)).equalsIgnoreCase("suricatarabiosa")) {
 				return -1;	
 			}
 			
