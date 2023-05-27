@@ -3,3 +3,4 @@
 3,ian,castillo,1,c,chile,coquimbo
 4,diego,cortez,2,java,python,venezuela,aragua
 5,manuel,rojas,1,python,chile,antofagasta
+6,empanadasconchalele,leopoldo,3,python,c#,java,c++,japon,okinawa

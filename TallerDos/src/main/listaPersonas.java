@@ -60,6 +60,16 @@ public class listaPersonas {
 		}	
 	}
 	
+	public int getIdConNombre(String nombre) {
+		int indice = 0;
+		for(int i = 0; i < getMax(); i++) {
+			if(nombre.equalsIgnoreCase(lista[i].getContraseña())) {
+				indice = lista[i].getId();
+				break;
+			}
+		}return indice;
+	}
+	
 	public boolean ingresar(Personas persona) {
 		if(cant < max) {
 			this.lista[cant] = persona;

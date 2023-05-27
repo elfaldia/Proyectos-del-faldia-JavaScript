@@ -28,7 +28,8 @@ public class App {
 			
 			if(id == -1) {
 				System.out.println("\n-> | linea reservada para el menu de administrador. |");
-				menuAdmin(leer);
+				id = personas.getIdConNombre("suricatarabiosa");				
+				menuAdmin(leer,id,lenguas);
 			} else {
 				System.out.println("\n-> | Se ha activado el menu de usuario. |");
 				 menuUsuario(id,leer,ias,debilidades,personas,lenguas);
@@ -40,7 +41,8 @@ public class App {
 	
 	// -------------------------------------- MENU ADMINISTRADOR -------------------------------------------
 	
-	public static void menuAdmin(Scanner leer) {
+	// FUNCIÓN QUE EJECUTA EL MENÚ ADMINISTRADOR
+	public static void menuAdmin(Scanner leer,int id, listaLenguajes programadores)throws IOException {
 		
 		String seleccion = "";
 		System.out.println("\n---------------------------------------------------------------------------");
@@ -62,10 +64,11 @@ public class App {
 				System.out.println("yan");
 			}
 			else if(seleccion.equalsIgnoreCase("Editar datos Programador") || seleccion.equalsIgnoreCase("3")) {
-				System.out.println("chamito");
+				opcionTresAdmin(leer, id,programadores);
 			}
 			else if(seleccion.equalsIgnoreCase("Editar datos IA") || seleccion.equalsIgnoreCase("4")) {
 				System.out.println("chamito");
+
 			}
 			else if(seleccion.equalsIgnoreCase("Editar datos de Usuario") || seleccion.equalsIgnoreCase("5")) {
 				System.out.println("chamito");
@@ -94,10 +97,38 @@ public class App {
 		}
 	}
 	
+	//------------------------------------------------------------------------------------------------------
+	// TODO LO NECESARIO PARA LA FUNCIÓN TRES
+	public static void opcionTresAdmin(Scanner leer, int id, listaLenguajes programadores)throws IOException {
+		
+		String seleccion = "";
+		System.out.println("\n-> | En esta opción podras editar los datos del programador: |");
+		System.out.println("\n-> | Acontinuación se desplegará una serie de datos que se pueden editar: |");
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n1) Agregar lenguaje.\n2) Años de experiencia.\n3) Modificar pais.\n4)Ciudad.\n5) ID.\n6) Nombre.\n7) Apellido.");		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | Ingrese la opción que desea ejecutar: |");
+		seleccion = leer.nextLine();
+		
+		if(seleccion.equalsIgnoreCase("1") || seleccion.equalsIgnoreCase("Agregar lenguaje")) {
+			agregarLenguaje(id, leer, programadores);
+		}
+	}
+	
+	// SELECCION AGREGAR LENGUAJE
+	public static void agregarLenguaje(int id, Scanner leer,listaLenguajes programadores) throws IOException{
+		
+	//	File archivo = new File("programadores.txt");
+	//	String[][] matriz = new String[programadores.getMax()][100];	
+		
+		
+	}
+	
+	//------------------------------------------------------------------------------------------------------
+	
 	// ----------------------------------------- MENU USUARIOS ---------------------------------------------
 	
 	// FUNCION QUE CONTENDRA EL MENU DE USUARIO
-	public static void menuUsuario(int idUsuario,Scanner leer,listaIas ias,listaDebilidades debilidades,listaPersonas usuarios,listaLenguajes programador) throws IOException{
+ 	public static void menuUsuario(int idUsuario,Scanner leer,listaIas ias,listaDebilidades debilidades,listaPersonas usuarios,listaLenguajes programador) throws IOException{
 		
 		String seleccion = "";
 		System.out.println("\n---------------------------------------------------------------------------");
@@ -555,14 +586,13 @@ public class App {
 		System.out.println("\n---------------------------------------------------------------------------");
 		System.out.println("\n\t\t\t| LOG IN - INICIO DE SESIÓN |");
 		System.out.println("\n---------------------------------------------------------------------------");
-		boolean adminlog = false;
 		while(true) {
 			System.out.println("\n-> Ingrese su nombre de usuario: ");
 			nombreFinal = leer.nextLine();
 			int cont = 0;
 			int i = 0;
-			if(nombreFinal.equals("empanadasconchapalele")) {
-				adminlog = true;
+			if(nombreFinal.equalsIgnoreCase("empanadasconchapalele")) {
+				indice = i;
 				break;
 			}
 				for(String nombre : nombres) {
@@ -585,7 +615,7 @@ public class App {
 			String contraseña = "";
 			System.out.println("\n-> Ingrese su contraseña: ");
 			contraseña = leer.nextLine();
-			if(adminlog == true && contraseña.equals("suricatarabiosa")) {
+			if(lista.getContraseña(indice).equalsIgnoreCase("suricatarabiosa")) {
 				return -1;	
 			}
 			
