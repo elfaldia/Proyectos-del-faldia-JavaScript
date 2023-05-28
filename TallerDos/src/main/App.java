@@ -30,10 +30,10 @@ public class App {
 			if(id == -1) {
 				System.out.println("\n-> | linea reservada para el menu de administrador. |");
 				id = personas.getIdConNombre("suricatarabiosa");		
-				menuAdmin(leer,id,lenguas,datosUsuario);
+				menuAdmin(leer,id,lenguas,datosUsuario,personas,ias,debilidades);
 			} else {
 				System.out.println("\n-> | Se ha activado el menu de usuario. |");
-				 menuUsuario(id,leer,ias,debilidades,personas,lenguas);
+				menuUsuario(id,leer,ias,debilidades,personas,lenguas);
 			}
 		}leer.close();
 	}
@@ -43,7 +43,7 @@ public class App {
 	// -------------------------------------- MENU ADMINISTRADOR -------------------------------------------
 	
 	// FUNCIÓN QUE EJECUTA EL MENÚ ADMINISTRADOR
-	public static void menuAdmin(Scanner leer,int id, listaLenguajes programadores,listaDatosUsuario datosUsuarios)throws IOException {
+	public static void menuAdmin(Scanner leer,int id, listaLenguajes programadores,listaDatosUsuario datosUsuarios,listaPersonas personas, listaIas ias,listaDebilidades debilidades)throws IOException {
 		
 		String seleccion = "";
 		System.out.println("\n---------------------------------------------------------------------------");
@@ -51,6 +51,7 @@ public class App {
 		System.out.println("\n---------------------------------------------------------------------------");
 		
 		while(true) {
+			id = personas.getIdConNombre("suricatarabiosa");
 			System.out.println("\n---------------------------------------------------------------------------");
 			System.out.println("\n\t\t   | INGRESE LA OPCIÓN DE SU PREFERENCIA |");
 			System.out.println("\n---------------------------------------------------------------------------");
@@ -65,11 +66,10 @@ public class App {
 				System.out.println("yan");
 			}
 			else if(seleccion.equalsIgnoreCase("Editar datos Programador") || seleccion.equalsIgnoreCase("3")) {
-				opcionTresAdmin(leer, id,programadores,datosUsuarios);
+				opcionTresAdmin(leer, id,programadores,datosUsuarios,personas,ias);
 			}
 			else if(seleccion.equalsIgnoreCase("Editar datos IA") || seleccion.equalsIgnoreCase("4")) {
-				System.out.println("chamito");
-
+				opcionCuatroAdmin(leer, id, ias, debilidades,datosUsuarios,personas);
 			}
 			else if(seleccion.equalsIgnoreCase("Editar datos de Usuario") || seleccion.equalsIgnoreCase("5")) {
 				System.out.println("chamito");
@@ -97,26 +97,331 @@ public class App {
 		}
 	}
 	
+	//-------------------------------------------OPCIÓN CINCO-----------------------------------------------
+	
+	
+	//------------------------------------------------------------------------------------------------------
+	
+	//-------------------------------------------OPCIÓN CUATRO----------------------------------------------
+	
+	// FUNCION QUE CONTIENE EL ESCQUELETO DE LA OPCION
+	public static void opcionCuatroAdmin(Scanner leer,int id, listaIas ias, listaDebilidades debilidad,listaDatosUsuario datosUsuarios ,listaPersonas personas)throws IOException{
+		
+		int idSeleccionado = 0;
+		
+		System.out.println("\n-> | En esta opción podras editar todos los datos de cualquier IA: |");
+		System.out.println("\n-> | Acontinuación se desplegarán todas las IA que puedes editar: |");
+		System.out.println("\n---------------------------------------------------------------------------");
+		
+		for(int i = 0; i < ias.getCantidad() ; i++) {
+			ias.getImpresion4taOpcion(i);;
+		}
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | SELECCIONE EL ID DEL IA QUE DESEA EDITAR |");
+			idSeleccionado = Integer.parseInt(leer.nextLine());
+			int i;
+			for(i = 0; i < ias.getCantidad(); i++) {
+				if(idSeleccionado == ias.getId(i)) {
+					break;
+				}
+			}if(i == ias.getCantidad()) {
+				System.out.println("\n-> | EL ID QUE INGRESÓ NO ESTA REGISTRADO |");
+				System.out.println("\n---------------------------------------------------------------------------");continue;
+			}else {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}
+		}
+		System.out.println("\n-> | Acontinuación se desplegará un menú con diversas aspectos que puedes editarle a los IA: |");
+
+		while(true) {
+			String seleccion = "";
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n1) Editar nombre.\n2) Edidar nivel de peligrosidad.\n3) Modificar debilidad.\n4) Modificar precisión.\n5) Modificar pais.\n6) Modificar ID.\n7) Volver al menu inicial.");System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | Ingrese la opción que desea ejecutar: |");
+			seleccion = leer.nextLine();
+			
+			if(seleccion.equalsIgnoreCase("7") || seleccion.equalsIgnoreCase("Volver al menu inicial")) {
+				break;
+			}
+			else if(seleccion.equalsIgnoreCase("1") || seleccion.equalsIgnoreCase("Editar nombre")) {
+				modificarNombreIa(idSeleccionado, leer, ias);
+			}
+			else if(seleccion.equalsIgnoreCase("2") || seleccion.equalsIgnoreCase("Edidar nivel de peligrosidad")) {
+				editarPeligrosidad(idSeleccionado, leer, ias);
+			}
+			else if(seleccion.equalsIgnoreCase("3") || seleccion.equalsIgnoreCase("Modificar debilidad")) {
+				editarDebilidad(idSeleccionado, leer, ias, debilidad);
+			}
+			else if(seleccion.equalsIgnoreCase("4") || seleccion.equalsIgnoreCase("Modificar precisión")) {
+				editarPresicion(idSeleccionado, leer, ias);
+			}
+			else if(seleccion.equalsIgnoreCase("5") || seleccion.equalsIgnoreCase("Modificar pais")) {
+				editarPais(idSeleccionado, leer, ias);
+			}
+			else if(seleccion.equalsIgnoreCase("6") || seleccion.equalsIgnoreCase("Modificar ID")) {
+				editarId(idSeleccionado, leer, datosUsuarios, personas, ias);
+			}
+			else {
+				System.out.println("\n---------------------------------------------------------------------------");
+				System.out.println("\n-> | EL MENÚ QUE INGRESO NO ES VALIDO, INTENTE NUEVAMENTE |");
+				System.out.println("\n---------------------------------------------------------------------------");		
+			}
+		}
+	}
+	
+	// EDITAR NOMBRE IA
+	public static void modificarNombreIa(int id, Scanner leer, listaIas ias)throws IOException {
+		
+		File archivo = new File("ia.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
+		String seleccion = "";
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | EL NOMBRE ACTUAL DEL IA ES |");
+		System.out.println("\n.- Nombre : " + ias.getNombre(ias.getIndice(id)));
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | INGRESE SU NUEVO NOMBRE |");
+		seleccion = leer.nextLine();
+		System.out.println("\n---------------------------------------------------------------------------");
+		
+		matriz[ias.getIndice(id)][0] = seleccion;actualizarDatos(matriz, archivo);
+		ias.setearNombe(ias.getIndice(id), seleccion);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
+	
+	// EDITAR NIVEL DE PELIGROSIDAD
+	public static void editarPeligrosidad(int id, Scanner leer, listaIas ias)throws IOException {
+		
+		File archivo = new File("ia.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
+		int seleccion = 0;
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | NIVEL ACTUAL |");
+		System.out.println("\n.- Nivel de amenaza : " + ias.getNivelAmenaza(ias.getIndice(id)));
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | RECUERDA QUE EL MINIMO SERIA 1 Y EL MAXIMO NIVEL 5 |");
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | INGRESE EL NIVEL |");
+			seleccion = Integer.parseInt(leer.nextLine());
+			
+			if(seleccion >= 1 &&  seleccion <= 5) {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}else {
+				System.out.println("\n-> | NIVELES DE PELIGROSIDAD INVALIDOS |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}
+		}
+		
+		matriz[ias.getIndice(id)][2] = Integer.toString(seleccion); actualizarDatos(matriz, archivo);
+		ias.setearNivelPeligrosidad(ias.getIndice(id), seleccion);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
+	
+	// EDITAR DEBILIDAD
+	public static void editarDebilidad(int id, Scanner leer, listaIas ias, listaDebilidades debilidades)throws IOException{
+		
+		File archivo = new File("ia.txt");File archivoDos = new File("debilidades.txt");
+		String[] debilidadesDisponibles = new String[filas(archivoDos)];
+		String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
+		String seleccion = "";
+		int indice =ias.getIndice(id), cont = 0;
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | DEBILIDAD ACTUAL |");
+		System.out.println("\n.- Debilidad: " + ias.getDebilidad(ias.getIndice(id)));
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | Ahora se desplegará la lista de debilidades validas para este usuario, escoja una sabiamente |\n");
+		
+		if(ias.getNivelAmenaza(indice) == 1) {
+			System.out.println("\n | Lo siento, pero este IA no puede recibir debilidades ya que es de nivel 1. |");
+			System.out.println("\n---------------------------------------------------------------------------");
+		}else {		
+			for(int i = 0; i < debilidades.getMax(); i++) {
+				if(ias.getNivelAmenaza(indice) >= debilidades.getJerarquia(i)) {
+					System.out.println(".- Debilidad " + debilidades.getDebilidad(i) + ".");
+					debilidadesDisponibles[cont] = debilidades.getDebilidad(i);
+					cont++;
+				}
+			}System.out.println("\n---------------------------------------------------------------------------");
+		}
+		System.out.println("\n-> | Introduzca la debilidad que desea seleccionar |");
+		
+		// BUCLE DE COMPROBACIÓN PARA LOS ID
+		while(true) {
+			int verificador = 0;
+			seleccion = leer.nextLine();
+			for(int i = 0; i < cont; i++) {
+				if(debilidadesDisponibles[i].equalsIgnoreCase(seleccion)) {
+					verificador++;
+					break;
+				}
+			}
+			if(verificador == 1) {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}else {
+				System.out.println("\n-> | La debilidad seleccionada no es valida o no existe. |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}
+		}
+		
+		ias.setearDebilidad(ias.getIndice(id), seleccion);
+		matriz[indice][3] = seleccion;actualizarDatos(matriz, archivo);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
+	
+	// EDITAR PRECISION
+	public static void editarPresicion(int id, Scanner leer, listaIas ias)throws IOException{
+		
+		File archivo = new File("ia.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
+		int seleccion = 0;
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | PRECISION ACTUAL |");
+		System.out.println("\n.- Presición: " + ias.getPrecision(ias.getIndice(id)));
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | RECUERDA QUE EL MINIMO SERIA 0% Y EL MAXIMO NIVEL 100% |");
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | INGRESE NUEVA PRESICIÓN |");
+			seleccion = Integer.parseInt(leer.nextLine());
+			
+			if(seleccion >= 0 &&  seleccion <= 100) {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}else {
+				System.out.println("\n-> | LA PRESISCION SE SALE DE SU RANGO |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}
+		}
+		String sleccionFinal = Integer.toString(seleccion) + "%";
+		matriz[ias.getIndice(id)][5] = sleccionFinal; actualizarDatos(matriz, archivo);
+		ias.setearPrecision(ias.getIndice(id), sleccionFinal);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
+	
+	// EDITAR PRECISION
+	public static void editarPais(int id, Scanner leer, listaIas ias)throws IOException{
+		
+		File archivo = new File("ia.txt"); File archivoDos = new File("paises.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
+		String[] paises = paises(filas(archivoDos));
+		String seleccion = "";
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | ACONTINUACIÓN SE MOSTRARÁ EL PAIS ACTUAL |");
+		System.out.println("\n.- Pais: " + ias.getPais(ias.getIndice(id)));
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | INGRESE EL NUEVO PAIS DE RESIDENCIA |");
+			seleccion = leer.nextLine();
+			int i;
+			for(i = 0; i < paises.length; i++) {
+				if(seleccion.equalsIgnoreCase(paises[i])) {
+					break;
+				}
+			}if(i == paises.length) {
+				System.out.println("\n-> | EL PAIS QUE INGRESO EXISTE O NO ESTA EN LA BASE DE DATOS |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}else {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}
+		}
+		
+		matriz[ias.getIndice(id)][4] = seleccion; actualizarDatos(matriz, archivo);
+		ias.setearPais(ias.getIndice(id), seleccion);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+		
+	}
+	
+	// MODIFICAR ID
+	public static void editarId(int id, Scanner leer, listaDatosUsuario datosUsuario, listaPersonas personas, listaIas ias)throws IOException{
+			
+		File archivo = new File("programadores.txt"),archivoDos = new File("usuarios.txt"),archivoTres = new File("ia.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), 100), matrizDos = matrizMadre(archivoDos,filas(archivoDos), columnas(archivoDos)),matrizTres = matrizMadre(archivoTres, filas(archivoTres), columnas(archivoTres));
+		int seleccion = 0;
+			
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | ACONTINUACIÓN SE MOSTRARÁ SU ID ACTUAL |");
+		System.out.println("\n.- ID : " + ias.getId(ias.getIndice(id)));
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | INGRESE EL NUEVO ID |");
+			seleccion = Integer.parseInt(leer.nextLine());
+			int i;
+			for(i = 0; i < ias.getCantidad();i++) {
+				if(seleccion == ias.getId(i)) {
+					break;
+				}
+			}if(i == ias.getCantidad()) {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}else {
+				System.out.println("\n-> | EL ID QUE INGRESO YA ES EXISTENTE |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}	
+		}
+			
+		matriz[datosUsuario.getIndice(id)][0] = Integer.toString(seleccion);actualizarDatosProgramador(matriz, archivo);
+		matrizDos[personas.getIndice(id)][2] = Integer.toString(seleccion);actualizarDatos(matrizDos, archivoDos);
+		matrizTres[ias.getIndice(id)][7] = Integer.toString(seleccion);actualizarDatos(matrizTres, archivoTres);
+		datosUsuario.setearId(datosUsuario.getIndice(id), seleccion);
+		personas.setearId(personas.getIndice(id), seleccion);
+		ias.setearId(ias.getIndice(id), seleccion);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
+	
+	//------------------------------------------------------------------------------------------------------
+	
 	//--------------------------------------------OPCIÓN TRES-----------------------------------------------
+	
 	// TODO LO NECESARIO PARA LA FUNCIÓN TRES
-	public static void opcionTresAdmin(Scanner leer, int id, listaLenguajes programadores, listaDatosUsuario datosUsuario)throws IOException {
+	public static void opcionTresAdmin(Scanner leer, int id, listaLenguajes programadores, listaDatosUsuario datosUsuario,listaPersonas personas, listaIas ias)throws IOException {
 		
 		System.out.println("\n-> | En esta opción podras editar los datos del programador: |");
 		System.out.println("\n-> | Acontinuación se desplegará una serie de datos que se pueden editar: |");
 		System.out.println("\n---------------------------------------------------------------------------");
 		while(true) {
 			String seleccion = "";
-
+			id = personas.getIdConNombre("suricatarabiosa");
 			System.out.println("\n---------------------------------------------------------------------------");
-			System.out.println("\n1) Agregar lenguaje.\n2) Años de experiencia.\n3) Modificar pais.\n4) Ciudad.\n5) ID.\n6) Nombre.\n7) Apellido.\n8) Volver al menu inicial.");System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n1) Agregar lenguaje.\n2) Años de experiencia.\n3) Modificar pais y region.\n4) Modificar ID.\n5) Modificar nombre.\n6) Modificar apellido.\n7) Volver al menu inicial.");System.out.println("\n---------------------------------------------------------------------------");
 			System.out.println("\n-> | Ingrese la opción que desea ejecutar: |");
 			seleccion = leer.nextLine();
 			
-			if(seleccion.equalsIgnoreCase("8") || seleccion.equalsIgnoreCase("Volver al menu inicial")) {
+			if(seleccion.equalsIgnoreCase("7") || seleccion.equalsIgnoreCase("Volver al menu inicial")) {
 				break;
 			}
 			else if(seleccion.equalsIgnoreCase("1") || seleccion.equalsIgnoreCase("Agregar lenguaje")) {
 				agregarLenguaje(id, leer, programadores,datosUsuario);
+			}
+			else if(seleccion.equalsIgnoreCase("2") || seleccion.equalsIgnoreCase("Años de experiencia")) {
+				editarAñosExperiencia(id, leer, datosUsuario);
+			}
+			else if(seleccion.equalsIgnoreCase("3") || seleccion.equalsIgnoreCase("Modificar pais")) {
+				modificarPais(id, leer, datosUsuario);
+			}
+			else if(seleccion.equalsIgnoreCase("4") || seleccion.equalsIgnoreCase("Modificar ID")) {
+				modificarId(id, leer, datosUsuario,personas,ias);
+			}
+			else if(seleccion.equalsIgnoreCase("5") || seleccion.equalsIgnoreCase("Modificar nombre")) {
+				modificarNombre(id, leer, datosUsuario);
+			}
+			else if(seleccion.equalsIgnoreCase("6") || seleccion.equalsIgnoreCase("Modificar apellido")) {
+				modificarApellido(id, leer, datosUsuario);
 			}
 			else {
 				System.out.println("\n---------------------------------------------------------------------------");
@@ -175,15 +480,221 @@ public class App {
 					System.out.println("-> | EL LENGUAJE QUE INGRESO NO ES VALIDO |");
 				}
 			}
-		}matriz[indice][columna] = datosUsuarios.getPais(indice);
+		}int i;
+		for(i = 0; i < lengueajesNuevos.length;i++) {
+			if(lengueajesNuevos[i] == null) {
+				break;
+			}
+		}
+		String[] lenguasSetter = new String[i];
+		
+		for(int j = 0; j < lenguasSetter.length; j++) {
+			lenguasSetter[j] = lengueajesNuevos[j];
+		}
+		
+		programadores.setearLenguajes(programadores.getIndice(id), lenguasSetter);
+		
+		matriz[indice][columna] = datosUsuarios.getPais(indice);
 		columna++;
 
 		matriz[indice][columna] = datosUsuarios.getCiudad(indice); 
+		
 		actualizarDatosProgramador(matriz, archivo);System.out.println("\n---------------------------------------------------------------------------");System.out.println("\n | LOS LENGUAJES FUERON AÑADIDOS CON EXITO |");enter(leer);
 	}
 	
-	//------------------------------------------------------------------------------------------------------
+	// EDITAR AÑOS DE EXPERIENCIA
+	public static void editarAñosExperiencia(int id, Scanner leer, listaDatosUsuario datosUsuarios) throws IOException {
+		
+		File archivo = new File("programadores.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), 100);
+		int seleccion = 0;
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | ACTUALMENTE SE MOSTRARÁ LOS AÑOS DE EXPERIENCIA ACTUALES |");
+		System.out.println("\n.- Año experiencia: " + datosUsuarios.getAñosExperiencia(datosUsuarios.getIndice(id)));
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | INGRESE LOS NUEVOS AÑOS DE EXPERIENCIA |");
+			seleccion = Integer.parseInt(leer.nextLine());
+			
+			if(seleccion < 0 || seleccion > 50) {
+				System.out.println("\n-> | LOS AÑOS NO SON LOGICOS |");System.out.println("\n---------------------------------------------------------------------------");
+				continue;
+			}else {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}
+		}	
+		matriz[datosUsuarios.getIndice(id)][3] = Integer.toString(seleccion); actualizarDatosProgramador(matriz, archivo);
+		datosUsuarios.setearAños(datosUsuarios.getIndice(id), seleccion);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
 	
+	// MODIFICAR PAIS
+	public static void modificarPais(int id, Scanner leer, listaDatosUsuario datosUsuario)throws IOException  {
+		
+		File archivo = new File("programadores.txt"); File archivoDos = new File("paises.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), 100);
+		String[] paises = paises(filas(archivoDos));
+		String seleccion = "",seleccionDos = "";
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | ACONTINUACIÓN SE MOSTRARÁ SU PAIS ACTUAL |");
+		System.out.println("\n.- Pais: " + datosUsuario.getPais(datosUsuario.getIndice(id)));
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | INGRESE SU NUEVO PAIS DE RESIDENCIA |");
+			seleccion = leer.nextLine();
+			int i;
+			for(i = 0; i < paises.length; i++) {
+				if(seleccion.equalsIgnoreCase(paises[i])) {
+					break;
+				}
+			}if(i == paises.length) {
+				System.out.println("\n-> | EL PAIS QUE INGRESO EXISTE O NO ESTA EN LA BASE DE DATOS |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}else {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}
+		}
+		int i,indice = 0;
+		int verificador = 0;
+		for(i = 0; i < 100;i++) {
+			if(matriz[datosUsuario.getIndice(id)][i] == null) {
+				break;
+			}else {
+				for(String pais : paises) {
+					if(matriz[datosUsuario.getIndice(id)][i].equalsIgnoreCase(pais)) {
+						verificador++;
+						indice = i;
+					}
+				}
+			}if(verificador == 1) {
+				break;
+			}
+		}
+		String[] regiones = regiones(seleccion);
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | ACONTINUACIÓN SE MOSTRARÁN LAS REGIONES DEL PAIS QUE ESCOGISTE |");
+		System.out.println("\n-> | INGRESE EL NOMBRE QUE GUSTE |");
+		for(int j = 0; j < regiones.length; j++) {
+			if(regiones[j] == null) {
+				break;
+			}else {
+				System.out.println("\n.- region de (" + regiones[j] + ").");
+			}
+		}
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | INGRESE SU NUEVA CIUDAD DE PREFERENCIA |");
+			seleccionDos = leer.nextLine();
+			int x;
+			for(x = 0; x < regiones.length; x++) {
+				if(seleccionDos.equalsIgnoreCase(regiones[x])) {
+					break;
+				}
+			}if(x == regiones.length) {
+				System.out.println("\n-> | LA REGION QUE INGRESO NO ESTA EN LA BASE DE DATOS O NO EXISTE |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}else {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}
+		}
+		
+		matriz[datosUsuario.getIndice(id)][indice] = seleccion;	
+		matriz[datosUsuario.getIndice(id)][indice + 1] = seleccionDos;	actualizarDatosProgramador(matriz, archivo);
+		datosUsuario.setearPais(datosUsuario.getIndice(id), seleccion);
+		datosUsuario.setearRegion(datosUsuario.getIndice(id), seleccionDos);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
+	
+	// MODIFICAR ID
+	public static void modificarId(int id, Scanner leer, listaDatosUsuario datosUsuario, listaPersonas personas, listaIas ias)throws IOException{
+		
+		File archivo = new File("programadores.txt"),archivoDos = new File("usuarios.txt"),archivoTres = new File("ia.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), 100), matrizDos = matrizMadre(archivoDos,filas(archivoDos), columnas(archivoDos)),matrizTres = matrizMadre(archivoTres, filas(archivoTres), columnas(archivoTres));
+		int seleccion = 0;
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | ACONTINUACIÓN SE MOSTRARÁ SU ID ACTUAL |");
+		System.out.println("\n.- ID : " + datosUsuario.getId(datosUsuario.getIndice(id)));
+		
+		while(true) {
+			System.out.println("\n---------------------------------------------------------------------------");
+			System.out.println("\n-> | INGRESE SU ID |");
+			seleccion = Integer.parseInt(leer.nextLine());
+			int i;
+			for(i = 0; i < datosUsuario.getCant();i++) {
+				if(seleccion == datosUsuario.getId(i)) {
+					break;
+				}
+			}if(i == datosUsuario.getCant()) {
+				System.out.println("\n---------------------------------------------------------------------------");
+				break;
+			}else {
+				System.out.println("\n-> | EL ID QUE INGRESO YA ES EXISTENTE |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}	
+		}
+		
+		matriz[datosUsuario.getIndice(id)][0] = Integer.toString(seleccion);actualizarDatosProgramador(matriz, archivo);
+		matrizDos[personas.getIndice(id)][2] = Integer.toString(seleccion);actualizarDatos(matrizDos, archivoDos);
+		matrizTres[ias.getIndice(id)][7] = Integer.toString(seleccion);actualizarDatos(matrizTres, archivoTres);
+		datosUsuario.setearId(datosUsuario.getIndice(id), seleccion);
+		personas.setearId(personas.getIndice(id), seleccion);
+		ias.setearId(ias.getIndice(id), seleccion);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
+	
+	// MODIFICAR NOMBRE
+	public static void modificarNombre(int id, Scanner leer, listaDatosUsuario datosUsuario)throws IOException {
+		
+		File archivo = new File("programadores.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), 100);
+		String seleccion = "";
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | SU NOMBRE ACTUAL ES |");
+		System.out.println("\n.- Nombre : " + datosUsuario.getNombre(datosUsuario.getIndice(id)));
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | INGRESE SU NUEVO NOMBRE |");
+		seleccion = leer.nextLine();
+		System.out.println("\n---------------------------------------------------------------------------");
+		
+		matriz[datosUsuario.getIndice(id)][1] = seleccion;actualizarDatosProgramador(matriz, archivo);
+		datosUsuario.setearNombre(datosUsuario.getIndice(id), seleccion);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
+	
+	// MODIFICAR APELLIDO
+	public static void modificarApellido(int id, Scanner leer, listaDatosUsuario datosUsuario)throws IOException {
+		
+		File archivo = new File("programadores.txt");
+		String[][] matriz = matrizMadre(archivo, filas(archivo), 100);
+		String seleccion = "";
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | SU APELLIDO ACTUAL ES |");
+		System.out.println("\n.- Nombre : " + datosUsuario.getApellido(datosUsuario.getIndice(id)));
+		
+		System.out.println("\n---------------------------------------------------------------------------");
+		System.out.println("\n-> | INGRESE SU NUEVO APELLIDO |");
+		seleccion = leer.nextLine();
+		System.out.println("\n---------------------------------------------------------------------------");
+		
+		matriz[datosUsuario.getIndice(id)][2] = seleccion;actualizarDatosProgramador(matriz, archivo);
+		datosUsuario.setearApellido(datosUsuario.getIndice(id), seleccion);
+		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(leer);System.out.println("\n---------------------------------------------------------------------------");
+	}
+	
+	//------------------------------------------------------------------------------------------------------
+	 
 	// ----------------------------------------- MENU USUARIOS ---------------------------------------------
 	
 	// FUNCION QUE CONTENDRA EL MENU DE USUARIO
@@ -244,7 +755,7 @@ public class App {
 		int indice = 0;
 		String[][] matriz = matrizMadre(archivo, filas(archivo), columnas(archivo));
 		int id = 0; String debilidadSeleccionada = "";
-		System.out.println("\n-> | En esta opción podras agregarle una debilidad a culquier IA de la lista, solo debes indicar el ID del mismo: |\n");
+		System.out.println("\n-> | En esta opción podras agregarle una debilidad a cualquier IA de la lista, solo debes indicar el ID del mismo: |\n");
 		
 		for(int i = 0; i < ias.getMax(); i++) {
 			if(ias.getDebilidad(i).equalsIgnoreCase("desconocida")) {
@@ -311,6 +822,8 @@ public class App {
 				System.out.println("\n-> | La debilidad seleccionada no es valida o no existe. |");
 			}
 		}
+		
+		ias.setearDebilidad(ias.getIndice(id), debilidadSeleccionada);
 		matriz[indice][3] = debilidadSeleccionada;
 		actualizarDatos(matriz, archivo);
 		System.out.println("\n | LA DEBILIDAD HA SIDO IMPLEMENTADA EN LA IA " + ias.getNombre(indice) + " |");
@@ -352,6 +865,7 @@ public class App {
 			String idDelUsuario = Integer.toString((int)(Math.random()*(99999 - 10000) + 10000));
 			String nombreCompleto = nombreNuevo + "#" + idDelUsuario;
 			
+			usuarios.setearUsuario(usuarios.getIndice(idUsuario), nombreCompleto);
 			matriz[indice][0] = nombreCompleto; actualizarDatos(matriz, archivo);
 			System.out.println("\n | EL NOMBRE DE USUARIO FUE ACTUALIZADO CON EXITO |");
 			
@@ -360,6 +874,7 @@ public class App {
 			System.out.println("\n-> | Ingrese su nueva contraseña |");
 			contraseñaNueva = leer.nextLine();
 			
+			usuarios.setearContraseña(usuarios.getIndice(idUsuario), contraseñaNueva);
 			matriz[indice][1] = contraseñaNueva; actualizarDatos(matriz, archivo);
 			System.out.println("\n | LA CONTRASEÑA DEL USUARIO FUE ACTUALIZADO CON EXITO |");
 		}
@@ -436,6 +951,8 @@ public class App {
 				}
 			}
 			String precisionFinal = Integer.toString(precision) + "%";
+			
+			ias.setearPrecision(ias.getIndice(idIa), precisionFinal);
 			matriz[ias.getIndice(idIa)][5] = precisionFinal; actualizarDatos(matriz, archivo);
 			System.out.println("\n--------------------------------------------------------"); System.out.println("\n | LA CONTRASEÑA DEL USUARIO FUE ACTUALIZADO CON EXITO |");	
 			enter(leer);

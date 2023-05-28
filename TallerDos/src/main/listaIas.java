@@ -76,6 +76,13 @@ public class listaIas {
 			return null;
 		}
 	}
+	public String getIa(int i) {
+		if(i < cant) {
+			return lista[i].getDebilidad();
+		}else {
+			return null;
+		}
+	}
 	
 	public String getPais(int i) {
 		if(i < cant) {
@@ -103,9 +110,42 @@ public class listaIas {
 	
 	public void getImpresion4taOpcion(int i) {
 		
-		System.out.println("\n--------------------------------------" + "\n.- El nombre del IA es: " + lista[i].getNombre() + "\n.- Su lenguaje es: " + lista[i].getLenguaje() + "\n.- El nivel de amenaza: " + lista[i].getNivelAmenaza() + "\n.- debilidad: " + lista[i].getDebilidad() + "\n.- Pais de creación: " + lista[i].getPais() + "\n.- Precisión: " + lista[i].getPrecision() + "\n.- El tipo del IA: " + lista[i].getTipo() + "\n--------------------------------------" ); 
+		System.out.println("\n--------------------------------------" + "\n.- El nombre del IA es: " + lista[i].getNombre() + "\n.- Su lenguaje es: " + lista[i].getLenguaje() + "\n.- El nivel de amenaza: " + lista[i].getNivelAmenaza() + "\n.- debilidad: " + lista[i].getDebilidad() + "\n.- Pais de creación: " + lista[i].getPais() + "\n.- Precisión: " + lista[i].getPrecision() + "\n.- El tipo del IA: " + lista[i].getTipo() + "\n.- ID: "+ lista[i].getId() + "\n--------------------------------------" ); 
+	}
+
+	public boolean setearDebilidad(int i, String debilidad) {
+		if(i < cant) {
+			lista[i].setDebilidad(debilidad);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public boolean setearPrecision(int i, String precision) {
+		if(i < cant) {
+			lista[i].setPrecision(precision);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public boolean setearNombe(int i, String nombre) {
+		if(i < cant) {
+			lista[i].setNombre(nombre);
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
+	public boolean setearId(int i, int id) {
+		if(i < cant) {
+			lista[i].setId(id);
+			return true;
+		}else {
+			return false;
+		}
+	}
 	public boolean ingresar(Ias ia) {
 		if(cant < max) {
 			this.lista[cant] = ia;
@@ -115,5 +155,21 @@ public class listaIas {
 			return false;
 		}
 	}
-
+	public boolean setearNivelPeligrosidad(int i, int nivel) {
+		if(i < cant) {
+			lista[i].setNivelAmenaza(nivel);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public boolean setearPais(int i, String apis) {
+		if(i < cant) {
+			lista[i].setPais(apis);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
 }

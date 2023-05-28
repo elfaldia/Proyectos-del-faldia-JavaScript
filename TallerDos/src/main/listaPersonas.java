@@ -89,4 +89,35 @@ public class listaPersonas {
 			return false;
 		}
 	}
+	public boolean setearUsuario(int i, String usuario) {
+		if(i < cant) {
+			lista[i].setUsuario(usuario);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public boolean setearContraseña(int i, String contraseña) {
+		if(i < cant) {
+			lista[i].setContraseña(contraseña);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public boolean setearId(int i, int id) {
+		if(i < cant) {
+			lista[i].setId(id);
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public String getElem(int i) {
+		if(i < cant) {
+			return lista[i].toString();
+		}else {
+			return null;
+		}
+	}
 }

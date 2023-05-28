@@ -61,5 +61,13 @@ public class listaLenguajes {
 			return false;
 		}
 	}
+	public boolean setearLenguajes(int i, String[] lenguajes) {
+		if(i < cant) {
+			lista[i].setLenguajes(lenguajes);
+			return true;
+		}else {
+			return false;
+		}
+	}
 }
 

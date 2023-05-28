@@ -8,7 +8,7 @@ public class datosUsuario {
 	private String pais,ciudad;
 	
 	public datosUsuario(int id, String nombre, String apellido, int añosExperiencia, String pais, String ciudad) {
-		super();
+		
 		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
