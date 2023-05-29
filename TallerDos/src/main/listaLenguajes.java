@@ -69,5 +69,14 @@ public class listaLenguajes {
 			return false;
 		}
 	}
+	public void setearMax(int nuevMax) {
+		Lenguajes[] listaAux = new Lenguajes[max];
+		listaAux = lista;
+		this.max = nuevMax;
+		lista = new Lenguajes[max];
+		for(int i = 0; i < cant; i++) {
+			lista[i] = listaAux[i];
+		}
+	}
 }
 

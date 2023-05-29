@@ -171,5 +171,13 @@ public class listaIas {
 			return false;
 		}
 	}
-	
+	public void setearMax(int nuevMax) {
+		Ias[] listaAux = new Ias[max];
+		listaAux = lista;
+		this.max = nuevMax;
+		lista = new Ias[max];
+		for(int i = 0; i < cant; i++) {
+			lista[i] = listaAux[i];
+		}
+	}
 }

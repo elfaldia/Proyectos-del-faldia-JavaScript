@@ -135,4 +135,13 @@ public class listaDatosUsuario {
 			return false;
 		}
 	}
+	public void setearMax(int nuevMax) {
+		datosUsuario[] listaAux = new datosUsuario[max];
+		listaAux = lista;
+		this.max = nuevMax;
+		lista = new datosUsuario[max];
+		for(int i = 0; i < cant; i++) {
+			lista[i] = listaAux[i];
+		}
+	}
 }

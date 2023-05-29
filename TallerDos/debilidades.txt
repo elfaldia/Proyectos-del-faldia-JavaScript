@@ -1,4 +1,4 @@
 desconectar su base de datos,3
 formatear,2
-destruirneuronas,5
+destruir neuronas,5
 purga de codigo,4

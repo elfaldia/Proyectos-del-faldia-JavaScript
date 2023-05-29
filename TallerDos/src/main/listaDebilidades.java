@@ -50,4 +50,13 @@ public class listaDebilidades {
 			return false;
 		}
 	}
+	public void setearMax(int nuevMax) {
+		Debilidades[] listaAux = new Debilidades[max];
+		listaAux = lista;
+		this.max = nuevMax;
+		lista = new Debilidades[max];
+		for(int i = 0; i < cant; i++) {
+			lista[i] = listaAux[i];
+		}
+	}
 }

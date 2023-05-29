@@ -97,6 +97,15 @@ public class listaPersonas {
 			return false;
 		}
 	}
+	public String darUsuario(int i, String usuario) {
+		if(i < cant) {
+			int numero = (int)(Math.random()*(99999 - 10000) + 10000);
+			String usuarioFinal = usuario + "#" + Integer.toString(numero);
+			return usuarioFinal;
+		}else {
+			return null;
+		}
+	}
 	public boolean setearContraseña(int i, String contraseña) {
 		if(i < cant) {
 			lista[i].setContraseña(contraseña);
@@ -118,6 +127,24 @@ public class listaPersonas {
 			return lista[i].toString();
 		}else {
 			return null;
+		}
+	}
+	public String getSoloNombre(int i) {
+		if(i < cant) {
+			String nombre = lista[i].getUsuario();
+			String[] partes = nombre.split("#");
+			return partes[0];
+		}else {
+			return null;
+		}
+	}
+	public void setearMax(int nuevMax) {
+		Personas[] listaAux = new Personas[max];
+		listaAux = lista;
+		this.max = nuevMax;
+		lista = new Personas[max];
+		for(int i = 0; i < cant; i++) {
+			lista[i] = listaAux[i];
 		}
 	}
 }
