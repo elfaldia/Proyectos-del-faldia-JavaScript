@@ -2,3 +2,4 @@ desconectar su base de datos,3
 formatear,2
 destruir neuronas,5
 purga de codigo,4
+hackeo,4

@@ -2,56 +2,56 @@ package main;
 
 public class Ias {
 
-	private String nombre;
-	private String lenguaje;
-	private int nivelAmenaza;
-	private String debilidad;
-	private String pais;
+	private String name;
+	private String language;
+	private int threat;
+	private String debility;
+	private String country;
 	private String precision;
-	private String tipo;
+	private String type;
 	private int id;
 	
-	public Ias(String nombre, String lenguaje, int nivelAmenaza, String debilidad, String pais, String precision,
-			String tipo, int id) {
+	public Ias(String name, String language, int threat, String debility, String country, String precision,
+			String type, int id) {
 		super();
-		this.nombre = nombre;
-		this.lenguaje = lenguaje;
-		this.nivelAmenaza = nivelAmenaza;
-		this.debilidad = debilidad;
-		this.pais = pais;
+		this.name = name;
+		this.language = language;
+		this.threat = threat;
+		this.debility = debility;
+		this.country = country;
 		this.precision = precision;
-		this.tipo = tipo;
+		this.type = type;
 		this.id = id;
 	}
-	public String getNombre() {
-		return nombre;
+	public String getName() {
+		return name;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getLenguaje() {
-		return lenguaje;
+	public String getLanguage() {
+		return language;
 	}
-	public void setLenguaje(String lenguaje) {
-		this.lenguaje = lenguaje;
+	public void setLanguage(String language) {
+		this.language = language;
 	}
-	public int getNivelAmenaza() {
-		return nivelAmenaza;
+	public int getThreat() {
+		return threat;
 	}
-	public void setNivelAmenaza(int nivelAmenaza) {
-		this.nivelAmenaza = nivelAmenaza;
+	public void setThreat(int threat) {
+		this.threat = threat;
 	}
-	public String getDebilidad() {
-		return debilidad;
+	public String getDebility() {
+		return debility;
 	}
-	public void setDebilidad(String debilidad) {
-		this.debilidad = debilidad;
+	public void setDebility(String debility) {
+		this.debility = debility;
 	}
-	public String getPais() {
-		return pais;
+	public String getCountry() {
+		return country;
 	}
-	public void setPais(String pais) {
-		this.pais = pais;
+	public void setCountry(String country) {
+		this.country = country;
 	}
 	public String getPrecision() {
 		return precision;
@@ -59,11 +59,11 @@ public class Ias {
 	public void setPrecision(String precision) {
 		this.precision = precision;
 	}
-	public String getTipo() {
-		return tipo;
+	public String getType() {
+		return type;
 	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setType(String type) {
+		this.type = type;
 	}
 	public int getId() {
 		return id;
@@ -73,7 +73,7 @@ public class Ias {
 	}
 	@Override
 	public String toString() {
-		return "Nombre= " + nombre + ", Lenguaje= " + lenguaje + ", Nivel de Amenaza= " + nivelAmenaza + " debilidad= "
-				+ debilidad + "\n Pais de origen= " + pais + ", Precision de la ia= " + precision + ", Tipo de ia= " + tipo + "\n id=" + id;
+		return "Nombre= " + name + ", Lenguaje= " + language + ", Nivel de Amenaza= " + threat + " debilidad= "
+				+ debility + "\n Pais de origen= " + country + ", Precision de la ia= " + precision + ", Tipo de ia= " + type + "\n id=" + id;
 	}
 }
