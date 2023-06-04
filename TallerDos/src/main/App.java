@@ -3,7 +3,9 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.util.Arrays;
 
 public class App {
 
@@ -30,7 +32,7 @@ public class App {
 			if(id == -1) {
 				System.out.println("\n-> | linea reservada para el menu de administrador. |");
 				id = users.getIdWithName("suricatarabiosa");		
-				adminMenu(read,id,language,usersInformation,users,ias,debilities);
+				adminMenu(read,id,language,usersInformation,users,ias,debilities, countriesFile);
 			} else {
 				System.out.println("\n-> | Se ha activado el menu de usuario. |");
 				userMenu(id,read,ias,debilities,users,language);
@@ -38,12 +40,12 @@ public class App {
 		}read.close();
 	}
 	
-	// ------------------------------------------- FUNCIONES -----------------------------------------------
+	// ------------------------------------------- FUNCTIONS -----------------------------------------------
 	
-	// -------------------------------------- MENU ADMINISTRADOR -------------------------------------------
+	// -------------------------------------- ADMINISTRATOR MENU -------------------------------------------
 	
-	// FUNCIÓN QUE EJECUTA EL MENÚ ADMINISTRADOR
-	public static void adminMenu(Scanner read,int id, languageData programers,userInformationData userInformation,usersData user, iaData ias,debilitiesData debilities)throws IOException {
+	// FUNCTION THAT EXECUTED THE ADMINISTRATOR MENU
+	public static void adminMenu(Scanner read,int id, languageData programers,userInformationData userInformation,usersData user, iaData ias,debilitiesData debilities, File countriesFile)throws IOException {
 		
 		String selection = "";
 		System.out.println("\n---------------------------------------------------------------------------");
@@ -60,10 +62,10 @@ public class App {
 			selection = read.nextLine();
 			
 			if(selection.equalsIgnoreCase("Ver todos los programadores") || selection.equalsIgnoreCase("1")) {
-				System.out.println("yan");
+				optionOneAdmin(read,countriesFile,userInformation,programers);
 			}
 			else if(selection.equalsIgnoreCase("Ver todas las IA") || selection.equalsIgnoreCase("2")) {
-				System.out.println("yan");
+				optionTwoAdmin(read,ias,countriesFile);
 			}
 			else if(selection.equalsIgnoreCase("Editar datos Programador") || selection.equalsIgnoreCase("3")) {
 				optionThreeAdmin(read, id,programers,userInformation,user,ias);
@@ -81,7 +83,7 @@ public class App {
 				optionSevenAdmin(read, userInformation, user, ias, debilities,programers);
 			}
 			else if(selection.equalsIgnoreCase("Dar estadísticas por países") || selection.equalsIgnoreCase("8")) {
-				System.out.println("yan");
+				optionEightAdmin(read,ias,countriesFile,userInformation);
 			}
 			else if(selection.equalsIgnoreCase("salir") || selection.equalsIgnoreCase("9")) {
 				System.out.println("\n---------------------------------------------------------------------------");
@@ -96,8 +98,90 @@ public class App {
 			}	
 		}
 	}
+	
 
-	//------------------------------------------OPCIÓN SIETE------------------------------------------------
+
+	//------------------------------------------------------------------------------------------------------
+	//------------------------------------------OPTION EIGHT------------------------------------------------
+	
+	private static void optionEightAdmin(Scanner read, iaData ias, File countriesFile, userInformationData userInformation) throws IOException {
+		while(true) {
+			System.out.println("\nESTADISTICAS DE DONDE SE ENCUENTRAN LAS IAS\nseleccione por cual opcion quiere ver el % de IAs\n 1) País\n 2) Ciudad\n 3) [SALIR]\nIngresa una opcion");
+			String selection = read.nextLine();
+			if(selection.equals("1") || selection.equalsIgnoreCase("país")) {
+				countryporcent(read,ias,countriesFile,userInformation);
+			}
+			else if(selection.equals("2") || selection.equalsIgnoreCase("ciudad")) {
+				cityporcent(read,ias,countriesFile,userInformation);
+			}	
+			else if(selection.equals("3") || selection.equalsIgnoreCase("salir")) {
+				break;
+			} else {
+				System.out.println("\n---------------------------------------------------------------------------");
+				System.out.println("\n-> | LA OPCION QUE INGRESO NO ES VALIDO, INTENTE NUEVAMENTE |");
+				System.out.println("\n---------------------------------------------------------------------------");
+			}
+		}
+		
+	}	
+	
+	// PERCENT FOR CITIES
+	private static void cityporcent(Scanner read, iaData ias, File countriesFile, userInformationData user) throws FileNotFoundException {
+		String[] cities = allcities();
+		float[] citiescount = new float[cities.length];
+		for(int i = 0; i < user.getMax(); i++) {
+			for(int j = 0; j < cities.length; j++) {
+				if(user.getCity(i).equalsIgnoreCase(cities[j])) {
+					citiescount[j]++;}}}
+		sortlists_String_float(cities,citiescount);
+		System.out.println("\n-> El porcentaje de los programadores por ciudad es:");
+		for(int i = 0; i < citiescount.length; i++) {
+			citiescount[i] = (citiescount[i] * 100)/user.getMax();
+			if(citiescount[i] == 0) {break;}
+			System.out.println(citiescount[i]+"% "+cities[i]+" de un total de "+user.getMax());}
+		enter(read);
+		}
+	
+	// PERCENT FOR COUNTRIES
+	private static void countryporcent(Scanner read, iaData ias, File countriesFile, userInformationData user) throws IOException {
+		String[] listcountry = contries(row(countriesFile));
+		int[] countrycount = new int[listcountry.length];
+		float[] percentC = new float[listcountry.length];
+		for(int i = 0; i < ias.getMax() ; i++) {
+			for(int j = 0; j < listcountry.length; j++) {
+				if(ias.getCountry(i).equalsIgnoreCase(listcountry[j])) {
+					countrycount[j]++;}}}
+		
+		sortlists_String_int(listcountry,countrycount);
+		for(int i = 0; i < percentC.length; i++) {
+			percentC[i] = countrycount[i];
+			percentC[i] = (percentC[i] * 100)/ias.getMax();
+		}
+		System.out.println("\n-> El porcentaje de las IAs segun el pais es:");
+		for(int i = 0; i < listcountry.length; i++) {
+			if(percentC[i] == 0) {break;}
+			System.out.println(percentC[i]+"% "+listcountry[i]+" "+countrycount[i]+" de un total de "+ias.getMax());}
+		
+		System.out.println("\n\n-> El porcentaje de los programadores por pais es:");
+		for(int i = 0; i < percentC.length; i++) {countrycount[i] = 0;percentC[i] = 0;}
+		for(int i = 0; i < user.getMax(); i++) {
+			for(int j = 0; j < listcountry.length; j++) {
+				if(user.getCountry(i).equalsIgnoreCase(listcountry[j])) {countrycount[j]++;}}}
+		
+		sortlists_String_int(listcountry,countrycount);
+		for(int i = 0; i < percentC.length; i++) {
+			percentC[i] = countrycount[i];
+			percentC[i] = (percentC[i] * 100)/user.getMax();}
+		for(int i = 0; i < listcountry.length; i++) {
+			if(percentC[i] == 0) {break;}
+			System.out.println(percentC[i]+"% "+listcountry[i]+" "+countrycount[i]+" de un total de "+user.getMax());}
+		
+		
+		enter(read);
+	}
+
+	//------------------------------------------------------------------------------------------------------
+	//------------------------------------------OPTION SEVEN------------------------------------------------
 
 	public static void optionSevenAdmin(Scanner read,userInformationData userInformation, usersData user, iaData ias,debilitiesData denilities,languageData languages) throws IOException {
 		
@@ -129,7 +213,7 @@ public class App {
 		}
 	}
 	
-	// FUNCION QUE NOS DEJARÁ REGISTRAR NUEVOS PAISES
+	// FUNCTION THAT ALLOWS US TO REGISTER NEW COUNTRIES
 	public static void addCountry(Scanner read)throws IOException{
 		
 		File file = new File("paises.txt");
@@ -179,7 +263,7 @@ public class App {
 		System.out.println("\n-> | SE HA REGISTRADO EL PAIS |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// FUNCION PARA LA PRIMERA OPCIÓN Y ES LA QUE CREA UN USUARIO
+	// FUNCTION FOR THE FIRST OPTION, WHICH CREATES A USER
 	public static void createNewGeneralUser(Scanner read, debilitiesData debilities, iaData ias, usersData user, userInformationData userInformation,languageData language)throws IOException{
 		
 		File debilityFile = new File("debilidades.txt"),userFile = new File("usuarios.txt"), userInformationFile = new File("programadores.txt"), iaFile = new File("ia.txt"), contriesFile = new File("paises.txt");
@@ -580,9 +664,9 @@ public class App {
 	
 	//------------------------------------------------------------------------------------------------------
 	
-	//-------------------------------------------OPCIÓN SEIS------------------------------------------------
+	//-------------------------------------------OPTION SIX------------------------------------------------
 	
-	// FUNCION QUE CONTIENE EL ESQUELETO DE LA OPCION SEIS
+	// FUNCTION THAT CONTAINS THE SKELETON OF OPTION SIX.
 	public static void optionSixAdmin(Scanner read,debilitiesData debilities) throws IOException {
 		
 		System.out.println("\n-> | En esta opción podras visualizar o cread debilidades para los IA: |");
@@ -614,7 +698,7 @@ public class App {
 		
 	}
 	
-	// VISUALIZAR DEBILIDADES
+	// VIEW WEAKNESSES.
 	public static void seeDebilities(debilitiesData debilities,Scanner read) {
 		
 		System.out.println("\n-> | ACONTINUACION SE DESPLEGARÁN TODAS LAS DEBILIDADES EXISTENTES HASTA EL MOMENTO |");
@@ -625,7 +709,7 @@ public class App {
 		}enter(read);
 	}
 	
-	// CREAR UNA DEBILIDAD
+	// CREATE A WEAKNESS.
 	public static void createNewDebility(Scanner read, debilitiesData debility) throws IOException{
 		
 		String newDebility = "";int newHierarchy = 0;
@@ -685,9 +769,9 @@ public class App {
 	
 	//------------------------------------------------------------------------------------------------------
 	
-	//-------------------------------------------OPCIÓN CINCO-----------------------------------------------
+	//-------------------------------------------OPTION FIVE-----------------------------------------------
 	
-	// FUNCION QUE CONTIENE EL ESQUELETO DE LA OPCION CINCO
+	// FUNCTION THAT CONTAINS THE SKELETON OF OPTION FIVE
  	public static void optionFiveAdmin(Scanner read,int id, iaData ias, debilitiesData debility,userInformationData userInformation ,usersData user)throws IOException{
 		
  		while(true) {
@@ -752,7 +836,7 @@ public class App {
 		}
 	}
 	
-	// MODIFICAR NOMBRE DE USUARIO
+	// MODIFY USERNAME
 	public static void changeUserName(int id, Scanner read, usersData user)throws IOException {
 		
 		File file = new File("usuarios.txt");
@@ -782,7 +866,7 @@ public class App {
 		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// MODIFICAR CONTRASEÑA USUARIO
+	// MODIFY USER PASSWORD
 	public static void changePassword(int id, Scanner read, usersData user)throws IOException {
 		
 		File file = new File("usuarios.txt");
@@ -811,7 +895,7 @@ public class App {
 		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// MODIFICAR ID
+	// MODIFY ID
 	public static void editUserId(int id, Scanner read, userInformationData userInformation, usersData user, iaData ias)throws IOException{
 				
 		File programerFile = new File("programadores.txt"),userFile = new File("usuarios.txt"),iaFile = new File("ia.txt");
@@ -850,9 +934,9 @@ public class App {
 	
 	//------------------------------------------------------------------------------------------------------
 	
-	//-------------------------------------------OPCIÓN CUATRO----------------------------------------------
+	//-------------------------------------------OPCIÓN FOUR----------------------------------------------
 	
-	// FUNCION QUE CONTIENE EL ESCQUELETO DE LA OPCION
+	// FUNCTION THAT CONTAINS THE SKELETON OF OPTION FOUR
 	public static void optionFourAdmin(Scanner read,int id, iaData ias, debilitiesData debility,userInformationData userInformation ,usersData user)throws IOException{
 		
 		while(true) {
@@ -919,7 +1003,7 @@ public class App {
 		}
 	}
 	
-	// EDITAR NOMBRE IA
+	// EDIT IA NAME
 	public static void changeIaName(int id, Scanner read, iaData ias)throws IOException {
 		
 		File file = new File("ia.txt");
@@ -947,7 +1031,7 @@ public class App {
 		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// EDITAR NIVEL DE PELIGROSIDAD
+	// EDIT LEVEL OF DANGER.
 	public static void changeThreat(int id, Scanner read, iaData ias)throws IOException {
 		
 		File file = new File("ia.txt");
@@ -979,7 +1063,7 @@ public class App {
 		enter(read);
 	}
 	
-	// EDITAR DEBILIDAD
+	// EDIT 
 	public static void editDebility(int id, Scanner read, iaData ias, debilitiesData debility)throws IOException{
 		
 		File iaFile = new File("ia.txt");File debilityFile = new File("debilidades.txt");
@@ -1036,7 +1120,7 @@ public class App {
 		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// EDITAR PRECISION
+	// EDIT PRECISION.
 	public static void editPresicion(int id, Scanner read, iaData ias)throws IOException{
 		
 		File file = new File("ia.txt");
@@ -1068,7 +1152,7 @@ public class App {
 		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// EDITAR PRECISION
+	// CHANGE COUNTRY
 	public static void changeCountry(int id, Scanner read, iaData ias)throws IOException{
 		
 		File iaFile = new File("ia.txt"); File countriesFile = new File("paises.txt");
@@ -1108,7 +1192,7 @@ public class App {
 		
 	}
 	
-	// MODIFICAR ID
+	// EDIT ID
 	public static void editId(int id, Scanner read, userInformationData userInformation, usersData user, iaData ias)throws IOException{
 			
 		File programerFile = new File("programadores.txt"),userFile = new File("usuarios.txt"),iaFile = new File("ia.txt");
@@ -1148,9 +1232,9 @@ public class App {
 	
 	//------------------------------------------------------------------------------------------------------
 	
-	//--------------------------------------------OPCIÓN TRES-----------------------------------------------
+	//--------------------------------------------OPTION THREE-----------------------------------------------
 	
-	// TODO LO NECESARIO PARA LA FUNCIÓN TRES
+	// ALL NECESSARY FOR OPTION THREE.
 	public static void optionThreeAdmin(Scanner read, int id, languageData programers, userInformationData userInformation,usersData user, iaData ias)throws IOException {
 		
 		System.out.println("\n-> | En esta opción podras editar los datos del programador: |");
@@ -1193,7 +1277,7 @@ public class App {
 		}
 	}
 	
-	// SELECCION AGREGAR LENGUAJE
+	// SELECT ADD LANGUAGE
 	public static void addLanguage(int id, Scanner read,languageData programers, userInformationData userInformation) throws IOException{
 		
 		File file = new File("programadores.txt");
@@ -1264,7 +1348,7 @@ public class App {
 		updateProgramerData(matrix, file);System.out.println("\n---------------------------------------------------------------------------");System.out.println("\n | LOS LENGUAJES FUERON AÑADIDOS CON EXITO |");enter(read);
 	}
 	
-	// EDITAR AÑOS DE EXPERIENCIA
+	// EDIT YEARS OF EXPERIENCE
 	public static void editExperience(int id, Scanner read, userInformationData userInformation) throws IOException {
 		
 		File file = new File("programadores.txt");
@@ -1293,7 +1377,7 @@ public class App {
 		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// MODIFICAR PAIS
+	// MODIFY COUNTRY
 	public static void changeCountryTwo(int id, Scanner read, userInformationData userInformation)throws IOException  {
 		
 		File programersFile = new File("programadores.txt"); File countriesFile = new File("paises.txt");
@@ -1375,7 +1459,7 @@ public class App {
 		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// MODIFICAR ID
+	// MODIFY ID
 	public static void changeIdTwo(int id, Scanner read, userInformationData userInformation, usersData user, iaData ias)throws IOException{
 		
 		File programersFile = new File("programadores.txt"),userFile = new File("usuarios.txt"),iaFile = new File("ia.txt");
@@ -1413,7 +1497,7 @@ public class App {
 		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// MODIFICAR NOMBRE
+	// MODIFY NAME
 	public static void changeNameTwo(int id, Scanner read, userInformationData userInformation)throws IOException {
 		
 		File file = new File("programadores.txt");
@@ -1441,7 +1525,7 @@ public class App {
 		System.out.println("\n-> | LOS DATOS SE HAN ACTUALIZADO CON EXITO |");System.out.println("\n---------------------------------------------------------------------------");enter(read);System.out.println("\n---------------------------------------------------------------------------");
 	}
 	
-	// MODIFICAR APELLIDO
+	// MODIFY LAST NAME
 	public static void changeLastName(int id, Scanner read, userInformationData userInformation)throws IOException {
 		
 		File file = new File("programadores.txt");
@@ -1470,10 +1554,253 @@ public class App {
 	}
 	
 	//------------------------------------------------------------------------------------------------------
-	 
-	// ----------------------------------------- MENU USUARIOS ---------------------------------------------
 	
-	// FUNCION QUE CONTENDRA EL MENU DE USUARIO
+	//--------------------------------------------OPTION TWO-----------------------------------------------
+			
+	private static void optionTwoAdmin(Scanner read, iaData ias, File countriesFile) throws IOException {
+		while(true) {
+			System.out.println("\n-> | En esta opción podras ver todos las IAs           |");
+			System.out.println("-> | los cuales se pueden filtar por:                  |");
+			System.out.println("\n 1) Tipo\n 2) Nombre alfabéticamente\n 3) Precisión\n 4) País\n 5) Nivel de peligrocidad\n 6) [SALIR]");
+			System.out.println("Ingresa una opcion:");
+			String opcion = read.nextLine();
+			
+			if(opcion.equalsIgnoreCase("1") || opcion.equalsIgnoreCase("Tipo")) {
+				viewType(read,ias);
+			}
+			else if (opcion.equals("2") || opcion.equalsIgnoreCase("Nombre")) {
+				viewName(read,ias);
+			}
+			else if (opcion.equals("3") || opcion.equalsIgnoreCase("Precisión")) {
+				viewPrecision(read,ias);
+			}
+			else if (opcion.equals("4") || opcion.equalsIgnoreCase("País")) {
+				viewCountry(read,ias,countriesFile);
+			}
+			else if (opcion.equals("5") || opcion.equalsIgnoreCase("Nivel de peligrocidad")) {
+				viewLOVE(read,ias);
+				//Level Of ViolencE
+			}
+			else if (opcion.equals("6") || opcion.equalsIgnoreCase("salir")) {
+				break;
+			}
+			else {
+				System.out.println("OPCION NO VALIDA...\n\nPRESIONE ENTER PARA VOLVER AL MENÚ");
+				String volver = read.nextLine();
+			}
+		}
+		
+	}
+
+	// FILTERED BY LEVEL OF DANGER
+	private static void viewLOVE(Scanner read, iaData ias) {
+		
+		String[] IA = new String[ias.getMax()];
+		int[] LOVE = new int[IA.length];
+		for(int i = 0; i < IA.length; i++) {
+			IA[i] = ias.getName(i);
+			LOVE[i] = ias.getThreat(i);
+		}
+		sortlists_String_int(IA,LOVE);
+		System.out.println("\n LAS IAS MAS PELIGROSAS ORDENADAS A LA MENOS PELIGROSAS");
+		for(int i = 0; i < IA.length; i++) {
+			if(LOVE[i] > 3) {
+			System.out.println(" -> "+IA[i].toUpperCase()+" CON NIVEL DE AMENAZA: "+LOVE[i]+"!!!");	
+			}else if(LOVE[i] < 4 && LOVE[i] != 1) {
+				System.out.println(" -> "+IA[i]+" tiene un nivel de AMENAZA: "+LOVE[i]);
+			}else if(LOVE[i] == 1) {
+				System.out.println(" -> "+IA[i]+" posee un nivel de amenaza de: "+LOVE[i]);
+			}
+			
+		}
+		enter(read);
+	}
+	
+	// FILTERED BY TYPE
+	private static void viewType(Scanner read, iaData ias) {
+		String[] Types = iaTypesList();
+		for(int i = 0; i < Types.length; i++) {
+			System.out.println("["+Types[i].toUpperCase()+"]");
+			int x = 0;
+			for(int j = 0; j < ias.getMax(); j++) {
+				if(Types[i].equalsIgnoreCase(ias.getType(j))) {
+					System.out.println("-> "+ias.getName(j));
+					x++;}}
+				if(x == 0) {System.out.println("[NO HAY IAS DE ESTE TIPO]");}
+			continu(read);
+		}
+		enter(read);
+	}
+
+	// FILTERED BY NAME
+	private static void viewName(Scanner read, iaData ias) {
+		String[] IA = new String[ias.getMax()];
+		for(int i = 0; i < IA.length; i++) {
+			IA[i] = ias.getName(i);
+		}
+		Arrays.sort(IA);
+		System.out.println(" ");
+		for(int i = 0; i < IA.length; i++) {
+			System.out.println("["+IA[i].toUpperCase()+"]");
+		}
+		enter(read);
+	}
+	
+	// FILTERED BY PRECISION
+	private static void viewPrecision(Scanner read, iaData ias) {
+		System.out.println(" ");
+		String[] IA = new String[ias.getMax()];
+		int[] Precision = new int[IA.length];
+		for(int i = 0; i < IA.length; i++) {
+			IA[i] = ias.getName(i);
+			String[] parts = ias.getPrecision(i).split("%");
+			Precision[i] = Integer.parseInt(parts[0]);
+		}
+		sortlists_String_int(IA,Precision);
+		
+		for(int i = 0; i < IA.length; i++) {System.out.println(Precision[i]+"% Tiene la IA: "+IA[i].toUpperCase());	}
+		enter(read);
+	}		
+
+	// FILTERED BY COUNTRY
+	private static void viewCountry(Scanner read, iaData ias, File countriesFile) throws IOException {
+		String[] listcountry = contries(row(countriesFile));
+		for(int i = 0; i < listcountry.length; i++) {
+			System.out.println("\n["+listcountry[i].toUpperCase()+"]");
+			int x = 0;
+			for(int j = 0; j < ias.getMax(); j++) {
+				if(listcountry[i].equalsIgnoreCase(ias.getCountry(j))) {
+					System.out.println(" -"+ias.getName(j));
+					x++;}}
+			if(x == 0) {System.out.println("[NO SE ENONTRARON IAS EN ESTE PAIS]");}
+			continu(read);
+	}
+	enter(read);	
+	}
+	//------------------------------------------------------------------------------------------------------
+		
+	//--------------------------------------------OPTION ONE-----------------------------------------------
+		 
+	private static void optionOneAdmin(Scanner read, File countriesFile, userInformationData userInformation, languageData programers) throws IOException {
+		while(true) {
+			System.out.println("\n-> | En esta opción podras ver todos los programadores |");
+			System.out.println("-> | los cuales se pueden filtar por:                  |");
+			System.out.println("\n 1) País\n 2) Ciudad\n 3) Años de Experiencia\n 4) Cantidad de lenguajes\n 5) ID\n 6) [SALIR]");
+			System.out.println("Ingresa una opcion:");
+			String opcion = read.nextLine();
+			
+			if(opcion.equalsIgnoreCase("1") || opcion.equalsIgnoreCase("País")) {
+				viewbycountry(read, countriesFile, userInformation);
+			}
+			else if (opcion.equals("2") || opcion.equalsIgnoreCase("Ciudad")) {
+				viewbycity(read,userInformation,countriesFile);
+			}
+			else if (opcion.equals("3") || opcion.equalsIgnoreCase("Años de Experiencia")) {
+				viewbyyears(read,userInformation);
+			}
+			else if (opcion.equals("4") || opcion.equalsIgnoreCase("Cantidad de lenguajes")) {
+				viewbylanguage(read,userInformation,programers);
+			}
+			else if (opcion.equals("5") || opcion.equalsIgnoreCase("ID")) {
+				viewbyID(read,userInformation);
+			}
+			else if (opcion.equals("6") || opcion.equalsIgnoreCase("salir")) {
+				break;
+			}
+			else {
+				System.out.println("OPCION NO VALIDA...\n\nPRESIONE ENTER PARA VOLVER AL MENÚ");
+				String volver = read.nextLine();
+			}
+		}
+		
+	}
+	
+	//FILTERED BY NUMBER OF ID
+	private static void viewbyID(Scanner read, userInformationData userInformation) {
+		String[] programmers = new String[userInformation.getMax()];
+		int[] IDs = new int[userInformation.getMax()];
+		for(int i = 0; i < userInformation.getMax(); i++) {
+			programmers[i] = userInformation.getName(i);
+			IDs[i] = userInformation.getId(i);
+	}
+		sortlists_String_int(programmers,IDs);
+		for(int i = 0; i < IDs.length; i++) {
+			System.out.println(programmers[i].toUpperCase()+" Tiene la ID: "+IDs[i]);
+		}
+		enter(read);
+		}
+
+	//FILTERED BY NUMBER OF LANGUAGES
+	private static void viewbylanguage(Scanner read, userInformationData userInformation, languageData programers) {
+		String[] programmers = new String[userInformation.getMax()];
+		int[] index = new int[userInformation.getMax()];
+		int[] IDs = new int[userInformation.getMax()];
+		for(int i = 0; i < userInformation.getMax(); i++) {
+			programmers[i] = userInformation.getName(i);
+			index[i] = programers.getLanguages(i).length;
+			IDs[i] = programers.getId(i);
+		}
+		sortlists_String_int_int(programmers,index,IDs);
+		for(int i = 0; i < IDs.length; i++) {System.out.println(programmers[i].toUpperCase()+" tiene "+index[i]+" lenguajes de programacion "+programers.getforID(IDs[i]));}
+		enter(read);}
+
+	//FILTERED BY YEARS
+	private static void viewbyyears(Scanner read, userInformationData userInformation) {
+		System.out.println(" ");
+		String[] programmers = new String[userInformation.getMax()];
+		int[] years = new int[userInformation.getMax()];
+		for(int i = 0; i < userInformation.getMax(); i++) {
+			programmers[i] = userInformation.getName(i);
+			years[i] = userInformation.getExperience(i);
+			}
+		
+		sortlists_String_int(programmers,years);
+		
+		for(int i = 0; i < programmers.length; i++) {
+			System.out.println("["+programmers[i].toUpperCase()+"] tiene ["+years[i]+"] años de experiencia");
+		
+		}
+		enter(read);
+	}
+
+	//FILTERED BY CITY
+	private static void viewbycity(Scanner read, userInformationData userInformation, File countriesFile) throws IOException {
+		String[] listcity = allcities();
+		for(int i = 0; i < listcity.length; i++) {
+			System.out.println("\n["+listcity[i].toUpperCase()+"]");
+			int x = 0;
+			for(int j = 0; j < userInformation.getMax(); j++) {
+				if(listcity[i].equalsIgnoreCase(userInformation.getCity(j))) {
+					System.out.println(" -"+userInformation.getName(j));
+					x++;}}
+			if(x == 0) {System.out.println("[NO SE ENONTRARON PROGRAMADORES EN ESTA CIUDAD]");}
+		}
+		enter(read);
+	}
+
+	//FILTERED BY COUNTRY
+	private static void viewbycountry(Scanner read, File countriesFile, userInformationData userInformation) throws IOException {
+		String[] listcountry = contries(row(countriesFile));
+		for(int i = 0; i < listcountry.length; i++) {
+			System.out.println("\n["+listcountry[i].toUpperCase()+"]");
+			int x = 0;
+			for(int j = 0; j < userInformation.getMax();j++) {
+				if(listcountry[i].equals(userInformation.getCountry(j))) {
+					System.out.println(" -"+userInformation.getName(j));
+					x++;}}
+
+			if(x == 0) {System.out.println("[NO SE ENONTRARON PROGRAMADORES EN ESTE PAIS]");}
+			continu(read);
+		}
+		enter(read);
+		}
+	
+	
+	//------------------------------------------------------------------------------------------------------
+	 
+	// ----------------------------------------- USER MENU ---------------------------------------------
+	
+	// FUNCTION THAT WILL CONTAIN THE USER MENU
  	public static void userMenu(int userId,Scanner read,iaData ias,debilitiesData debilities,usersData user,languageData languages) throws IOException{
 		
 		String selection = "";
@@ -1505,7 +1832,7 @@ public class App {
 				fourthOption(read,ias);
 			}
 			else if(selection.equalsIgnoreCase("ver tipo de ias") || selection.equalsIgnoreCase("5")) {
-				quintaOpcion(read,ias);
+				fifthoption(read,ias);
 			}				
 			// CIERRE DEL MENU (Y DEL BUCLE)
 			else if(selection.equalsIgnoreCase("salir") || selection.equalsIgnoreCase("6")) {
@@ -1522,7 +1849,7 @@ public class App {
 		}
 	}
 
-	// FUNCION PARA LA 1RA OPCIÓN
+	// FUNCTION FOR THE FIRST OPTION
 	public static void firstOption(Scanner read, iaData ias, debilitiesData debilities) throws IOException{
 		
 		File iaFile = new File("ia.txt"); File debilityFile = new File("debilidades.txt");
@@ -1607,7 +1934,7 @@ public class App {
 		enter(read);
 	}
 
-	// FUNCION PARA LA 2DA OPCION
+	// FUNCTION FOR THE SECOND OPTION
 	public static void secondOption(int userId,Scanner read, usersData user)throws IOException {
 		
 		File file = new File("usuarios.txt");
@@ -1657,7 +1984,7 @@ public class App {
 		enter(read);
 	}
 	
-	// FUNCION PARA LA 3RA OPCION
+	// FUNCTION FOR THE THIRD OPTION
 	public static void thirdOption(Scanner read, iaData ias,languageData language, int id)throws IOException{
 		
 		File file = new File("ia.txt");
@@ -1739,7 +2066,7 @@ public class App {
 		}
 	}
 	
-	// FUNCION PARA LA 4TA OPCIÓN
+	// FUNCTION FOR THE FOURTH OPTION
 	private static void fourthOption(Scanner read, iaData ias) {
 		System.out.println("\n--------------------------------------------------------");
 		System.out.println("\n\t-> | BASE DE DATOS DE IAS REGISTRADAS |");
@@ -1763,10 +2090,10 @@ public class App {
 		enter(read);
 	}	
 	
-	// FUNCION PARA LA 5TA OPCIÓN
-	private static void quintaOpcion(Scanner read, iaData ias) {
+	// FUNCTION FOR THE FIFTH OPTION
+	private static void fifthoption(Scanner read, iaData ias) {
 		
-		//PEQUEÑO FRAGMENTO DE CODIGO PARA CREAR UNA LISTA SIN REPETICION DE LOS TIPOS DE IA SEGUN EL TXT
+		//SMALL CODE SNIPPET TO CREATE A LIST WHITHOUT REPETITIONS OF AI TYPES BASED ON THE TXT FILE.
 		boolean isHere = false;
 		String[] list = new String[5];
 		for(int i = 0; i < list.length; i++) {
@@ -1779,7 +2106,6 @@ public class App {
 					if(isHere == false) {
 						list[i] = ias.getType(j);}}}}
 		
-		//System.out.println(Arrays.toString(lista));
 		//INICIO DEL MENU COMO TAL
 
 	System.out.println("\n--------------------------------------------------------"); System.out.println("\n-> | INGRESE EL TIPO DE IA QUE QUIERE REVISAR |"); System.out.println("\n--------------------------------------------------------");
@@ -1811,16 +2137,16 @@ public class App {
 	
 	// -----------------------------------------------------------------------------------------------------------
 	
-	// ------------------------------------------- LOGIN / COMPLEMENTOS -------------------------------------------
+	// ------------------------------------------- LOGIN / COMPLEMENTS -------------------------------------------
 	
-	// LISTA DE TIPOS DE IA
+	// LIST OF AI TYPES.
 	public static String[] iaTypesList(){
 
 		String[] iaTypes = {"IA autónoma militar","IA supervisora","IA transhumanista","IA social","IA de realidad virtual"};
 		return iaTypes;
 	}
 	
-	// RELLENAR EL CONTENEDOR DE DATOS DE LOS PROGRAMADORES.
+	// FILL THE PROGRAMMERS' DATA CONTAINER.
 	public static void fillUserData(userInformationData list) throws IOException {
 		
 		Scanner file = new Scanner(new File("programadores.txt"));
@@ -1830,7 +2156,7 @@ public class App {
 		}
 	}
 	
-	//CIERRE DE OPCIÓN
+	//CLOSING OPTION
 	public static void enter(Scanner read) {
 		while(true) {
 			System.out.println("\n---------------------------------------------------------");
@@ -1846,7 +2172,21 @@ public class App {
 		}
 	}
 	
-	// RELLENAR CONTENEDOR DE LOS IA
+	//CONTINUE OPTION
+	public static void continu(Scanner leer) {
+		while(true) {
+			System.out.println("\n[PRESIONA ENTER PARA CONTINUAR]");
+			String scout = leer.nextLine();
+
+			if(scout.equalsIgnoreCase("")) {
+				break;
+			}else {
+				continue;
+			}
+		}
+	}
+	
+	// FILL THE AI CONTAINER
 	public static void fillDebilitiesData(debilitiesData list) throws IOException{
 			
 			Scanner file = new Scanner(new File("debilidades.txt"));	
@@ -1856,7 +2196,7 @@ public class App {
 			}
 		}
 	
-	// FUNCION PARA IMPRIMIR MATRIZ
+	// FUNCTION TO PRINT MATRIX
 	public static void seeMatrix(String[][] matrix) {
 	
 		for(int i = 0; i < matrix.length; i++) {
@@ -1870,7 +2210,7 @@ public class App {
 		}
 	}
 	
-	// RELLENAR CONTENEDOR DE LOS IA
+	// FILL THE AI CONTAINER
 	public static void fillIaData(iaData list) throws IOException{
 		
 		Scanner file = new Scanner(new File("ia.txt"));	
@@ -1880,7 +2220,7 @@ public class App {
 		}
 	}
 	
-	// RELLENAR EL CONTENEDOR DE DATOS DE LOS PROGRAMADORES.
+	// FILL THE PROGRAMMERS' DATA CONTAINER
 	public static void fillLanguageData(languageData languages, int limitCountries) throws IOException {
 		
 		Scanner file = new Scanner(new File("programadores.txt"));
@@ -1888,12 +2228,11 @@ public class App {
 			String[] line = file.nextLine().split(",");
 			String[] lineTwo = getLine(line, limitCountries);
 			languages.getInto(new Language(line[0], lineTwo));
-			//DESCOMENTALO PARA VER EL CONTENEDOR
 		}
 
 	}
 
-	// COMPLEMENTO QUE NOS DA LA LISTAS DE LOS LENGUAJES DE PROGRAMACION DOMINADOS POR CADA PERSONA.
+	// COMPLEMENT THAT GIVES US THE LIST OF THE PROGRAMMING LANGUAGES DOMINATED BY EACH PERSON.
 	public static String[] getLine(String[] list, int countryIndex) throws IOException {
 			Scanner file = new Scanner(new File("paises.txt"));
 			String[] countriesList = new String[countryIndex];
@@ -1902,9 +2241,9 @@ public class App {
 				String[] parte = file.nextLine().split(",");
 				countriesList[paisindex] = parte[0];
 				paisindex++;}
-			int veri = 4; //como empieza por la posicion 5 del txt
-			int difference = -4; //para sacer el verdadero indice de la lista
-			int index = 0; //indice de la lista
+			int veri = 4; 
+			int difference = -4; 
+			int index = 0; 
 			boolean stop = false;
 			
 			for(int i = veri; i < list.length; i++) {
@@ -1927,7 +2266,7 @@ public class App {
 		return finalList;
 	}
 
-	// RELLENAR EL CONTENEDOR DE USUARIOS.		
+	// FILL THE USER CONTAINER.		
 	public static void fillUsers(usersData user) throws IOException{
 		
 		Scanner file = new Scanner(new File("usuarios.txt"));
@@ -1938,7 +2277,7 @@ public class App {
 		}
 	}
 	
-	// FUNCION QUE TERMINARA EL INGRESO AL SISTEMA.
+	// FUNCTION THAT WILL TERMINATE SYSTEM ENTRY.
 	public static int finishLogin(usersData list, Scanner read) {
 		
 		String finalName = "";
@@ -1997,7 +2336,7 @@ public class App {
 		return list.getId(index);	
 	}
 	
-	// SELECCIÓN DEL MENÚ, SI ESTE DESEA INGRESAR AL SISTEMA O REGISTRAR OTRO USUARIO.
+	// MENU SELECTION, WHETHER TO ENTER THE SYSTEM OR REGISTER ANOTHER USER.
  	public static void loginComplete(Scanner read) throws IOException {
 		
 		String verification = "";
@@ -2166,7 +2505,7 @@ public class App {
 		
 	}
 	
-	// LISTA DE REGIONES SEGUN EL PAIS ESCOGIDO.
+	// LIST OF REGIONS BASED ON THE SELECTED COUNTRY.
 	public static String[] cities(String country)throws IOException{
 		
 		Scanner file = new Scanner(new File("paises.txt"));
@@ -2193,7 +2532,7 @@ public class App {
 
 	}
 	
-	// LISTA DE PAISES
+	// LIST THE COUNTRYES
 	public static String[] contries(int index)throws IOException{
 		
 		Scanner file = new Scanner(new File("paises.txt"));
@@ -2207,14 +2546,82 @@ public class App {
 		}return list;
 	}
 	
-	// LISTA DE TODOS LOS LENGUAJES DE PROGRAMACION.
+	// LIST THE CITIES
+	private static String[] allcities() throws FileNotFoundException {
+		Scanner arch = new Scanner(new File("paises.txt"));
+		int maxcity = 0;
+		while(arch.hasNextLine()) {
+			String[] parts = arch.nextLine().split(",");
+			maxcity += parts.length-1;
+		}
+		int index = 0;	
+		Scanner arch2 = new Scanner(new File("paises.txt"));
+		String[] cities = new String[maxcity];
+		while(arch2.hasNextLine()) {
+		
+			String[] parts = arch2.nextLine().split(",");
+			for(int i = 0; i < parts.length-1; i++) {
+				cities[index] = parts[i+1];
+				index++;
+			}
+		}
+		return cities;
+	}
+
+	//BUBBLE SORT METHOD
+	private static void sortlists_String_int(String[] Strings, int[] ints) {
+		for(int i = 0; i < Strings.length-1; i++) {
+			for(int j = i+1; j < Strings.length; j++) {
+				if(ints[i] < ints[j]) {exchanged(Strings,ints,i,j);}
+				}}}
+	private static void exchanged(String[] strings, int[] ints, int i, int j) {
+		String supportS = strings[i];
+		int supportI = ints[i];
+		strings[i] = strings[j];
+		ints[i] = ints[j];
+		strings[j] = supportS;
+		ints[j] = supportI;
+		
+	}
+	private static void sortlists_String_int_int(String[] Strings, int[] ints, int[] intss) {
+		for(int i = 0; i < Strings.length-1; i++) {
+			for(int j = i+1; j < Strings.length; j++) {
+				if(ints[i] < ints[j]) {exchangedtwo(Strings,ints,intss,i,j);}
+			}}}
+	private static void exchangedtwo(String[] strings, int[] ints, int[] intss, int i, int j) {
+		String supportS = strings[i];
+		int supportI = ints[i];
+		int supportII = intss[i];
+ 		strings[i] = strings[j];
+		ints[i] = ints[j];
+		intss[i] = intss[j];
+		strings[j] = supportS;
+		ints[j] = supportI;
+		intss[j] = supportII;
+	}
+	private static void sortlists_String_float(String[] Strings, float[] floats) {
+		for(int i = 0; i < Strings.length-1; i++) {
+			for(int j = i+1; j < Strings.length; j++) {
+				if(floats[i] < floats[j]) {exchangedthree(Strings,floats,i,j);}
+				}}}	
+	private static void exchangedthree(String[] strings, float[] floats, int i, int j) {
+		String supportS = strings[i];
+		Float supportF = floats[i];
+		strings[i] = strings[j];
+		floats[i] = floats[j];
+		strings[j] = supportS;
+		floats[j] = supportF;
+		
+	}
+	
+	// LIST OF ALL PROGRAMMING LANGUAGES.
  	public static String[] programingLanguagesList() {
 		
 		String[] list = {"c","c++","c#","Java","Python","PHP","SQL","Ruby","Visual Basic NET","R" ,"TypeScript","Swift","Rust","Go","Kotlin","Postscript","Scheme","Erlang","Elixir","Pascal","Scala","Objective-C"};
 		return list;
 	}
 	
-	// MATRIZ QUE CONTIENE LOS DATOS DE LOS DATOS ACTUALIZADOS HASTA EL MOMENTO.
+	// MATRIX CONTAINING THE DATA UPDATED SO FAR.
 	public static String[][] matrixGenerator(File file,int row, int column) throws IOException{	 
 		
 		String[][] matrix = new String[row][column];
@@ -2234,7 +2641,7 @@ public class App {
 		return matrix;
 	}
 	
-	// SACAR LAS FILAS PARA LA MATRIZ.
+	// EXTRACTING THE ROWS FOR THE MATRIX.
 	public static int row(File file) throws IOException{
 		Scanner archive = new Scanner(file);
 		int cont = 0;
@@ -2247,7 +2654,7 @@ public class App {
 		return cont;
 	}
 	
-	// SACAR LAS FILAS PARA LA MATRIZ.
+	// EXTRACTING THE COLUMNS FOR THE MATRIX.
 	public static int columns(File file) throws IOException{
 			
 		Scanner archive = new Scanner(file);
@@ -2263,7 +2670,7 @@ public class App {
 		return lon;
 	}
 	
-	// LISTA DEL LARGO DE LAS COLUMNAS.
+	// LIST OF COLUMN LENGTHS.
 	public static int[] columnList(String[][] matrix){
 			
 		int[] list = new int[matrix.length];
@@ -2284,7 +2691,7 @@ public class App {
 		}return list;
 	}
 	
-	// FUNCION QUE ACTUALIZARA LOS DATOS DEL ARCHIVO TXT PROGRAMADOR.
+	// FUNCTION THAT WILL UPDATE THE DATA OF THE PROGRAMMER TXT FILE.
 	public static void updateProgramerData(String[][] matrix, File file) throws IOException {
 		
 	    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -2303,7 +2710,7 @@ public class App {
 	    } writer.close();
 	}
 	
-	// FUNCION QUE ACTUALIZARA LOS DATOS DE CUALQUIER TXT.
+	// FUNCTION THAT WILL UPDATE THE DATA OF ANY TXT FILE.
 	public static void updateData(String[][] matrix, File file) throws IOException {
 		
 	    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -2320,7 +2727,7 @@ public class App {
 	    writer.close();
 	}
 
-	// FUNCION DE COMPROBACIÓN DE DATOS, EN EL CASO QUE LOS TXT ESTEN VACIOS.
+	// DATA VERIFICATION FUNCTION, IN CASE THE TXT FILES ARE EMPTY.
 	public static int emptyTxt()throws IOException{
 		
 		int verification = vacuumEmpty("usuarios.txt");
@@ -2346,7 +2753,7 @@ public class App {
 		return verification;
 	}
 	
-	// SUMA DATOS DE LOS TXT (APOYO DE LA FUNCION TXTVACIO).
+	// FUNCTION TO SUM DATA FROM TXT FILES (SUPPORT FROM THE TXTEMPTY FUNCTION).
 	public static int vacuumEmpty(String file) throws IOException{
 		
 		Scanner archive = new Scanner(new File(file));
@@ -2360,4 +2767,3 @@ public class App {
 	// -----------------------------------------------------------------------------------------------------------
 	
 }
- 

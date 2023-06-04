@@ -35,7 +35,7 @@ public class Language {
 
 
 	public String toString() {
-		return "Languages [id=" + id + ", lenguajes=" + Arrays.toString(languages) + "]";
+		return Arrays.toString(languages);
 	}
 	
 

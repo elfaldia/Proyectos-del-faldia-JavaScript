@@ -36,6 +36,14 @@ public class languageData {
 		}return null;
 	}
 	
+	public Language getforID(int ID) {
+		for(int i = 0; i < amount; i++) {
+			if(ID == Integer.parseInt(list[i].getId())) {
+				return list[i];
+			}
+		} return null;
+	}
+	
 	public String[] getLanguages(int i) {
 		if(i < amount) {
 			return list[i].getLanguage();
@@ -78,5 +86,8 @@ public class languageData {
 			list[i] = auxList[i];
 		}
 	}
+
+
+	
 }
 
