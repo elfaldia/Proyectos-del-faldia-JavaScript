@@ -53,6 +53,17 @@ public class userInformationData {
 			return null;
 		}
 	}
+	
+	public String getCityforID(int id) {
+		for(int i = 0; i < max; i++) {
+			if(id == list[i].getId()) {
+				return list[i].getCity();
+			}
+		}
+		
+		return null;
+	}
+	
 	public String getName(int index) {
 		if(index < amount) {
 			return list[index].getName();

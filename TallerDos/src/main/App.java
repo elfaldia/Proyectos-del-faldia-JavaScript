@@ -139,6 +139,21 @@ public class App {
 			citiescount[i] = (citiescount[i] * 100)/user.getMax();
 			if(citiescount[i] == 0) {break;}
 			System.out.println(citiescount[i]+"% "+cities[i]+" de un total de "+user.getMax());}
+		
+		// A CONTINUACION EL SIGUIENTE FRAGMENTO DE CODIGO FUE DEBIDO A NUESTRO DE RELACIONAR
+		//IA Y CIUDAD QUE FUE POR EL ID DE CREAR PERO AL PRINTEAR DIO LO MISMO PERO LE DEJO LA LOGICA COMENTADA
+		/*/for(int i = 0; i < cities.length; i++) {citiescount[i] = 0;}
+		System.out.println("\n-> El porcentaje de las IAs segun la ciudad de su creador es:");
+		for(int i = 0; i < user.getMax(); i++) {
+			for(int j = 0; j < cities.length; j++) {
+			if(user.getCityforID(ias.getId(i)).equalsIgnoreCase(cities[j])) {
+				citiescount[j]++;}}}
+		sortlists_String_float(cities,citiescount);
+		for(int i = 0; i < citiescount.length; i++) {
+			citiescount[i] = (citiescount[i] * 100)/user.getMax();
+			if(citiescount[i] == 0) {break;}
+			System.out.println(citiescount[i]+"% "+cities[i]+" de un total de "+user.getMax());}/*/
+
 		enter(read);
 		}
 	
