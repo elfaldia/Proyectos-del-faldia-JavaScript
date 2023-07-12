@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-07-12T22:47:33.988Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.79" etag="Q2lNRG5WTeMkUtUjRbWz" version="21.6.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-07-12T22:58:19.456Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.79" etag="UFfzxWiXc5pPsPXvFYeN" version="21.6.2" type="github">
   <diagram name="Page-1" id="lF3UblHLmA0cqcG6uqCf">
-    <mxGraphModel dx="911" dy="492" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2500" pageHeight="1920" math="0" shadow="0">
+    <mxGraphModel dx="1594" dy="861" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2500" pageHeight="1920" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -812,6 +812,84 @@
         </mxCell>
         <mxCell id="w-rCVOtRvk_F5D2muNZO-316" value="- numberThreats int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
           <mxGeometry x="850" y="1350" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-317" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ Gets and Sets(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="1410" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-318" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ Gets and Sets(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="1410" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-319" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ Gets and Sets(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1410" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-320" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ Gets and Sets(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="1410" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-321" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ Gets and Sets(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1925" y="1410" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-322" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ toString(...) String&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="1420" width="110" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-323" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ toString(...) String&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="1420" width="110" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-324" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ toString(...) String&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1420" width="110" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-325" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ toString(...) String&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="1420" width="110" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-326" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ toString(...) String&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1925" y="1420" width="110" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-327" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ ArtillerySoldier(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="1400" width="100" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-328" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ CombatIntelligence(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="1400" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-329" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ InfantrySoldier(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1400" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-330" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ LogisticSupport(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="1400" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-331" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;+ SpecialOpsSoldiers(...)&lt;br&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1925" y="1400" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-332" value="- targetsDestroyed int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="1340" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-333" value="- precision int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="1350" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-334" value="- compiledIntelligence int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="1340" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-335" value="- identifiedEnemies int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="1350" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-336" value="- missionsCompleted int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1340" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-338" value="- gun String" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="1350" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-339" value="- distributedSupplies int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="1340" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-340" value="- troopsAttended int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="1350" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-341" value="- successfulCovert int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1925" y="1330" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-342" value="- totalMissions int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1925" y="1340" width="120" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="w-rCVOtRvk_F5D2muNZO-343" value="- resourcesObtained int" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1925" y="1350" width="120" height="10" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
